@@ -1,0 +1,13 @@
+POST http://localhost:8000/api/users/ HTTP/1.1
+Content-Type: application/json 
+
+{
+
+     "name" : "Michael Oliva Tonilon",
+     "birthdate" :"October 69, 2001",
+     "email": "mtonilon@oten.com",
+     "username": "otin123",
+     "password" : "oten123"
+}
+
+

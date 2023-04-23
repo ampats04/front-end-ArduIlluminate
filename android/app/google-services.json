@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "791737884654",
+    "project_id": "ardu-illuminate",
+    "storage_bucket": "ardu-illuminate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791737884654:android:6bb118fd67d18c4fa4b8ff",
+        "android_client_info": {
+          "package_name": "com.example.ardu_illuminate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "791737884654-jd2bgcej4k426m8fbrgj03ojl4j9kdnd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5zEdU72q7x64Sbxm02oM8n_Ah0EfWLBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "791737884654-jd2bgcej4k426m8fbrgj03ojl4j9kdnd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
