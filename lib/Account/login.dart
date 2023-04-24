@@ -2,6 +2,8 @@ import 'package:ardu_illuminate/Account/passReset.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'createAcc.dart';
+import '../Model/user_model.dart';
+import '../Authentication/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -29,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future signIn() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await Auth().signIn(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );

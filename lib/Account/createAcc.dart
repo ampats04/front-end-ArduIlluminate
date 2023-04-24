@@ -1,8 +1,15 @@
+// ignore: file_names
+import 'dart:convert';
+
 import 'package:ardu_illuminate/Account/login.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:ardu_illuminate/Authentication/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../Model/user_model.dart';
+import '../HTTP/HttpService.dart';
+import 'package:http/http.dart' as http;
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({Key? key}) : super(key: key);
@@ -14,18 +21,37 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
   final TextEditingController fullNameController = TextEditingController();
+  DateTime? _selectedDate;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  String? errorMessage = '';
+  String? errorMessage = 'Account creation failed';
+  UserCredential? credential;
   bool isLogin = true;
+
+  HttpService httpService = HttpService();
 
   Future createAcc() async {
     try {
-      await Auth().createUserWithEmailAndPassword(
+      credential = await Auth().register(
         email: emailController.text,
         password: passwordController.text,
       );
+
+      Map<String, dynamic> data = {
+        'user_id': credential!.user!.uid,
+        'name': fullNameController.text,
+        'birthdate': _selectedDate.toString(),
+        'email': emailController.text,
+        'username': usernameController.text,
+        'password': passwordController.text,
+      };
+
+      Response response =
+          await http.post(Uri.parse("10.0.2.2:8000/api"), body: data);
+
+      var resdata = json.decode(response.body);
+      print(resdata);
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
@@ -33,7 +59,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     }
   }
 
-  DateTime? _selectedDate;
   bool _agreeToTermsAndPrivacy = false;
 
   void _presentDatePicker() {
