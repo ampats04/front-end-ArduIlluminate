@@ -1,5 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
 class UserModel {
   // ignore: non_constant_identifier_names
   String user_id;
