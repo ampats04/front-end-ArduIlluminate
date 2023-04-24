@@ -2,7 +2,7 @@ class UserModel {
   // ignore: non_constant_identifier_names
   String user_id;
   String name;
-  String birthdate;
+  DateTime birthdate;
   String email;
   String username;
   String password;
@@ -21,7 +21,7 @@ class UserModel {
     return UserModel(
       user_id: json['user_id'] as String,
       name: json['name'] as String,
-      birthdate: json['birthdate'] as String,
+      birthdate: json['birthdate'] as DateTime,
       email: json['email'] as String,
       username: json['username'] as String,
       password: json['password'] as String,

@@ -37,25 +37,41 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         email: emailController.text,
         password: passwordController.text,
       );
-
-      Map<String, dynamic> data = {
-        'user_id': credential!.user!.uid,
-        'name': fullNameController.text,
-        'birthdate': _selectedDate.toString(),
-        'email': emailController.text,
-        'username': usernameController.text,
-        'password': passwordController.text,
-      };
-
-      Response response =
-          await http.post(Uri.parse("10.0.2.2:8000/api"), body: data);
-
-      var resdata = json.decode(response.body);
-      print(resdata);
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
       });
+    }
+  }
+
+  Future<UserModel> createUser() async {
+    final uri = Uri.parse('http://10.0.2.2:8000/api/users/');
+    final headers = {'Content-Type': 'application/json'};
+    final encoding = Encoding.getByName('utf-8');
+
+    Map<String, dynamic> data = {
+      'user_id': credential!.user!.uid,
+      'name': fullNameController.text,
+      'birthdate': _selectedDate.toString(),
+      'email': emailController.text,
+      'username': usernameController.text,
+      'password': passwordController.text,
+    };
+
+    Response response = await http.post(
+      uri,
+      headers: headers,
+      body: jsonEncode(data),
+      encoding: encoding,
+    );
+
+    int statusCode = response.statusCode;
+    String responseBody = response.body;
+
+    if (statusCode == 201) {
+      return UserModel.fromJson(jsonDecode(responseBody));
+    } else {
+      throw Exception('Failed to get User:');
     }
   }
 
@@ -193,6 +209,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ElevatedButton(
               onPressed: () {
                 createAcc();
+                createUser();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
