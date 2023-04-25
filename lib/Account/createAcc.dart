@@ -1,6 +1,5 @@
 // ignore: file_names
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:ardu_illuminate/Account/login.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:ardu_illuminate/Authentication/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../Model/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class CreateAccountPage extends StatefulWidget {
@@ -46,7 +44,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
       final uri = Uri.parse('http://10.0.2.2:8000/api/users/add');
       final headers = {'Content-Type': 'application/json'};
-      final encoding = Encoding.getByName('utf-8');
 
       print('Data to be sent: $data');
 
@@ -63,9 +60,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         print('Request failed with status code ${response.statusCode}');
       }
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
       throw Exception('Failed to create user');
     } catch (error) {
       print(error);
