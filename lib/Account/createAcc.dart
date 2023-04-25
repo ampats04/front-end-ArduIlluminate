@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:ardu_illuminate/Account/login.dart';
 import 'package:flutter/material.dart';
@@ -28,23 +29,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   UserCredential? credential;
   bool isLogin = true;
 
-  Future createAcc() async {
+  Future createUser() async {
     try {
-      credential = await Auth().register(
+      String uid = await Auth().register(
         email: emailController.text,
         password: passwordController.text,
       );
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
-    }
-  }
 
-  Future<UserModel> createUser() async {
-    if (credential != null) {
+      print("yawa maoni si $uid");
       Map<String, dynamic> data = {
-        'user_id': 'qweqwewasdsad',
+        'user_id': uid,
         'name': fullNameController.text,
         'birthdate': _selectedDate.toString(),
         'username': usernameController.text,
@@ -56,25 +50,26 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
       print('Data to be sent: $data');
 
-      try {
-        Response response = await http.post(
-          uri,
-          headers: headers,
-          body: jsonEncode(data),
-          encoding: encoding,
-        );
+      Response response = await http.post(
+        uri,
+        headers: headers,
+        body: jsonEncode(data),
+        // encoding: encoding,
+      );
 
-        if (response.statusCode == 201) {
-          return UserModel.fromJson(jsonDecode(response.body));
-        } else {
-          throw Exception('Failed to create user');
-        }
-      } catch (error) {
-        print(error);
-        throw Exception('Failed to create user');
+      if (response.statusCode == 200) {
+        print(response.body);
+      } else {
+        print('Request failed with status code ${response.statusCode}');
       }
-    } else {
-      throw Exception('User credentials are null');
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
+      throw Exception('Failed to create user');
+    } catch (error) {
+      print(error);
+      throw Exception('Failed to create user');
     }
   }
 
@@ -211,7 +206,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             const SizedBox(height: 32.0),
             ElevatedButton(
               onPressed: () {
-                createAcc();
+                //createAcc();
                 createUser();
                 Navigator.push(
                   context,

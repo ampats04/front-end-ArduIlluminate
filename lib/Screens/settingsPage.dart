@@ -164,7 +164,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                           fontSize: 16),
                                     ),
                                     content: const Text(
-                                        'Are you sure you want to log out?'),
+                                      'Are you sure you want to log out?'
+                                    ),
                                     actions: [
                                       TextButton(
                                         onPressed: () {
@@ -178,6 +179,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       TextButton(
                                         onPressed: () {
                                           FirebaseAuth.instance.signOut();
+                                          Navigator.pop(context); // close the dialog box
                                         },
                                         child: const Text('Continue'),
                                       )
