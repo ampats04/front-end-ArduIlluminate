@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:ardu_illuminate/Authentication/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../Model/user_model.dart';
-import '../HTTP/HttpService.dart';
 import 'package:http/http.dart' as http;
 
 class CreateAccountPage extends StatefulWidget {
@@ -29,8 +28,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   UserCredential? credential;
   bool isLogin = true;
 
-  HttpService httpService = HttpService();
-
   Future createAcc() async {
     try {
       credential = await Auth().register(
@@ -45,33 +42,39 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   Future<UserModel> createUser() async {
-    final uri = Uri.parse('http://10.0.2.2:8000/api/users/');
-    final headers = {'Content-Type': 'application/json'};
-    final encoding = Encoding.getByName('utf-8');
+    if (credential != null) {
+      Map<String, dynamic> data = {
+        'user_id': 'qweqwewasdsad',
+        'name': fullNameController.text,
+        'birthdate': _selectedDate.toString(),
+        'username': usernameController.text,
+      };
 
-    Map<String, dynamic> data = {
-      'user_id': credential!.user!.uid,
-      'name': fullNameController.text,
-      'birthdate': _selectedDate.toString(),
-      'email': emailController.text,
-      'username': usernameController.text,
-      'password': passwordController.text,
-    };
+      final uri = Uri.parse('http://10.0.2.2:8000/api/users/add');
+      final headers = {'Content-Type': 'application/json'};
+      final encoding = Encoding.getByName('utf-8');
 
-    Response response = await http.post(
-      uri,
-      headers: headers,
-      body: jsonEncode(data),
-      encoding: encoding,
-    );
+      print('Data to be sent: $data');
 
-    int statusCode = response.statusCode;
-    String responseBody = response.body;
+      try {
+        Response response = await http.post(
+          uri,
+          headers: headers,
+          body: jsonEncode(data),
+          encoding: encoding,
+        );
 
-    if (statusCode == 201) {
-      return UserModel.fromJson(jsonDecode(responseBody));
+        if (response.statusCode == 201) {
+          return UserModel.fromJson(jsonDecode(response.body));
+        } else {
+          throw Exception('Failed to create user');
+        }
+      } catch (error) {
+        print(error);
+        throw Exception('Failed to create user');
+      }
     } else {
-      throw Exception('Failed to get User:');
+      throw Exception('User credentials are null');
     }
   }
 
