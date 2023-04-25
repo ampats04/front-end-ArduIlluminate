@@ -42,9 +42,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   Future<UserModel> createUser() async {
+    print(Auth().currentUser!.uid);
     if (credential != null) {
       Map<String, dynamic> data = {
-        'user_id': 'qweqwewasdsad',
+        'user_id': Auth().currentUser!.uid,
         'name': fullNameController.text,
         'birthdate': _selectedDate.toString(),
         'username': usernameController.text,
