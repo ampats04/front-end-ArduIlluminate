@@ -7,24 +7,34 @@ class Auth {
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
-  Future<void> signInWithEmailAndPassword({
+  Future<UserCredential> signIn({
     required String email,
     required String password,
   }) async {
-    await _firebaseAuth.signInWithEmailAndPassword(
+    return await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
   }
 
-  Future<void> createUserWithEmailAndPassword({
+  Future<String> register({
     required String email,
     required String password,
   }) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      UserCredential userCredential =
+          await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // The UID of the newly registered user can be obtained from the UserCredential object
+      String uid = userCredential.user!.uid;
+      return uid;
+    } catch (e) {
+      // Handle errors that occurred during registration
+      print(e.toString());
+      return '';
+    }
   }
 
   Future<void> signOut() async {

@@ -1,8 +1,13 @@
+// ignore: file_names
+import 'dart:convert';
+
 import 'package:ardu_illuminate/Account/login.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:ardu_illuminate/Authentication/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({Key? key}) : super(key: key);
@@ -14,26 +19,54 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
   final TextEditingController fullNameController = TextEditingController();
+  DateTime? _selectedDate;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  String? errorMessage = '';
+  String? errorMessage = 'Account creation failed';
+  UserCredential? credential;
   bool isLogin = true;
 
-  Future createAcc() async {
+  Future createUser() async {
     try {
-      await Auth().createUserWithEmailAndPassword(
+      String uid = await Auth().register(
         email: emailController.text,
         password: passwordController.text,
       );
+
+      print("yawa maoni si $uid");
+      Map<String, dynamic> data = {
+        'user_id': uid,
+        'name': fullNameController.text,
+        'birthdate': _selectedDate.toString(),
+        'username': usernameController.text,
+      };
+
+      final uri = Uri.parse('http://10.0.2.2:8000/api/users/add');
+      final headers = {'Content-Type': 'application/json'};
+
+      print('Data to be sent: $data');
+
+      Response response = await http.post(
+        uri,
+        headers: headers,
+        body: jsonEncode(data),
+        // encoding: encoding,
+      );
+
+      if (response.statusCode == 200) {
+        print(response.body);
+      } else {
+        print('Request failed with status code ${response.statusCode}');
+      }
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
+      throw Exception('Failed to create user');
+    } catch (error) {
+      print(error);
+      throw Exception('Failed to create user');
     }
   }
 
-  DateTime? _selectedDate;
   bool _agreeToTermsAndPrivacy = false;
 
   void _presentDatePicker() {
@@ -167,7 +200,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             const SizedBox(height: 32.0),
             ElevatedButton(
               onPressed: () {
-                createAcc();
+                //createAcc();
+                createUser();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
