@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 class VerifyCode extends StatefulWidget {
   final String email;
 
-  VerifyCode({Key? key, required this.email}) : super(key: key);
+  const VerifyCode({Key? key, required this.email}) : super(key: key);
 
   @override
   _VerifyCodeState createState() => _VerifyCodeState();

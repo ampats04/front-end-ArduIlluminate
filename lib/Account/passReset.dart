@@ -58,13 +58,13 @@ class ResetPasswordState extends State<ResetPassword> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Verification Code Sent'),
-                          content: Text(
+                          title: const Text('Verification Code Sent'),
+                          content: const Text(
                               'Please check the 6 digit pin sent to your email.'),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context),
-                              child: Text(''),
+                              child: const Text(''),
                             ),
                             ElevatedButton(
                               onPressed: () {
@@ -80,7 +80,7 @@ class ResetPasswordState extends State<ResetPassword> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    Color.fromARGB(255, 0, 71, 255),
+                                    const Color.fromARGB(255, 0, 71, 255),
                               ),
                               child: const Text(
                                 'Okay',

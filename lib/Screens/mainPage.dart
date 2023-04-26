@@ -1,12 +1,11 @@
-// This is the main light control screen
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Socket/webSocket.dart';
+import 'package:ardu_illuminate/Screens/draw_header.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _MainPageScreenState createState() => _MainPageScreenState();
 }
 
@@ -65,38 +64,47 @@ class _MainPageScreenState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(30),
-        child: SafeArea(
+      backgroundColor: Color(0xFFD9D9D9),
+      appBar: AppBar(
+        title: const Text(
+          'Main Light Control',
+          style: TextStyle(
+            fontSize: 20,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Color(0xFFD9D9D9),
+      ),
+      drawer: const DrawHeader(),
+      body: Container(
+        width: 1500,
+        height: 2000,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+          image: AssetImage('assets/bg.png'),
+          //fit: BoxFit.contain,
+          fit: BoxFit.fitHeight,
+          alignment: Alignment(1.5, 1.0),
+        )),
+        padding: const EdgeInsets.all(40),
+        child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 10,
-              ),
-              const Center(
-                child: Text(
-                  'Main Light Control',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 150),
-              const Center(
+              const SizedBox(height: 50),
+              const Align(
+                alignment: Alignment.centerLeft,
                 child: Text(
                   'Power',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 23,
                     fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
                   ),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 30),
               Transform.scale(
                 scale: 1.5,
                 child: Switch(
@@ -110,33 +118,69 @@ class _MainPageScreenState extends State<MainPage> {
               const SizedBox(
                 height: 50,
               ),
-              const Center(
+              const Align(
+                alignment: Alignment.centerLeft,
                 child: Text(
-                  'Light Intensity',
+                  'Intensity',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 23,
                   ),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.start,
                 ),
               ),
+              const SizedBox(height: 30),
               Row(
                 children: [
                   const Icon(Icons.dark_mode_outlined),
-                  Expanded(
-                    child: Slider(
-                      value: _currentSliderValue,
-                      max: 100,
-                      divisions: 100,
-                      label: _currentSliderValue.round().toString(),
-                      onChanged: _onSliderChanged,
+                  SizedBox(
+                    width: 170,
+                    child: Theme(
+                      data: ThemeData(
+                        sliderTheme: const SliderThemeData(
+                          trackHeight:
+                              1.0, // Set the thickness of the slider track
+                          thumbShape: RoundSliderThumbShape(
+                            enabledThumbRadius:
+                                8.0, // Set the size of the slider thumb
+                          ),
+                          overlayShape: RoundSliderOverlayShape(
+                            overlayRadius:
+                                16.0, // Set the size of the overlay on the thumb
+                          ),
+                          activeTrackColor: Colors
+                              .black, // Set the color of the active part of the slider
+                          inactiveTrackColor: Colors
+                              .grey, // Set the color of the inactive part of the slider
+                        ),
+                      ),
+                      child: Slider(
+                        value: _currentSliderValue,
+                        max: 100,
+                        divisions: 100,
+                        label: _currentSliderValue.round().toString(),
+                        onChanged: _onSliderChanged,
+                      ),
                     ),
                   ),
                   const Icon(Icons.sunny),
                 ],
               ),
-              const Spacer(),
+              const SizedBox(height: 40),
+              Image.asset('assets/lightbulb.png', width: 80, height: 80),
+              const SizedBox(height: 20),
+              const Text(
+                'Current Bulb',
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 18),
+              ),
+              const SizedBox(height: 20),
+              const SizedBox(
+                height: 20,
+                width: 150,
+                child: TextField(
+                  decoration: InputDecoration(hintText: 'E - 27 Bulb 18W'),
+                ),
+              ),
             ],
           ),
         ),
