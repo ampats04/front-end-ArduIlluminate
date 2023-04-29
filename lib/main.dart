@@ -23,20 +23,23 @@ class MyApp extends StatelessWidget {
       home: Builder(
         builder: (BuildContext context) {
           return AnimatedSplashScreen(
-            splash: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    child: Center(
-                      child: Image.asset(
-                        "assets/ardu-ulliminate.png",
+            splash: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      child: Center(
+                        child: Image.asset(
+                          "assets/ardu-ulliminate.png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             duration: 1000,
             splashTransition: SplashTransition.sizeTransition,

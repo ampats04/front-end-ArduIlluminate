@@ -23,7 +23,7 @@ Future userProfile() async {
     //String username = await Auth().currentUser!.username!;
 
     Response response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/users/retrieve?name=$uid'),
+      Uri.parse('http://192.168.160.79:8000/api/users/retrieve?name=$uid'),
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -178,7 +178,7 @@ class _EditProfileState extends State<EditProfile> {
                                     // ex. _usernameController.text prints j
                                     Response response1 = await http.put(
                                         Uri.parse(
-                                            'http://10.0.2.2:8000/api/users/update'),
+                                            'http://192.168.160.79:8000/api/users/update'),
                                         headers: {
                                           "Accept": "application/json",
                                           "content-type": "application/json"
@@ -188,7 +188,7 @@ class _EditProfileState extends State<EditProfile> {
                                           'email': email,
                                           'name': _fullnameController.text,
                                           'birthdate':
-                                              _birthdateController.toString(),
+                                              _birthdateController.text,
                                           'username': _usernameController.text,
                                         }));
                                     // Navigator.push(

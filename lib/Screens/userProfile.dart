@@ -19,7 +19,7 @@ String email = Auth().currentUser!.email!;
 Future userProfile() async {
   try {
     Response response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/users/retrieve?name=$uid'),
+      Uri.parse('http://192.168.160.79:8000/api/users/retrieve?name=$uid'),
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -142,7 +142,7 @@ class _FirstScreenState extends State<FirstScreen> {
             const TextField(
               decoration: InputDecoration(
                 enabled: false,
-                // hintText: '**********',
+                hintText: '**********',
                 prefixIcon: Icon(Icons.lock),
               ),
             ),
