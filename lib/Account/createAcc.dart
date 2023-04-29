@@ -35,6 +35,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       );
 
       print("yawa maoni si $uid");
+
       Map<String, dynamic> data = {
         'user_id': uid,
         'name': fullNameController.text,
