@@ -180,16 +180,17 @@ class _EditProfileState extends State<EditProfile> {
                                         Uri.parse(
                                             'http://10.0.2.2:8000/api/users/update'),
                                         headers: {
-                                          'Content-Type': 'application/json'
+                                          "Accept": "application/json",
+                                          "content-type": "application/json"
                                         },
-                                        body: {
+                                        body: jsonEncode({
                                           'user_id': uid,
                                           'email': email,
                                           'name': _fullnameController.text,
                                           'birthdate':
                                               _birthdateController.toString(),
                                           'username': _usernameController.text,
-                                        });
+                                        }));
                                     // Navigator.push(
                                     //   context,
                                     //   MaterialPageRoute(

@@ -29,8 +29,6 @@ class _DrawHeaderState extends State<DrawHeader> {
   Widget build(BuildContext context) {
     return Drawer(
       child: MaterialApp(
-        theme: _darkMode ? ThemeData.dark() : ThemeData.light(),
-        debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
             title: const Text(''),
