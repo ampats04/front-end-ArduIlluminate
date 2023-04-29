@@ -21,7 +21,6 @@ class _HomePageState extends State<HomePage> {
     const TimerPage(),
     const MainPage(),
     const PowerConsumption(),
-    const DrawHeader(),
   ];
 
   void _onItemTapped(int index) {
@@ -35,7 +34,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const DrawHeader(),
       body: PageView(
         controller: _pageController,
         children: _widgetOptions,

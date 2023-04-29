@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Socket/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -64,7 +66,9 @@ class _MainPageScreenState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFD9D9D9),
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black
+          : Color(0xFFD9D9D9),
       appBar: AppBar(
         title: const Text(
           'Main Light Control',

@@ -32,8 +32,10 @@ dependencies:
   firebase_core: any
   firebase_auth: any
   flutter_settings_screens: ^0.2.2+1
+  
   flutter:
     sdk: flutter
+  
     
   animated_splash_screen:
   curved_navigation_bar: ^1.0.3

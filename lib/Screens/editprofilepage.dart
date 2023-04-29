@@ -3,17 +3,62 @@ import 'package:ardu_illuminate/Screens/userProfile.dart';
 //import 'package:ardu_illuminate/passwordResetpage.dart';
 //import 'package:ardu_illuminate/editprofile.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import '../Authentication/auth.dart';
+
+TextEditingController _fullnameController = TextEditingController();
+TextEditingController _emailController = TextEditingController();
+TextEditingController _birthdateController = TextEditingController();
+TextEditingController _passwordController = TextEditingController();
+TextEditingController _usernameController = TextEditingController();
+String uid = Auth().currentUser!.uid;
+String email = Auth().currentUser!.email!;
+
+Future userProfile() async {
+  try {
+    //String password = await Auth().currentUser!.password!;
+    //String birthdate = await Auth().currentUser!.birthdate!;
+    //String username = await Auth().currentUser!.username!;
+
+    Response response = await http.get(
+      Uri.parse('http://10.0.2.2:8000/api/users/retrieve?name=$uid'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    var data = json.decode(response.body);
+    print("hi");
+    print(uid);
+    print(data);
+
+    _fullnameController.text = data[0]['name'];
+    _emailController.text = email;
+    _birthdateController.text = data[0]['birthdate'];
+    _usernameController.text = data[0]['username'];
+    print(_usernameController.text);
+  } catch (error) {
+    print(error);
+    throw Exception('Failed to Get User Credentials');
+  }
+}
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
 
   @override
-  State<EditProfile> createState() => _EditProfile();
+  State<EditProfile> createState() => _EditProfileState();
 }
 
-class _EditProfile extends State<EditProfile> {
+class _EditProfileState extends State<EditProfile> {
+  @override
+  void initState() {
+    userProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -32,8 +77,9 @@ class _EditProfile extends State<EditProfile> {
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold),
               ),
-              const TextField(
+              TextField(
                 enabled: true,
+                controller: _fullnameController,
                 decoration: InputDecoration(
                   hintText: 'Jeremy Andy Ampatin',
                   prefixIcon: Icon(Icons.person),
@@ -49,7 +95,8 @@ class _EditProfile extends State<EditProfile> {
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold),
               ),
-              const TextField(
+              TextField(
+                controller: _birthdateController,
                 enabled: true,
                 decoration: InputDecoration(
                   hintText: 'January 69, 6969',
@@ -67,8 +114,9 @@ class _EditProfile extends State<EditProfile> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const TextField(
+              TextField(
                 enabled: true,
+                controller: _emailController,
                 decoration: InputDecoration(
                   hintText: 'jeremyandyampatin@gmail.com',
                   prefixIcon: Icon(Icons.mark_email_read),
@@ -83,7 +131,8 @@ class _EditProfile extends State<EditProfile> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const TextField(
+              TextField(
+                controller: _usernameController,
                 decoration: InputDecoration(
                   enabled: true,
                   hintText: 'Jeremy_Andy',
@@ -96,7 +145,7 @@ class _EditProfile extends State<EditProfile> {
                       fontSize: 16,
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.bold)),
-              const TextField(
+              TextField(
                 decoration: InputDecoration(
                   enabled: false,
                   hintText: '**********',
@@ -124,14 +173,30 @@ class _EditProfile extends State<EditProfile> {
                                   'Do you want to update credentials?'),
                               actions: [
                                 TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const FirstScreen(),
-                                      ),
-                                    );
+                                  onPressed: () async {
+                                    // Get all the updated inputs
+                                    // ex. _usernameController.text prints j
+                                    Response response1 = await http.put(
+                                        Uri.parse(
+                                            'http://10.0.2.2:8000/api/users/update'),
+                                        headers: {
+                                          'Content-Type': 'application/json'
+                                        },
+                                        body: {
+                                          'user_id': uid,
+                                          'email': email,
+                                          'name': _fullnameController.text,
+                                          'birthdate':
+                                              _birthdateController.toString(),
+                                          'username': _usernameController.text,
+                                        });
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         const FirstScreen(),
+                                    //   ),
+                                    // );
                                   },
                                   child: const Text('CONTINUE'),
                                 ),
