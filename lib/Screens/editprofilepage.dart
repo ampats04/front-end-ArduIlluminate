@@ -11,17 +11,12 @@ import '../Authentication/auth.dart';
 TextEditingController _fullnameController = TextEditingController();
 TextEditingController _emailController = TextEditingController();
 TextEditingController _birthdateController = TextEditingController();
-TextEditingController _passwordController = TextEditingController();
 TextEditingController _usernameController = TextEditingController();
 String uid = Auth().currentUser!.uid;
 String email = Auth().currentUser!.email!;
 
 Future userProfile() async {
   try {
-    //String password = await Auth().currentUser!.password!;
-    //String birthdate = await Auth().currentUser!.birthdate!;
-    //String username = await Auth().currentUser!.username!;
-
     Response response = await http.get(
       Uri.parse('http://192.168.160.79:8000/api/users/retrieve?name=$uid'),
       headers: {'Content-Type': 'application/json'},

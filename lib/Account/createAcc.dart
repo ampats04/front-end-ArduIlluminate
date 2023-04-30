@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:ardu_illuminate/Account/login.dart';
+import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -43,7 +44,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         'username': usernameController.text,
       };
 
-      final uri = Uri.parse('http://10.0.2.2:8000/api/users/add');
+      final uri = Uri.parse('http://192.168.254.102:8000/api/users/add');
       final headers = {'Content-Type': 'application/json'};
 
       print('Data to be sent: $data');
@@ -67,6 +68,70 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       throw Exception('Failed to create user');
     }
   }
+
+  //check gpt
+  Future<void> _createAccount() async {
+    if (!_agreeToTermsAndPrivacy) {
+      return showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Please agree to the terms and privacy policy'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    try {
+      await createUser();
+
+      // If the account is created successfully, automatically logs the user in
+      credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const MainPage()),
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message;
+      });
+    } catch (error) {
+      setState(() {
+        errorMessage = error.toString();
+      });
+    }
+
+    if (errorMessage != null) {
+      return showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(errorMessage!),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+//check gpt
 
   bool _agreeToTermsAndPrivacy = false;
 
@@ -201,14 +266,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             const SizedBox(height: 32.0),
             ElevatedButton(
               onPressed: () {
-                //createAcc();
-                createUser();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(),
-                  ),
-                );
+                _createAccount();
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const MainPage(),
+                //   ),
+                // );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

@@ -176,7 +176,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              FirebaseAuth.instance.signOut();
+                                              signOut();
                                             },
                                             child: const Text('Continue'),
                                           )

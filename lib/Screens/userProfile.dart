@@ -2,7 +2,6 @@
 import 'package:ardu_illuminate/Screens/editprofilepage.dart';
 //import 'package:ardu_illuminate/editprofile.dart';
 import 'package:flutter/material.dart';
-import 'package:ardu_illuminate/Account/editPass.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -11,7 +10,6 @@ import '../Authentication/auth.dart';
 TextEditingController _fullnameController = TextEditingController();
 TextEditingController _emailController = TextEditingController();
 TextEditingController _birthdateController = TextEditingController();
-TextEditingController _passwordController = TextEditingController();
 TextEditingController _usernameController = TextEditingController();
 String uid = Auth().currentUser!.uid;
 String email = Auth().currentUser!.email!;
@@ -19,7 +17,7 @@ String email = Auth().currentUser!.email!;
 Future userProfile() async {
   try {
     Response response = await http.get(
-      Uri.parse('http://192.168.160.79:8000/api/users/retrieve?name=$uid'),
+      Uri.parse('http://192.168.254.102:8000/api/users/retrieve?name=$uid'),
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -50,6 +48,7 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
+    super.initState();
     userProfile();
   }
 
