@@ -1,59 +1,81 @@
 //import 'package:ardu_illuminate/editPassword.dart';
+import 'dart:convert';
+
 import 'package:ardu_illuminate/Screens/userProfile.dart';
-//import 'package:ardu_illuminate/passwordResetpage.dart';
-//import 'package:ardu_illuminate/editprofile.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+
+import 'package:intl/intl.dart';
 import '../Authentication/auth.dart';
 
-TextEditingController _fullnameController = TextEditingController();
-TextEditingController _emailController = TextEditingController();
-TextEditingController _birthdateController = TextEditingController();
-TextEditingController _usernameController = TextEditingController();
 String uid = Auth().currentUser!.uid;
 String email = Auth().currentUser!.email!;
 
-Future userProfile() async {
-  try {
-    Response response = await http.get(
-      Uri.parse('http://192.168.160.79:8000/api/users/retrieve?name=$uid'),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    var data = json.decode(response.body);
-    print("hi");
-    print(uid);
-    print(data);
-
-    _fullnameController.text = data[0]['name'];
-    _emailController.text = email;
-    _birthdateController.text = data[0]['birthdate'];
-    _usernameController.text = data[0]['username'];
-    print(_usernameController.text);
-  } catch (error) {
-    print(error);
-    throw Exception('Failed to Get User Credentials');
-  }
-}
-
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
-
+  const EditProfile({Key? key}) : super(key: key);
   @override
-  State<EditProfile> createState() => _EditProfileState();
+
+  // ignore: library_private_types_in_public_api
+  _EditProfileState createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
-  @override
-  void initState() {
-    userProfile();
+  final TextEditingController _fullnameController = TextEditingController();
+  DateTime? _selectedDate;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+
+  Future editUser() async {
+    try {
+      Map<String, dynamic> data = {
+        'user_id': uid,
+        'name': _fullnameController.text,
+        'birthdate': _selectedDate.toString(),
+        'username': _usernameController.text,
+      };
+
+      final uri =
+          Uri.parse('http://192.168.254.115:8000/api/users/update/$uid');
+      final headers = {'Content-Type': 'application/json'};
+
+      final response = await http.put(
+        uri,
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        return response.body;
+      }
+    } catch (error) {
+      print(error);
+      throw Exception('Failed to update user');
+    }
+  }
+
+  void _presentDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    final DateFormat dateFormat = DateFormat('MMM d, yyyy');
+    final String? selectedDateFormatted =
+        _selectedDate == null ? null : dateFormat.format(_selectedDate!);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -75,7 +97,7 @@ class _EditProfileState extends State<EditProfile> {
               TextField(
                 enabled: true,
                 controller: _fullnameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Jeremy Andy Ampatin',
                   prefixIcon: Icon(Icons.person),
                 ),
@@ -90,12 +112,18 @@ class _EditProfileState extends State<EditProfile> {
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold),
               ),
-              TextField(
-                controller: _birthdateController,
-                enabled: true,
-                decoration: InputDecoration(
-                  hintText: 'January 69, 6969',
-                  prefixIcon: Icon(Icons.calendar_today),
+              GestureDetector(
+                onTap: _presentDatePicker,
+                child: AbsorbPointer(
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Select your birthdate',
+                      prefixIcon: Icon(Icons.calendar_today),
+                    ),
+                    controller: TextEditingController(
+                        text: selectedDateFormatted ?? ''),
+                    keyboardType: TextInputType.datetime,
+                  ),
                 ),
               ),
               const SizedBox(
@@ -112,7 +140,7 @@ class _EditProfileState extends State<EditProfile> {
               TextField(
                 enabled: true,
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'jeremyandyampatin@gmail.com',
                   prefixIcon: Icon(Icons.mark_email_read),
                 ),
@@ -128,7 +156,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               TextField(
                 controller: _usernameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   enabled: true,
                   hintText: 'Jeremy_Andy',
                   prefixIcon: Icon(Icons.account_circle),
@@ -140,7 +168,7 @@ class _EditProfileState extends State<EditProfile> {
                       fontSize: 16,
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.bold)),
-              TextField(
+              const TextField(
                 decoration: InputDecoration(
                   enabled: false,
                   hintText: '**********',
@@ -168,31 +196,8 @@ class _EditProfileState extends State<EditProfile> {
                                   'Do you want to update credentials?'),
                               actions: [
                                 TextButton(
-                                  onPressed: () async {
-                                    // Get all the updated inputs
-                                    // ex. _usernameController.text prints j
-                                    Response response1 = await http.put(
-                                        Uri.parse(
-                                            'http://192.168.160.79:8000/api/users/update'),
-                                        headers: {
-                                          "Accept": "application/json",
-                                          "content-type": "application/json"
-                                        },
-                                        body: jsonEncode({
-                                          'user_id': uid,
-                                          'email': email,
-                                          'name': _fullnameController.text,
-                                          'birthdate':
-                                              _birthdateController.text,
-                                          'username': _usernameController.text,
-                                        }));
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         const FirstScreen(),
-                                    //   ),
-                                    // );
+                                  onPressed: () {
+                                    editUser();
                                   },
                                   child: const Text('CONTINUE'),
                                 ),

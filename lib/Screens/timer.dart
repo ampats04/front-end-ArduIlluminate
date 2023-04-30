@@ -12,7 +12,10 @@ class TimerPage extends StatefulWidget {
   _TimerPageState createState() => _TimerPageState();
 }
 
-class _TimerPageState extends State<TimerPage> {
+class _TimerPageState extends State<TimerPage>
+    with AutomaticKeepAliveClientMixin<TimerPage> {
+  @override
+  bool get wantKeepAlive => true;
   Duration _picked = const Duration(hours: 0, minutes: 0);
   Timer? countdownTimer;
   bool isStarted = false;

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Socket/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -11,7 +9,10 @@ class MainPage extends StatefulWidget {
   _MainPageScreenState createState() => _MainPageScreenState();
 }
 
-class _MainPageScreenState extends State<MainPage> {
+class _MainPageScreenState extends State<MainPage>
+    with AutomaticKeepAliveClientMixin<MainPage> {
+  @override
+  bool get wantKeepAlive => true;
   bool light1 = false;
   Color activeColor = Colors.green;
   double _currentSliderValue = 20;

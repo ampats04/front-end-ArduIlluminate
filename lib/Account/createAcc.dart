@@ -44,7 +44,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         'username': usernameController.text,
       };
 
-      final uri = Uri.parse('http://192.168.254.102:8000/api/users/add');
+      final uri = Uri.parse('http://192.168.254.115:8000/api/users/add');
       final headers = {'Content-Type': 'application/json'};
 
       print('Data to be sent: $data');
@@ -53,7 +53,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         uri,
         headers: headers,
         body: jsonEncode(data),
-        // encoding: encoding,
       );
 
       if (response.statusCode == 200) {
@@ -97,11 +96,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         email: emailController.text,
         password: passwordController.text,
       );
-
       // ignore: use_build_context_synchronously
-      Navigator.of(context).pushAndRemoveUntil(
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const MainPage()),
-        (route) => false,
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -114,6 +111,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     }
 
     if (errorMessage != null) {
+      // ignore: use_build_context_synchronously
       return showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
@@ -267,12 +265,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ElevatedButton(
               onPressed: () {
                 _createAccount();
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => const MainPage(),
-                //   ),
-                // );
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

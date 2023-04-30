@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 import 'draw_header.dart';
@@ -9,7 +11,10 @@ class PowerConsumption extends StatefulWidget {
   _PowerConsumption createState() => _PowerConsumption();
 }
 
-class _PowerConsumption extends State<PowerConsumption> {
+class _PowerConsumption extends State<PowerConsumption>
+    with AutomaticKeepAliveClientMixin<PowerConsumption> {
+  @override
+  bool get wantKeepAlive => true;
   double wattage = 0.0;
   double kilowattHours = 0.0;
   double pesoCost = 0.0;
