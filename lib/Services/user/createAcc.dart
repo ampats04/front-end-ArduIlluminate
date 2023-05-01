@@ -34,8 +34,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         password: passwordController.text,
       );
 
-      print("yawa maoni si $uid");
-
       Map<String, dynamic> data = {
         'user_id': uid,
         'name': fullNameController.text,
@@ -43,26 +41,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         'username': usernameController.text,
       };
 
-      final uri = Uri.parse('http://192.168.254.115:8000/api/users/add');
+      final uri = Uri.parse('http://192.168.254.106:8000/api/users/add');
       final headers = {'Content-Type': 'application/json'};
 
-      print('Data to be sent: $data');
-
-      Response response = await http.post(
+      await http.post(
         uri,
         headers: headers,
         body: jsonEncode(data),
       );
-
-      if (response.statusCode == 200) {
-        print(response.body);
-      } else {
-        print('Request failed with status code ${response.statusCode}');
-      }
-    } on FirebaseAuthException catch (e) {
-      throw Exception('Failed to create user');
-    } catch (error) {
-      print(error);
+    } catch (err) {
+      print(err);
       throw Exception('Failed to create user');
     }
   }

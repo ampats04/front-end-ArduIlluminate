@@ -92,7 +92,7 @@ class _PowerConsumption extends State<PowerConsumption>
               'P ${pesoCost.toStringAsFixed(2)}',
               style: const TextStyle(fontSize: 20, fontFamily: 'Poppins'),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
           ],
         ),
       ),

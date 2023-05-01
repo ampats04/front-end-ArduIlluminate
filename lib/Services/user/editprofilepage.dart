@@ -26,34 +26,6 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
 
-  // Future editUser() async {
-  //   try {
-  //     Map<String, dynamic> data = {
-  //       'user_id': uid,
-  //       'name': _fullnameController.text,
-  //       'birthdate': _selectedDate.toString(),
-  //       'username': _usernameController.text,
-  //     };
-
-  //     final uri =
-  //         Uri.parse('http://192.168.254.115:8000/api/users/update/$uid');
-  //     final headers = {'Content-Type': 'application/json'};
-
-  //     final response = await http.put(
-  //       uri,
-  //       headers: headers,
-  //       body: jsonEncode(data),
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       return response.body;
-  //     }
-  //   } catch (error) {
-  //     print(error);
-  //     throw Exception('Failed to update user');
-  //   }
-  // }
-
   void _presentDatePicker() {
     showDatePicker(
       context: context,

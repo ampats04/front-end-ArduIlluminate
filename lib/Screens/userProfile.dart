@@ -1,6 +1,4 @@
-//import 'package:ardu_illuminate/passwordResetpage.dart';
-import 'package:ardu_illuminate/Services/User_Service/editprofilepage.dart';
-//import 'package:ardu_illuminate/editprofile.dart';
+import 'package:ardu_illuminate/Services/user/editprofilepage.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -17,7 +15,7 @@ String email = Auth().currentUser!.email!;
 Future userProfile() async {
   try {
     Response response = await http.get(
-      Uri.parse('http://192.168.254.115:8000/api/users/retrieve?name=$uid'),
+      Uri.parse('http://192.168.254.106:8000/api/users/retrieve?name=$uid'),
       headers: {'Content-Type': 'application/json'},
     );
 
