@@ -1,3 +1,4 @@
+import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/user/editPass.dart';
 import 'package:ardu_illuminate/Screens/light_details.dart';
@@ -18,11 +19,8 @@ class _DrawHeaderState extends State<DrawHeader> {
   final User? user = Auth().currentUser;
 
   Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut();
-  }
-
-  void _logout(BuildContext context) {
-    // ari mag butang sa logic pag log out sa user
+    await FirebaseAuth.instance.signOut().then((value) => Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const LoginPage())));
   }
 
   @override

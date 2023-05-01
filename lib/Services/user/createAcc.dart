@@ -1,6 +1,7 @@
 // ignore: file_names
 import 'dart:convert';
 
+import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -33,6 +34,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         email: emailController.text,
         password: passwordController.text,
       );
+      //     .then((value) {
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => MainPage()));
+      // });
 
       Map<String, dynamic> data = {
         'user_id': uid,
@@ -56,67 +61,70 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   //check gpt
-  Future<dynamic> _createAccount() async {
-    if (!_agreeToTermsAndPrivacy) {
-      return showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Error'),
-          content: const Text('Please agree to the terms and privacy policy'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
+//   Future<dynamic> _createAccount() async {
+//     if (!_agreeToTermsAndPrivacy) {
+//       return showDialog(
+//         context: context,
+//         builder: (ctx) => AlertDialog(
+//           title: const Text('Error'),
+//           content: const Text('Please agree to the terms and privacy policy'),
+//           actions: <Widget>[
+//             TextButton(
+//               onPressed: () {
+//                 Navigator.of(ctx).pop();
+//               },
+//               child: const Text('OK'),
+//             ),
+//           ],
+//         ),
+//       );
+//     }
 
-    try {
-      await createUser();
+//     try {
+//       await createUser();
 
-      // If the account is created successfully, automatically logs the user in
-      credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const MainPage()),
-      );
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
-    } catch (error) {
-      setState(() {
-        errorMessage = error.toString();
-      });
-    }
+//       // If the account is created successfully, automatically logs the user in
+//       credential = await FirebaseAuth.instance
+//           .signInWithEmailAndPassword(
+//         email: emailController.text,
+//         password: passwordController.text,
+//       )
+//           // ignore: body_might_complete_normally_nullable
+//           .then((value) {
+//         Navigator.push(
+//             context, MaterialPageRoute(builder: (context) => const HomePage()));
+//       });
+//       // ignore: use_build_context_synchronously
+//     } on FirebaseAuthException catch (e) {
+//       setState(() {
+//         errorMessage = e.message;
+//       });
+//     } catch (error) {
+//       setState(() {
+//         errorMessage = error.toString();
+//       });
+//     }
 
-    if (errorMessage != null) {
-      // ignore: use_build_context_synchronously
-      return showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Error'),
-          content: Text(errorMessage!),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-  }
-//check gpt
+//     if (errorMessage != null) {
+//       // ignore: use_build_context_synchronously
+//       return showDialog(
+//         context: context,
+//         builder: (ctx) => AlertDialog(
+//           title: const Text('Error'),
+//           content: Text(errorMessage!),
+//           actions: <Widget>[
+//             TextButton(
+//               onPressed: () {
+//                 Navigator.of(ctx).pop();
+//               },
+//               child: const Text('OK'),
+//             ),
+//           ],
+//         ),
+//       );
+//     }
+//   }
+// //check gpt
 
   bool _agreeToTermsAndPrivacy = false;
 
@@ -251,7 +259,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             const SizedBox(height: 32.0),
             ElevatedButton(
               onPressed: () {
-                _createAccount();
+                createUser();
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

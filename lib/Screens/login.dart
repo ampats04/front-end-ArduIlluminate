@@ -1,3 +1,4 @@
+import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:ardu_illuminate/Services/user/passReset.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,10 +31,15 @@ class _LoginPageState extends State<LoginPage> {
 
   Future signIn() async {
     try {
-      await Auth().signIn(
+      await Auth()
+          .signIn(
         email: emailController.text,
         password: passwordController.text.trim(),
-      );
+      )
+          .then((value) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
+      });
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
