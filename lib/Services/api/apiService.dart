@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:ardu_illuminate/Screens/editprofilepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-import './Authentication/auth.dart';
+import '../auth/auth.dart';
 
 // ignore: camel_case_types
 

@@ -1,5 +1,5 @@
 // ignore: file_names
-import 'package:ardu_illuminate/Account/verifyCode.dart';
+import 'package:ardu_illuminate/Services/auth/verifyCode.dart';
 import 'package:flutter/material.dart';
 
 class ResetPassword extends StatefulWidget {

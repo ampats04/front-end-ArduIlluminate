@@ -1,12 +1,11 @@
 //import 'package:ardu_illuminate/passwordResetpage.dart';
-import 'package:ardu_illuminate/Screens/editprofilepage.dart';
+import 'package:ardu_illuminate/Services/User_Service/editprofilepage.dart';
 //import 'package:ardu_illuminate/editprofile.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import '../Authentication/auth.dart';
-import '../apiService.dart';
+import '../Services/auth/auth.dart';
 
 TextEditingController _fullnameController = TextEditingController();
 TextEditingController _emailController = TextEditingController();

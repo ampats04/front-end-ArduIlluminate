@@ -1,15 +1,13 @@
 //import 'package:ardu_illuminate/editPassword.dart';
-import 'dart:convert';
 
-import 'package:ardu_illuminate/Model/user_model.dart';
+import 'package:ardu_illuminate/Models/user_model.dart';
 
-import 'package:ardu_illuminate/apiService.dart';
+import 'package:ardu_illuminate/Services/api/apiService.dart';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:intl/intl.dart';
-import '../Authentication/auth.dart';
+import '../auth/auth.dart';
 
 String uid = Auth().currentUser!.uid;
 String email = Auth().currentUser!.email!;

@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ardu_illuminate/Account/login.dart';
+import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Screens/homePage.dart';
 

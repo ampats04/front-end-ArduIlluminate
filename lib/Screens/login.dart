@@ -1,8 +1,8 @@
-import 'package:ardu_illuminate/Account/passReset.dart';
+import 'package:ardu_illuminate/Services/user/passReset.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'createAcc.dart';
-import '../Authentication/auth.dart';
+import '../Services//user/createAcc.dart';
+import '../Services/auth/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

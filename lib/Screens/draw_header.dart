@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ardu_illuminate/Account/editPass.dart';
+import 'package:ardu_illuminate/Services/user/editPass.dart';
 import 'package:ardu_illuminate/Screens/light_details.dart';
 import 'package:ardu_illuminate/Screens/userProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ardu_illuminate/Authentication/auth.dart';
+import 'package:ardu_illuminate/Services/auth/auth.dart';
 
 class DrawHeader extends StatefulWidget {
   const DrawHeader({Key? key}) : super(key: key);

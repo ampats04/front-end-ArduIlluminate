@@ -1,4 +1,4 @@
-import 'package:ardu_illuminate/Account/login.dart';
+import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -30,7 +30,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat dateFormat = DateFormat('MMM d, yyyy');
+    final DateFormat dateFormat = DateFormat.yMEd();
     final String? selectedDateFormatted =
         _selectedDate == null ? null : dateFormat.format(_selectedDate!);
     return Scaffold(
@@ -89,13 +89,6 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
             ),
             //add birthdate selector here
             ElevatedButton(
-              child: Text(
-                'SAVE DETAILS',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
-                ),
-              ),
               onPressed: () {
                 showDialog(
                     context: context,
@@ -115,7 +108,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
                               Navigator.pop(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
+                                  builder: (context) => const LoginPage(),
                                 ),
                               );
                             },
@@ -137,6 +130,13 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 backgroundColor: const Color(0xFF0047FF),
+              ),
+              child: const Text(
+                'SAVE DETAILS',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: Colors.white,
+                ),
               ),
             ),
           ],

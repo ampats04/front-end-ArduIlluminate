@@ -1,12 +1,11 @@
 // ignore: file_names
 import 'dart:convert';
 
-import 'package:ardu_illuminate/Account/login.dart';
 import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:ardu_illuminate/Authentication/auth.dart';
+import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
