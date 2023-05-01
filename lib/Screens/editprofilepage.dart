@@ -206,7 +206,7 @@ class _EditProfileState extends State<EditProfile> {
                                       );
 
                                       var response = await apiService()
-                                          .put("/update/$userId", user)
+                                          .put("/users/update/$userId", user)
                                           .catchError((err) {
                                         debugPrint(err.toString());
                                       });

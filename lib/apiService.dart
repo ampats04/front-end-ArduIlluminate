@@ -8,7 +8,7 @@ import './Authentication/auth.dart';
 
 // ignore: camel_case_types
 
-const String baseUrl = "http://192.168.254.115:8000/api/users";
+const String baseUrl = "http://192.168.254.115:8000/api";
 
 // ignore: camel_case_types
 class apiService {
@@ -51,7 +51,7 @@ class apiService {
     if (response.statusCode == 200) {
       return response.body;
     } else {
-      throw Exception("cannot update user");
+      throw Exception("cannot update");
     }
   }
 }
