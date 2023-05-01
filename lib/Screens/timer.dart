@@ -82,6 +82,7 @@ class _TimerPageState extends State<TimerPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     String strDigits(int n) => n.toString().padLeft(2, '0');
     final hours = strDigits(_picked.inHours.remainder(24));
     final minutes = strDigits(_picked.inMinutes.remainder(60));

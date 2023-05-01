@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import '../Authentication/auth.dart';
+import '../apiService.dart';
 
 TextEditingController _fullnameController = TextEditingController();
 TextEditingController _emailController = TextEditingController();
@@ -29,7 +30,6 @@ Future userProfile() async {
     _emailController.text = email;
     _birthdateController.text = data[0]['birthdate'];
     _usernameController.text = data[0]['username'];
-    print(_usernameController.text);
   } catch (error) {
     print(error);
     throw Exception('Failed to Get User Credentials');

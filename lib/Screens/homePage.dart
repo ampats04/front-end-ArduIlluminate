@@ -13,18 +13,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedindex = 0;
+  // ignore: prefer_typing_uninitialized_variables
   var _selectedPageIndex;
   late List<Widget> _pages;
   late final PageController _pageController;
 
-  //final PageController _pageController = PageController();
-
-  // final List<Widget> _widgetOptions = [
-  //   const TimerPage(),
-  //   const MainPage(),
-  //   const PowerConsumption(),
-  // ];
   @override
   void initState() {
     super.initState();
@@ -37,14 +30,6 @@ class _HomePageState extends State<HomePage> {
     ];
 
     _pageController = PageController(initialPage: _selectedPageIndex);
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedindex = index;
-      _pageController.animateToPage(index,
-          duration: const Duration(milliseconds: 300), curve: Curves.ease);
-    });
   }
 
   @override
@@ -63,8 +48,8 @@ class _HomePageState extends State<HomePage> {
         children: _pages,
       ),
       bottomNavigationBar: CurvedNavigationBar(
-          backgroundColor: const Color(0xFFcffafe),
-          color: const Color(0xFF219ebc),
+          backgroundColor: const Color.fromRGBO(228, 195, 173, 1),
+          color: Color.fromRGBO(158, 163, 176, 1),
           height: 57.0,
           animationDuration: const Duration(milliseconds: 400),
           items: const [

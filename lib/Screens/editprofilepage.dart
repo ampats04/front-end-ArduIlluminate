@@ -1,11 +1,12 @@
 //import 'package:ardu_illuminate/editPassword.dart';
 import 'dart:convert';
 
-import 'package:ardu_illuminate/Screens/userProfile.dart';
+import 'package:ardu_illuminate/Model/user_model.dart';
+
+import 'package:ardu_illuminate/apiService.dart';
+
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 
 import 'package:intl/intl.dart';
 import '../Authentication/auth.dart';
@@ -27,33 +28,33 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
 
-  Future editUser() async {
-    try {
-      Map<String, dynamic> data = {
-        'user_id': uid,
-        'name': _fullnameController.text,
-        'birthdate': _selectedDate.toString(),
-        'username': _usernameController.text,
-      };
+  // Future editUser() async {
+  //   try {
+  //     Map<String, dynamic> data = {
+  //       'user_id': uid,
+  //       'name': _fullnameController.text,
+  //       'birthdate': _selectedDate.toString(),
+  //       'username': _usernameController.text,
+  //     };
 
-      final uri =
-          Uri.parse('http://192.168.254.115:8000/api/users/update/$uid');
-      final headers = {'Content-Type': 'application/json'};
+  //     final uri =
+  //         Uri.parse('http://192.168.254.115:8000/api/users/update/$uid');
+  //     final headers = {'Content-Type': 'application/json'};
 
-      final response = await http.put(
-        uri,
-        headers: headers,
-        body: jsonEncode(data),
-      );
+  //     final response = await http.put(
+  //       uri,
+  //       headers: headers,
+  //       body: jsonEncode(data),
+  //     );
 
-      if (response.statusCode == 200) {
-        return response.body;
-      }
-    } catch (error) {
-      print(error);
-      throw Exception('Failed to update user');
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       return response.body;
+  //     }
+  //   } catch (error) {
+  //     print(error);
+  //     throw Exception('Failed to update user');
+  //   }
+  // }
 
   void _presentDatePicker() {
     showDatePicker(
@@ -98,7 +99,6 @@ class _EditProfileState extends State<EditProfile> {
                 enabled: true,
                 controller: _fullnameController,
                 decoration: const InputDecoration(
-                  hintText: 'Jeremy Andy Ampatin',
                   prefixIcon: Icon(Icons.person),
                 ),
               ),
@@ -141,7 +141,6 @@ class _EditProfileState extends State<EditProfile> {
                 enabled: true,
                 controller: _emailController,
                 decoration: const InputDecoration(
-                  hintText: 'jeremyandyampatin@gmail.com',
                   prefixIcon: Icon(Icons.mark_email_read),
                 ),
               ),
@@ -158,7 +157,6 @@ class _EditProfileState extends State<EditProfile> {
                 controller: _usernameController,
                 decoration: const InputDecoration(
                   enabled: true,
-                  hintText: 'Jeremy_Andy',
                   prefixIcon: Icon(Icons.account_circle),
                 ),
               ),
@@ -171,7 +169,6 @@ class _EditProfileState extends State<EditProfile> {
               const TextField(
                 decoration: InputDecoration(
                   enabled: false,
-                  hintText: '**********',
                   prefixIcon: Icon(Icons.lock),
                 ),
               ),
@@ -196,8 +193,35 @@ class _EditProfileState extends State<EditProfile> {
                                   'Do you want to update credentials?'),
                               actions: [
                                 TextButton(
-                                  onPressed: () {
-                                    editUser();
+                                  onPressed: () async {
+                                    try {
+                                      var userId = uid;
+                                      print(userId);
+                                      var user = UserModel(
+                                        user_id: userId,
+                                        name: "Rosiel Getio",
+                                        birthdate: DateTime.parse(
+                                            "2023-04-23 00:00:00.000"),
+                                        username: "rososoosiel",
+                                      );
+
+                                      var response = await apiService()
+                                          .put("/update/$userId", user)
+                                          .catchError((err) {
+                                        print(err);
+                                      });
+
+                                      if (response != null &&
+                                          response.statusCode >= 200 &&
+                                          response.statusCode < 300) {
+                                        print('Successful');
+                                      } else {
+                                        print('Failed');
+                                      }
+                                    } catch (err) {
+                                      print(err);
+                                      throw Exception("Failed to update user");
+                                    }
                                   },
                                   child: const Text('CONTINUE'),
                                 ),

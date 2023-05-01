@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Socket/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
@@ -66,10 +68,11 @@ class _MainPageScreenState extends State<MainPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark
           ? Colors.black
-          : Color(0xFFD9D9D9),
+          : const Color(0xFFD9D9D9),
       appBar: AppBar(
         title: const Text(
           'Main Light Control',
@@ -79,7 +82,7 @@ class _MainPageScreenState extends State<MainPage>
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color(0xFFD9D9D9),
+        backgroundColor: const Color(0xFFD9D9D9),
       ),
       drawer: const DrawHeader(),
       body: Container(
