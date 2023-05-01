@@ -199,27 +199,26 @@ class _EditProfileState extends State<EditProfile> {
                                       print(userId);
                                       var user = UserModel(
                                         user_id: userId,
-                                        name: "Rosiel Getio",
+                                        name: _fullnameController.text,
                                         birthdate: DateTime.parse(
-                                            "2023-04-23 00:00:00.000"),
-                                        username: "rososoosiel",
+                                            _selectedDate.toString()),
+                                        username: _usernameController.text,
                                       );
 
                                       var response = await apiService()
                                           .put("/update/$userId", user)
                                           .catchError((err) {
-                                        print(err);
+                                        debugPrint(err.toString());
                                       });
 
                                       if (response != null &&
-                                          response.statusCode >= 200 &&
-                                          response.statusCode < 300) {
-                                        print('Successful');
+                                          response.statusCode >= 200) {
+                                        debugPrint('Successful');
                                       } else {
-                                        print('Failed');
+                                        debugPrint('Failed');
                                       }
                                     } catch (err) {
-                                      print(err);
+                                      debugPrint(err.toString());
                                       throw Exception("Failed to update user");
                                     }
                                   },

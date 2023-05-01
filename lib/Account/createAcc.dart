@@ -69,7 +69,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   //check gpt
-  Future<void> _createAccount() async {
+  Future<dynamic> _createAccount() async {
     if (!_agreeToTermsAndPrivacy) {
       return showDialog(
         context: context,
