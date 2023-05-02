@@ -2,32 +2,44 @@ import 'package:ardu_illuminate/Services/user/editprofilepage.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
+import '../Services/api/apiService.dart';
 import '../Services/auth/auth.dart';
 
-TextEditingController _fullnameController = TextEditingController();
-TextEditingController _emailController = TextEditingController();
-TextEditingController _birthdateController = TextEditingController();
-TextEditingController _usernameController = TextEditingController();
+final TextEditingController _fullnameController = TextEditingController();
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _birthdateController = TextEditingController();
+final TextEditingController _usernameController = TextEditingController();
+
 String uid = Auth().currentUser!.uid;
 String email = Auth().currentUser!.email!;
 
-Future userProfile() async {
+Future fetchDatafromServer() async {
   try {
-    Response response = await http.get(
+    var response = await http.get(
       Uri.parse('http://10.0.2.2:8000/api/users/retrieve?name=$uid'),
       headers: {'Content-Type': 'application/json'},
     );
 
-    var data = json.decode(response.body);
-
-    _fullnameController.text = data[0]['name'];
-    _emailController.text = email;
-    _birthdateController.text = data[0]['birthdate'];
-    _usernameController.text = data[0]['username'];
-  } catch (error) {
-    print(error);
+    if (response.statusCode == 200) {
+      //resuest sucesss
+      return response.body;
+    } else {
+      // The request failed
+      throw Exception('Failed to load data from server');
+    }
+  } catch (err) {
+    throw Exception("Failed to Retrieve Creddentials");
   }
+}
+
+Future fetchUser() async {
+  final String data = await fetchDatafromServer();
+  final decodeData = jsonDecode(data);
+
+  _fullnameController.text = decodeData[0]['name'];
+  _emailController.text = email;
+  _birthdateController.text = decodeData[0]['birthdate'];
+  _usernameController.text = decodeData[0]['username'];
 }
 
 bool isEditProfile = false;
@@ -43,7 +55,7 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
     super.initState();
-    userProfile();
+    fetchUser();
   }
 
   @override
@@ -68,7 +80,6 @@ class _FirstScreenState extends State<FirstScreen> {
               enabled: isEditProfile,
               controller: _fullnameController,
               decoration: const InputDecoration(
-                //hintText: 'Jeremy Andy Ampatin',
                 prefixIcon: Icon(Icons.person),
               ),
             ),
@@ -86,7 +97,6 @@ class _FirstScreenState extends State<FirstScreen> {
               enabled: isEditProfile,
               controller: _birthdateController,
               decoration: const InputDecoration(
-                // hintText: 'January 69, 6969',
                 prefixIcon: Icon(Icons.calendar_today),
               ),
             ),
@@ -105,7 +115,6 @@ class _FirstScreenState extends State<FirstScreen> {
               enabled: isEditProfile,
               controller: _emailController,
               decoration: const InputDecoration(
-                //hintText: 'jeremyandyampatin@gmail.com',
                 prefixIcon: Icon(Icons.mark_email_read),
               ),
             ),
@@ -122,7 +131,6 @@ class _FirstScreenState extends State<FirstScreen> {
               controller: _usernameController,
               decoration: InputDecoration(
                 enabled: isEditProfile,
-                // hintText: 'Jeremy_Andy',
                 prefixIcon: const Icon(Icons.account_circle),
               ),
             ),

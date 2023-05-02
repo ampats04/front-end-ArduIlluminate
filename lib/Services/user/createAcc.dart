@@ -2,11 +2,13 @@
 import 'dart:convert';
 
 // import '../../Screens/homePage.dart';
+import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+import '../api/apiService.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({Key? key}) : super(key: key);
@@ -26,34 +28,71 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   UserCredential? credential;
   bool isLogin = true;
 
-  Future createUser() async {
+  // Future createUser() async {
+
+  //   final uri = Uri.parse('http://10.0.2.2:8000/api/users/add');
+  //   final headers = {'Content-Type': 'application/json'};
+
+  //   try {
+  //     String uid = await Auth().register(
+  //       email: emailController.text,
+  //       password: passwordController.text,
+  //     );
+
+  //     Map<String, dynamic> data = {
+  //       'user_id': uid,
+  //       'name': fullNameController.text,
+  //       'birthdate': birthdateOnlyString,
+  //       'username': usernameController.text,
+  //     };
+
+  //     await http.post(
+  //       uri,
+  //       headers: headers,
+  //       body: jsonEncode(data),
+  //     );
+  //   } catch (err) {
+  //     print(err);
+  //     throw Exception('Failed to create user');
+  //   }
+  // }
+
+  void _register() async {
     String birthdateString = _selectedDate!.toIso8601String();
     String birthdateOnlyString = birthdateString.substring(0, 10);
-    print(birthdateOnlyString);
-    try {
-      String uid = await Auth().register(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+    final String email = emailController.text.trim();
+    final String password = passwordController.text.trim();
 
-      Map<String, dynamic> data = {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      print(
+          "User registered successfully with uid: ${userCredential.user!.uid}");
+      String uid = userCredential.user!.uid;
+
+      final Map<String, dynamic> userData = {
         'user_id': uid,
         'name': fullNameController.text,
         'birthdate': birthdateOnlyString,
         'username': usernameController.text,
       };
 
-      final uri = Uri.parse('http://10.0.2.2:8000/api/users/add');
-      final headers = {'Content-Type': 'application/json'};
-
-      await http.post(
-        uri,
-        headers: headers,
-        body: jsonEncode(data),
-      );
-    } catch (err) {
-      print(err);
-      throw Exception('Failed to create user');
+      await apiService().post("/users/add", userData);
+      print("Account created successfully!");
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: ((context) => const MainPage())));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print("Failed to create account: $e");
     }
   }
 
@@ -104,8 +143,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               'Full Name',
               style: TextStyle(fontSize: 16.0),
             ),
-            TextField(
+            TextFormField(
               controller: fullNameController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Please enter your full name";
+                }
+                return null;
+              },
               decoration: const InputDecoration(
                 hintText: 'Enter your full name',
                 prefixIcon: Icon(Icons.person),
@@ -119,7 +164,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             GestureDetector(
               onTap: _presentDatePicker,
               child: AbsorbPointer(
-                child: TextField(
+                child: TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please enter your Birthdate";
+                    }
+                    return null;
+                  },
                   decoration: const InputDecoration(
                     hintText: 'Select your birthdate',
                     prefixIcon: Icon(Icons.calendar_today),
@@ -135,8 +186,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               'Email',
               style: TextStyle(fontSize: 16.0),
             ),
-            TextField(
+            TextFormField(
               controller: emailController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Please enter your Email";
+                }
+                return null;
+              },
               decoration: const InputDecoration(
                 hintText: 'Enter your email',
                 prefixIcon: Icon(Icons.email),
@@ -148,8 +205,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               'Username',
               style: TextStyle(fontSize: 16.0),
             ),
-            TextField(
+            TextFormField(
               controller: usernameController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Please enter your Username";
+                }
+                return null;
+              },
               decoration: const InputDecoration(
                 hintText: 'Enter your username',
                 prefixIcon: Icon(Icons.account_circle),
@@ -190,7 +253,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             const SizedBox(height: 32.0),
             ElevatedButton(
               onPressed: () {
-                createUser();
+                _register();
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
