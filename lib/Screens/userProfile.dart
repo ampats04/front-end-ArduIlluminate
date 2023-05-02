@@ -15,13 +15,11 @@ String email = Auth().currentUser!.email!;
 Future userProfile() async {
   try {
     Response response = await http.get(
-      Uri.parse('http://192.168.254.106:8000/api/users/retrieve?name=$uid'),
+      Uri.parse('http://10.0.2.2:8000/api/users/retrieve?name=$uid'),
       headers: {'Content-Type': 'application/json'},
     );
 
     var data = json.decode(response.body);
-    print("hi");
-    print(data);
 
     _fullnameController.text = data[0]['name'];
     _emailController.text = email;
@@ -29,7 +27,6 @@ Future userProfile() async {
     _usernameController.text = data[0]['username'];
   } catch (error) {
     print(error);
-    throw Exception('Failed to Get User Credentials');
   }
 }
 

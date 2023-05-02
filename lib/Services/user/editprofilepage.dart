@@ -164,41 +164,36 @@ class _EditProfileState extends State<EditProfile> {
                               actions: [
                                 TextButton(
                                   onPressed: () async {
+                                    String birthdateString =
+                                        _selectedDate!.toIso8601String();
+                                    String birthdateOnlyString =
+                                        birthdateString.substring(0, 10);
                                     try {
                                       var userId = uid;
-                                      print(userId);
-                                      var user = UserModel(
-                                        user_id: userId,
-                                        name: _fullnameController.text,
-                                        birthdate: DateTime.parse(
-                                            _selectedDate.toString()),
-                                        username: _usernameController.text,
-                                      );
+                                      Map<String, dynamic> data = {
+                                        'user_id': uid,
+                                        'name': _fullnameController.text,
+                                        'birthdate': birthdateOnlyString,
+                                        'username': _usernameController.text,
+                                      };
 
-                                      var response = await apiService()
-                                          .put("/users/update/$userId", user)
+                                      await apiService()
+                                          .put("/users/update/$userId", data)
                                           .catchError((err) {
                                         debugPrint(err.toString());
                                       });
-
-                                      if (response != null &&
-                                          response.statusCode >= 200) {
-                                        debugPrint('Successful');
-                                      } else {
-                                        debugPrint('Failed');
-                                      }
                                     } catch (err) {
                                       debugPrint(err.toString());
                                       throw Exception("Failed to update user");
                                     }
                                   },
-                                  child: const Text('CONTINUE'),
+                                  child: const Text('Continue'),
                                 ),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: const Text('REVERT'),
+                                  child: const Text('Cancel'),
                                 ),
                               ],
                             );

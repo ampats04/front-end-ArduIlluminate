@@ -1,10 +1,8 @@
 // ignore: file_names
 import 'dart:convert';
 
-import 'package:ardu_illuminate/Screens/homePage.dart';
-import 'package:ardu_illuminate/Screens/mainPage.dart';
+// import '../../Screens/homePage.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,24 +27,23 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   bool isLogin = true;
 
   Future createUser() async {
+    String birthdateString = _selectedDate!.toIso8601String();
+    String birthdateOnlyString = birthdateString.substring(0, 10);
+    print(birthdateOnlyString);
     try {
       String uid = await Auth().register(
         email: emailController.text,
         password: passwordController.text,
       );
-      //     .then((value) {
-      //   Navigator.push(
-      //       context, MaterialPageRoute(builder: (context) => MainPage()));
-      // });
 
       Map<String, dynamic> data = {
         'user_id': uid,
         'name': fullNameController.text,
-        'birthdate': _selectedDate.toString(),
+        'birthdate': birthdateOnlyString,
         'username': usernameController.text,
       };
 
-      final uri = Uri.parse('http://192.168.254.106:8000/api/users/add');
+      final uri = Uri.parse('http://10.0.2.2:8000/api/users/add');
       final headers = {'Content-Type': 'application/json'};
 
       await http.post(
@@ -60,79 +57,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     }
   }
 
-  //check gpt
-//   Future<dynamic> _createAccount() async {
-//     if (!_agreeToTermsAndPrivacy) {
-//       return showDialog(
-//         context: context,
-//         builder: (ctx) => AlertDialog(
-//           title: const Text('Error'),
-//           content: const Text('Please agree to the terms and privacy policy'),
-//           actions: <Widget>[
-//             TextButton(
-//               onPressed: () {
-//                 Navigator.of(ctx).pop();
-//               },
-//               child: const Text('OK'),
-//             ),
-//           ],
-//         ),
-//       );
-//     }
-
-//     try {
-//       await createUser();
-
-//       // If the account is created successfully, automatically logs the user in
-//       credential = await FirebaseAuth.instance
-//           .signInWithEmailAndPassword(
-//         email: emailController.text,
-//         password: passwordController.text,
-//       )
-//           // ignore: body_might_complete_normally_nullable
-//           .then((value) {
-//         Navigator.push(
-//             context, MaterialPageRoute(builder: (context) => const HomePage()));
-//       });
-//       // ignore: use_build_context_synchronously
-//     } on FirebaseAuthException catch (e) {
-//       setState(() {
-//         errorMessage = e.message;
-//       });
-//     } catch (error) {
-//       setState(() {
-//         errorMessage = error.toString();
-//       });
-//     }
-
-//     if (errorMessage != null) {
-//       // ignore: use_build_context_synchronously
-//       return showDialog(
-//         context: context,
-//         builder: (ctx) => AlertDialog(
-//           title: const Text('Error'),
-//           content: Text(errorMessage!),
-//           actions: <Widget>[
-//             TextButton(
-//               onPressed: () {
-//                 Navigator.of(ctx).pop();
-//               },
-//               child: const Text('OK'),
-//             ),
-//           ],
-//         ),
-//       );
-//     }
-//   }
-// //check gpt
-
   bool _agreeToTermsAndPrivacy = false;
 
   void _presentDatePicker() {
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
+      firstDate: DateTime(1950),
       lastDate: DateTime.now(),
     ).then((pickedDate) {
       if (pickedDate == null) {

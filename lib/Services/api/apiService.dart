@@ -6,7 +6,7 @@ import '../auth/auth.dart';
 
 // ignore: camel_case_types
 
-const String baseUrl = "http://192.168.254.106:8000/api";
+const String baseUrl = "http://10.0.2.2:8000/api";
 
 // ignore: camel_case_types
 class apiService {
