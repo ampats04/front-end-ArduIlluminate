@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 // import '../../Screens/homePage.dart';
+import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -27,35 +28,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   String? errorMessage = 'Account creation failed';
   UserCredential? credential;
   bool isLogin = true;
-
-  // Future createUser() async {
-
-  //   final uri = Uri.parse('http://10.0.2.2:8000/api/users/add');
-  //   final headers = {'Content-Type': 'application/json'};
-
-  //   try {
-  //     String uid = await Auth().register(
-  //       email: emailController.text,
-  //       password: passwordController.text,
-  //     );
-
-  //     Map<String, dynamic> data = {
-  //       'user_id': uid,
-  //       'name': fullNameController.text,
-  //       'birthdate': birthdateOnlyString,
-  //       'username': usernameController.text,
-  //     };
-
-  //     await http.post(
-  //       uri,
-  //       headers: headers,
-  //       body: jsonEncode(data),
-  //     );
-  //   } catch (err) {
-  //     print(err);
-  //     throw Exception('Failed to create user');
-  //   }
-  // }
 
   void _register() async {
     String birthdateString = _selectedDate!.toIso8601String();
@@ -83,8 +55,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       await apiService().post("/users/add", userData);
       print("Account created successfully!");
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: ((context) => const MainPage())));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -254,6 +224,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             ElevatedButton(
               onPressed: () {
                 _register();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => const LoginPage())));
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

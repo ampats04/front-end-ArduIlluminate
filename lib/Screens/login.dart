@@ -63,8 +63,15 @@ class _LoginPageState extends State<LoginPage> {
                   height: 230,
                 ),
                 const SizedBox(height: 15),
-                TextField(
+                TextFormField(
                   controller: emailController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please enter your Username";
+                    } else {
+                      return null;
+                    }
+                  },
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.perm_identity_sharp),
                     labelText: 'Username',
@@ -77,8 +84,15 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                TextField(
+                TextFormField(
                   controller: passwordController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please enter your password";
+                    } else {
+                      return null;
+                    }
+                  },
                   obscureText: true,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.lock_open_rounded),
