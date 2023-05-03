@@ -13,10 +13,10 @@ final TextEditingController _usernameController = TextEditingController();
 String uid = Auth().currentUser!.uid;
 String email = Auth().currentUser!.email!;
 
-Future fetchDatafromServer() async {
+Future fetchDatafromServer(String uid) async {
   try {
     var response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/users/retrieve?name=$uid'),
+      Uri.parse('http://10.0.2.2:8000/api/users/one/$uid'),
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -25,15 +25,15 @@ Future fetchDatafromServer() async {
       return response.body;
     } else {
       // The request failed
-      throw Exception('Failed to load data from server');
+      throw Exception('Failed to load data from server ${response.body}');
     }
   } catch (err) {
-    throw Exception("Failed to Retrieve Creddentials");
+    throw Exception("Failed to Retrieve Creddentials $err");
   }
 }
 
-Future fetchUser() async {
-  final String data = await fetchDatafromServer();
+Future fetchUser(String uid) async {
+  final String data = await fetchDatafromServer(uid);
   final decodeData = jsonDecode(data);
 
   _fullnameController.text = decodeData[0]['name'];
@@ -55,7 +55,7 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
     super.initState();
-    fetchUser();
+    fetchUser(uid);
   }
 
   @override
@@ -168,10 +168,12 @@ class _FirstScreenState extends State<FirstScreen> {
                                 'Do you want to update credentials?'),
                             actions: [
                               TextButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   setState(() {
                                     isEditProfile = false;
                                   });
+                                  await fetchUser(uid);
+                                  // ignore: use_build_context_synchronously
                                   Navigator.pop(context);
                                 },
                                 child: const Text('Cancel'),
