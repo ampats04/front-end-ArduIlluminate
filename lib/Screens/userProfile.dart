@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../Models/user_model.dart';
-import '../Services/api/apiService.dart';
 import '../Services/auth/auth.dart';
 
 final TextEditingController _fullnameController = TextEditingController();
@@ -11,11 +10,15 @@ final TextEditingController _emailController = TextEditingController();
 final TextEditingController _birthdateController = TextEditingController();
 final TextEditingController _usernameController = TextEditingController();
 
-String uid = Auth().currentUser!.uid;
+String uid =  Auth().currentUser!.uid;
 String email = Auth().currentUser!.email!;
 
-Future<UserModel> fetchDatafromServer( ) async {
+Future<UserModel> fetchDatafromServer() async {
   try {
+    String uid = Auth().currentUser!.uid;
+   
+   
+    print("m,sadfsadf $uid");
     var response = await http.get(
       Uri.parse('http://10.0.2.2:8000/api/users/one/$uid'),
       headers: {'Content-Type': 'application/json',
@@ -53,10 +56,10 @@ class _FirstScreenState extends State<FirstScreen> {
     futureUser = fetchDatafromServer();
    
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -70,8 +73,10 @@ class _FirstScreenState extends State<FirstScreen> {
                 return Center(child: Text('${snapshot.error} occured'),);
             }
             else if(snapshot.hasData){
+              
+              
               _fullnameController.text = snapshot.data.name;
-              _emailController.text = email;
+              _emailController.text = Auth().currentUser!.email!;
               _birthdateController.text = snapshot.data.birthdate.toString();
               _usernameController.text = snapshot.data.username;
 
@@ -188,14 +193,13 @@ class _FirstScreenState extends State<FirstScreen> {
                                 child: const Text('Cancel'),
                               ),
                               TextButton(
-                                onPressed: () async {
+                                onPressed: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             const EditProfile(),
                                       ));
-                                      
                                 },
                                 child: const Text('Continue'),
                               )

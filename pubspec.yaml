@@ -44,6 +44,9 @@ dependencies:
   web_socket_channel: ^2.4.0
   duration_picker: ^1.1.1
   http: ^0.13.5
+  localstorage: ^4.0.1+2
+  get: ^4.6.5
+  flutter_riverpod: ^2.3.6
 
 dev_dependencies:
   flutter_test:

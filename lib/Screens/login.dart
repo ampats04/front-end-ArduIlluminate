@@ -2,8 +2,8 @@ import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:ardu_illuminate/Services/user/passReset.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../Services//user/createAcc.dart';
-import '../Services/auth/auth.dart';
+import 'package:ardu_illuminate/Services/user/createAcc.dart';
+import 'package:ardu_illuminate/Services/auth/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -31,12 +31,18 @@ class _LoginPageState extends State<LoginPage> {
 
   Future signIn() async {
     try {
-      await Auth()
-          .signIn(
-        email: emailController.text,
+      
+      await Auth().signIn(
+        email: emailController.text.trim(),
         password: passwordController.text.trim(),
-      )
-          .then((value) {
+      ).then((value) {
+        print("asdasdsdad ${Auth().currentUser!.uid}");
+
+        setState(() {
+           // ignore: unused_label
+           uid:Auth().currentUser!.uid;
+        });
+
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const HomePage()));
       });

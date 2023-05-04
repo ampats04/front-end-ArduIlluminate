@@ -28,8 +28,10 @@ class _DrawHeaderState extends State<DrawHeader> {
 
        
     await FirebaseAuth.instance.signOut();
+  
     setState(() {
       user = null;
+      
     });
      // ignore: use_build_context_synchronously
      Navigator.push(
