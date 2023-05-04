@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import '../../Models/user_model.dart';
-import '../auth/auth.dart';
+
 
 // ignore: camel_case_types
 
@@ -10,13 +9,13 @@ const String baseUrl = "http://10.0.2.2:8000/api";
 
 // ignore: camel_case_types
 class apiService {
+
+
   var client = http.Client();
 
-  Future<UserModel> get(String api, String uid) async {
+  Future<UserModel> get(String api) async {
   try {
   
-   
-   
  
     var response = await client.get(
       Uri.parse(baseUrl + api),
@@ -41,9 +40,9 @@ class apiService {
     var headers = {
       'Content-Type': 'application/json',
     };
-    var paylod = jsonEncode(object);
+    var payload = jsonEncode(object);
 
-    var response = await client.post(url, headers: headers, body: paylod);
+    var response = await client.post(url, headers: headers, body: payload);
 
     if (response.statusCode == 200) {
       return response.body;

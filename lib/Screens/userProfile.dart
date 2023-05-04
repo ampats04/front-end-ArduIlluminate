@@ -1,43 +1,13 @@
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:ardu_illuminate/Services/user/editprofilepage.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import '../Models/user_model.dart';
-import '../Services/auth/auth.dart';
+import 'package:ardu_illuminate/Models/user_model.dart';
+import 'package:ardu_illuminate/Services/auth/auth.dart';
 
 final TextEditingController _fullnameController = TextEditingController();
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _birthdateController = TextEditingController();
 final TextEditingController _usernameController = TextEditingController();
-
-String uid =  Auth().currentUser!.uid;
-String email = Auth().currentUser!.email!;
-
-Future<UserModel> fetchDatafromServer() async {
-  try {
-    String uid = Auth().currentUser!.uid;
-   
-   
-    print("m,sadfsadf $uid");
-    var response = await http.get(
-      Uri.parse('http://10.0.2.2:8000/api/users/one/$uid'),
-      headers: {'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache',},
-    );
- 
-    if (response.statusCode == 200) {
-      //resuest sucesss  
-        return UserModel.fromJson(jsonDecode(response.body));
-    } else {
-      // The request failed
-      throw Exception('Failed to load data from server ${response.body}');
-    }
-  } catch (err) {
-    throw Exception("Failed to Retrieve Creddentials $err");
-  }
-}
-
 
 bool isEditProfile = false;
 
@@ -50,16 +20,21 @@ const FirstScreen({Key? key}) : super(key: key);
 
 class _FirstScreenState extends State<FirstScreen> {
 
-   late Future<UserModel> futureUser;
+  late Future<UserModel> futureUser;
+  String uid =  Auth().currentUser!.uid;
+  String? email = Auth().currentUser!.email;
+
   @override
   void initState() {
+    
     super.initState();
-    futureUser = fetchDatafromServer();
+      futureUser = apiService().get("/users/one/$uid");
    
   }
   
   @override
   Widget build(BuildContext context) {
+
 
     return Scaffold(
       appBar: AppBar(
@@ -76,7 +51,7 @@ class _FirstScreenState extends State<FirstScreen> {
             else if(snapshot.hasData){
               
               _fullnameController.text = snapshot.data.name;
-              _emailController.text = Auth().currentUser!.email!;
+              _emailController.text = email!;
               _birthdateController.text = snapshot.data.birthdate.toString().substring(0,10);
               _usernameController.text = snapshot.data.username;
 
@@ -173,7 +148,7 @@ class _FirstScreenState extends State<FirstScreen> {
                                   setState(() {
                                     isEditProfile = false;
                                   });
-                                  await fetchDatafromServer();
+                                  await apiService().get("/users/one/$uid");
                                   // ignore: use_build_context_synchronously
                                   Navigator.pop(context);
                                 },
@@ -222,7 +197,7 @@ class _FirstScreenState extends State<FirstScreen> {
           return const Center(child: CircularProgressIndicator());
         },
         
-        future: futureUser,
+        future: futureUser
         )
         
       ),
