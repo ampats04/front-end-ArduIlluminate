@@ -227,7 +227,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: ((context) => const LoginPage())));
+                        builder: ((context) => const MainPage())));
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

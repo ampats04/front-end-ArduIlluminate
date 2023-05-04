@@ -169,9 +169,8 @@ class _EditProfileState extends State<EditProfile> {
                                     String birthdateOnlyString =
                                         birthdateString.substring(0, 10);
                                     try {
-                                      var userId = uid;
+                                      var userId = Auth().currentUser!.uid;
                                       Map<String, dynamic> data = {
-                                        'user_id': uid,
                                         'name': _fullnameController.text,
                                         'birthdate': birthdateOnlyString,
                                         'username': _usernameController.text,
@@ -180,11 +179,11 @@ class _EditProfileState extends State<EditProfile> {
                                       await apiService()
                                           .put("/users/update/$userId", data)
                                           .catchError((err) {
-                                        debugPrint(err.toString());
+                                        print(err.toString());
                                       });
                                     } catch (err) {
-                                      debugPrint(err.toString());
-                                      throw Exception("Failed to update user");
+                                     
+                                      throw Exception("Failed to update user $err");
                                     }
                                   },
                                   child: const Text('Continue'),

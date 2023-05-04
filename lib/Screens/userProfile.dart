@@ -1,3 +1,4 @@
+import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:ardu_illuminate/Services/user/editprofilepage.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -74,10 +75,9 @@ class _FirstScreenState extends State<FirstScreen> {
             }
             else if(snapshot.hasData){
               
-              
               _fullnameController.text = snapshot.data.name;
               _emailController.text = Auth().currentUser!.email!;
-              _birthdateController.text = snapshot.data.birthdate.toString();
+              _birthdateController.text = snapshot.data.birthdate.toString().substring(0,10);
               _usernameController.text = snapshot.data.username;
 
               return Column(
@@ -148,19 +148,6 @@ class _FirstScreenState extends State<FirstScreen> {
                 prefixIcon: const Icon(Icons.account_circle),
               ),
             ),
-            const SizedBox(height: 16),
-            const Text('Password',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold)),
-            const TextField(
-              decoration: InputDecoration(
-                enabled: false,
-                hintText: '**********',
-                prefixIcon: Icon(Icons.lock),
-              ),
-            ),
             const SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -186,7 +173,7 @@ class _FirstScreenState extends State<FirstScreen> {
                                   setState(() {
                                     isEditProfile = false;
                                   });
-                                  //await fetchUser(uid);
+                                  await fetchDatafromServer();
                                   // ignore: use_build_context_synchronously
                                   Navigator.pop(context);
                                 },

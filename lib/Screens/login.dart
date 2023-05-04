@@ -36,14 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       ).then((value) {
-        print("asdasdsdad ${Auth().currentUser!.uid}");
-
-        setState(() {
-           // ignore: unused_label
-           uid:Auth().currentUser!.uid;
-        });
-
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const HomePage()));
       });
     } on FirebaseAuthException catch (e) {
