@@ -5,6 +5,7 @@ import 'package:ardu_illuminate/Models/user_model.dart';
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 import 'package:intl/intl.dart';
 import '../auth/auth.dart';
@@ -29,9 +30,9 @@ class _EditProfileState extends State<EditProfile> {
   void _presentDatePicker() {
     showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: DateTime(2015),
       firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2015),
     ).then((pickedDate) {
       if (pickedDate == null) {
         return;
@@ -160,7 +161,7 @@ class _EditProfileState extends State<EditProfile> {
                                     fontSize: 16),
                               ),
                               content: const Text(
-                                  'Do you want to update credentials?'),
+                                  'You are about to change details'),
                               actions: [
                                 TextButton(
                                   onPressed: () async {
@@ -186,7 +187,7 @@ class _EditProfileState extends State<EditProfile> {
                                       throw Exception("Failed to update user $err");
                                     }
                                   },
-                                  child: const Text('Continue'),
+                                  child: const Text('Proceed'),
                                 ),
                                 TextButton(
                                   onPressed: () {

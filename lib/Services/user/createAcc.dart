@@ -71,9 +71,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   void _presentDatePicker() {
     showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: DateTime(2015),
       firstDate: DateTime(1950),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(2015),
     ).then((pickedDate) {
       if (pickedDate == null) {
         return;

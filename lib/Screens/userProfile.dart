@@ -188,7 +188,7 @@ class _FirstScreenState extends State<FirstScreen> {
                                             const EditProfile(),
                                       ));
                                 },
-                                child: const Text('Continue'),
+                                child: const Text('Yes'),
                               )
                             ],
                           );
