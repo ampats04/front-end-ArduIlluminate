@@ -21,8 +21,8 @@ Future fetchDatafromServer(String uid) async {
     );
 
     if (response.statusCode == 200) {
-      //resuest sucesss
-      return response.body;
+      //resuest sucesss  
+        return response.body;
     } else {
       // The request failed
       throw Exception('Failed to load data from server ${response.body}');
@@ -40,6 +40,10 @@ Future fetchUser(String uid) async {
   _emailController.text = email;
   _birthdateController.text = decodeData[0]['birthdate'];
   _usernameController.text = decodeData[0]['username'];
+
+
+  print(uid);
+  print(decodeData[0]['name']);
 }
 
 bool isEditProfile = false;
@@ -55,18 +59,25 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
     super.initState();
-    fetchUser(uid);
+   
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(30),
-        child: Column(
+        child:FutureBuilder( builder: (context, snapshot){
+          if(snapshot.connectionState == ConnectionState.done){
+            if(snapshot.hasError){
+                return Center(child: Text('${snapshot.error} occured'),);
+            }
+            else if(snapshot.hasData){
+              return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Text(
@@ -179,13 +190,14 @@ class _FirstScreenState extends State<FirstScreen> {
                                 child: const Text('Cancel'),
                               ),
                               TextButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             const EditProfile(),
                                       ));
+                                      await fetchDatafromServer(uid);
                                 },
                                 child: const Text('Continue'),
                               )
@@ -215,7 +227,15 @@ class _FirstScreenState extends State<FirstScreen> {
               ],
             ),
           ],
-        ),
+        );
+            }
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+        
+        future: fetchDatafromServer(uid),
+        )
+        
       ),
     );
   }
