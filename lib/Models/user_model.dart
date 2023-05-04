@@ -22,17 +22,6 @@ class UserModel {
   DateTime? birthdate;
   String? username;
 
-  // factory UserModel.fromJson(Map<String, dynamic> json) {
-  //   return UserModel(
-  //     user_id: json['user_id'] as String,
-  //     name: json['name'] as String,
-  //     birthdate: json['birthdate'] as DateTime,
-  //     email: json['email'] as String,
-  //     username: json['username'] as String,
-  //     password: json['password'] as String,
-  //   );
-  // }
-
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         user_id: json['user_id'],
         name: json['name'],

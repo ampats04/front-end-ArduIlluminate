@@ -2,6 +2,7 @@ import 'package:ardu_illuminate/Services/user/editprofilepage.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../Models/user_model.dart';
 import '../Services/api/apiService.dart';
 import '../Services/auth/auth.dart';
 
@@ -13,16 +14,17 @@ final TextEditingController _usernameController = TextEditingController();
 String uid = Auth().currentUser!.uid;
 String email = Auth().currentUser!.email!;
 
-Future fetchDatafromServer(String uid) async {
+Future<UserModel> fetchDatafromServer( ) async {
   try {
     var response = await http.get(
       Uri.parse('http://10.0.2.2:8000/api/users/one/$uid'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache',},
     );
-
+ 
     if (response.statusCode == 200) {
       //resuest sucesss  
-        return response.body;
+        return UserModel.fromJson(jsonDecode(response.body));
     } else {
       // The request failed
       throw Exception('Failed to load data from server ${response.body}');
@@ -32,33 +34,23 @@ Future fetchDatafromServer(String uid) async {
   }
 }
 
-Future fetchUser(String uid) async {
-  final String data = await fetchDatafromServer(uid);
-  final decodeData = jsonDecode(data);
-
-  _fullnameController.text = decodeData[0]['name'];
-  _emailController.text = email;
-  _birthdateController.text = decodeData[0]['birthdate'];
-  _usernameController.text = decodeData[0]['username'];
-
-
-  print(uid);
-  print(decodeData[0]['name']);
-}
 
 bool isEditProfile = false;
 
 class FirstScreen extends StatefulWidget {
-  const FirstScreen({super.key});
+const FirstScreen({Key? key}) : super(key: key);
 
   @override
   State<FirstScreen> createState() => _FirstScreenState();
 }
 
 class _FirstScreenState extends State<FirstScreen> {
+
+   late Future<UserModel> futureUser;
   @override
   void initState() {
     super.initState();
+    futureUser = fetchDatafromServer();
    
   }
 
@@ -71,12 +63,18 @@ class _FirstScreenState extends State<FirstScreen> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(30),
-        child:FutureBuilder( builder: (context, snapshot){
+        child:FutureBuilder( builder: (BuildContext context, AsyncSnapshot snapshot){
+
           if(snapshot.connectionState == ConnectionState.done){
             if(snapshot.hasError){
                 return Center(child: Text('${snapshot.error} occured'),);
             }
             else if(snapshot.hasData){
+              _fullnameController.text = snapshot.data.name;
+              _emailController.text = email;
+              _birthdateController.text = snapshot.data.birthdate.toString();
+              _usernameController.text = snapshot.data.username;
+
               return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -183,7 +181,7 @@ class _FirstScreenState extends State<FirstScreen> {
                                   setState(() {
                                     isEditProfile = false;
                                   });
-                                  await fetchUser(uid);
+                                  //await fetchUser(uid);
                                   // ignore: use_build_context_synchronously
                                   Navigator.pop(context);
                                 },
@@ -197,7 +195,7 @@ class _FirstScreenState extends State<FirstScreen> {
                                         builder: (context) =>
                                             const EditProfile(),
                                       ));
-                                      await fetchDatafromServer(uid);
+                                      
                                 },
                                 child: const Text('Continue'),
                               )
@@ -233,7 +231,7 @@ class _FirstScreenState extends State<FirstScreen> {
           return const Center(child: CircularProgressIndicator());
         },
         
-        future: fetchDatafromServer(uid),
+        future: futureUser,
         )
         
       ),
