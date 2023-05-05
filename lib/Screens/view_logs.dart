@@ -9,7 +9,6 @@ class ViewLogsPage extends StatefulWidget {
 }
 
 class _ViewLogsPageState extends State<ViewLogsPage> {
-  // EUnsaon nani diri dapitaaaaaa pag kuhas inputs
   final List<Map<String, String>> logs = [
     {
       'timestamp': '2022-05-05 8:30:09',
@@ -26,7 +25,7 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
       'action': 'Turned off',
       'status': 'Off',
     },
-     {
+    {
       'timestamp': '2022-05-05 9:20:00',
       'action': 'Timer: 50 Minutes',
       'status': 'On',
@@ -45,38 +44,52 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
         title: const Text('View Logs'),
       ),
       body: SingleChildScrollView(
-        child: DataTable(
-          columns: const [
-            DataColumn(
-              label: Text(
-                'Timestamp',
-                style: TextStyle(fontWeight: FontWeight.bold),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Logs',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
               ),
             ),
-            DataColumn(
-              label: Text(
-                'Action',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Status',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+            const SizedBox(height: 16),
+            DataTable(
+              columns: const [
+                DataColumn(
+                  label: Text(
+                    'Timestamp',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Action',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Status',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+              rows: logs
+                  .map(
+                    (log) => DataRow(
+                      cells: [
+                        DataCell(Text(log['timestamp']!)),
+                        DataCell(Text(log['action']!)),
+                        DataCell(Text(log['status']!)),
+                      ],
+                    ),
+                  )
+                  .toList(),
             ),
           ],
-          rows: logs
-              .map(
-                (log) => DataRow(
-                  cells: [
-                    DataCell(Text(log['timestamp']!)),
-                    DataCell(Text(log['action']!)),
-                    DataCell(Text(log['status']!)),
-                  ],
-                ),
-              )
-              .toList(),
         ),
       ),
     );

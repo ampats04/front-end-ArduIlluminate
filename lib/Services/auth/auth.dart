@@ -32,7 +32,6 @@ class Auth {
       return uid;
     } catch (e) {
       // Handle errors that occurred during registration
-      print(e.toString());
       return '';
     }
   }

@@ -1,14 +1,9 @@
 // ignore: file_names
-import 'dart:convert';
 
-// import '../../Screens/homePage.dart';
-import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:http/http.dart' as http;
 import '../api/apiService.dart';
 
 class CreateAccountPage extends StatefulWidget {
@@ -41,10 +36,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         email: email,
         password: password,
       );
-      print(
-          "User registered successfully with uid: ${userCredential.user!.uid}");
-      String uid = userCredential.user!.uid;
 
+      String uid = userCredential.user!.uid;
       final Map<String, dynamic> userData = {
         'user_id': uid,
         'name': fullNameController.text,
@@ -53,13 +46,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       };
 
       await apiService().post("/users/add", userData);
-      print("Account created successfully!");
+
       // ignore: use_build_context_synchronously
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        //logic para sa weak pass
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        //logic paras less email
       }
     } catch (e) {
       print("Failed to create account: $e");

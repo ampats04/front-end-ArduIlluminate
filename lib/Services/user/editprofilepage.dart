@@ -2,12 +2,8 @@
 
 import 'package:ardu_illuminate/Models/user_model.dart';
 import 'package:ardu_illuminate/Screens/userProfile.dart';
-
 import 'package:ardu_illuminate/Services/api/apiService.dart';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-
 import 'package:intl/intl.dart';
 import '../auth/auth.dart';
 

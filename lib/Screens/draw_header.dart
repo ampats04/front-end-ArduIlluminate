@@ -1,14 +1,11 @@
 import 'package:ardu_illuminate/Screens/login.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/user/editPass.dart';
 import 'package:ardu_illuminate/Screens/light_details.dart';
 import 'package:ardu_illuminate/Screens/userProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
-import 'package:flutter/material.dart';
-import 'view_logs.dart';  //
-
+import 'view_logs.dart'; //
 
 class DrawHeader extends StatefulWidget {
   const DrawHeader({Key? key}) : super(key: key);
@@ -18,28 +15,17 @@ class DrawHeader extends StatefulWidget {
 }
 
 class _DrawHeaderState extends State<DrawHeader> {
-
   bool _darkMode = false;
 
-   User? user = Auth().currentUser;
-
+  User? user = Auth().currentUser;
 
   Future<void> signOut() async {
-            
-        print('lgout');
-
-       
     await FirebaseAuth.instance.signOut();
-  
-    setState(() {
-      user = null;
-      
-    });
-     // ignore: use_build_context_synchronously
-     Navigator.push(
+
+    // ignore: use_build_context_synchronously
+    Navigator.push(
         context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -145,20 +131,23 @@ class _DrawHeaderState extends State<DrawHeader> {
                             ),
                             const Divider(),
                             ListTile(
-                            title: const Text(
-                              'View Logs',
-                              style: TextStyle(fontFamily: 'Poppins', fontSize: 16),
+                              title: const Text(
+                                'View Logs',
+                                style: TextStyle(
+                                    fontFamily: 'Poppins', fontSize: 16),
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.data_exploration),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ViewLogsPage()),
+                                  );
+                                },
+                              ),
                             ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.data_exploration),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => ViewLogsPage()),
-                                );
-                              },
-                            ),
-                          ),
                             const Divider(),
                             ListTile(
                               title: const Text(
@@ -187,9 +176,8 @@ class _DrawHeaderState extends State<DrawHeader> {
                                             onPressed: () {
                                               setState(() {
                                                 isEditProfile = false;
-                                             
                                               });
-                                                
+
                                               Navigator.pop(context);
                                             },
                                             child: const Text('Cancel'),

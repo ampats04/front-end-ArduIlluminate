@@ -32,10 +32,10 @@ class _PowerConsumption extends State<PowerConsumption>
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color(0xFFD9D9D9),
+        backgroundColor: const Color(0xFFD9D9D9),
       ),
       drawer: const DrawHeader(),
-      backgroundColor: Color(0xFFD9D9D9),
+      backgroundColor: const Color(0xFFD9D9D9),
       body: Container(
         width: 1500,
         height: 2000,

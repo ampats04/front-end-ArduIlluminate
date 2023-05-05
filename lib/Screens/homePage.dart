@@ -1,10 +1,15 @@
 // ignore_for_file: library_private_types_in_public_api
-import 'package:ardu_illuminate/Screens/draw_header.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Screens/powerConsumption.dart';
 import 'package:ardu_illuminate/Screens/timer.dart';
 import './mainPage.dart';
+
+List<Color> _iconColors = [
+  Colors.white,
+  Colors.white,
+  Colors.white,
+];
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -42,37 +47,47 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
-        children: _pages,
-      ),
-      bottomNavigationBar: CurvedNavigationBar(
+        body: PageView(
+          controller: _pageController,
+          physics: const NeverScrollableScrollPhysics(),
+          children: _pages,
+        ),
+        bottomNavigationBar: CurvedNavigationBar(
           backgroundColor: const Color.fromRGBO(228, 195, 173, 1),
-          color: Color.fromRGBO(158, 163, 176, 1),
+          color: const Color.fromRGBO(158, 163, 176, 1),
           height: 57.0,
           animationDuration: const Duration(milliseconds: 400),
-          items: const [
+          items: [
             Icon(
               Icons.timer,
-              color: Colors.white,
+              color: _iconColors[0],
             ),
             Icon(
               Icons.home,
-              color: Colors.white,
+              color: _iconColors[1],
             ),
             Icon(
               Icons.lightbulb,
-              color: Colors.white,
+              color: _iconColors[2],
             ),
           ],
           index: _selectedPageIndex,
           onTap: (selectedPageIndex) {
             setState(() {
-              _selectedPageIndex = _selectedPageIndex;
+              _selectedPageIndex = selectedPageIndex;
+
+              // kamo lang bahala sa color boss
+              for (int i = 0; i < _iconColors.length; i++) {
+                if (i == selectedPageIndex) {
+                  _iconColors[i] = const Color.fromARGB(255, 226, 255, 6);
+                } else {
+                  _iconColors[i] = const Color.fromARGB(255, 255, 255, 255);
+                }
+              }
+
               _pageController.jumpToPage(selectedPageIndex);
             });
-          }),
-    );
+          },
+        ));
   }
 }

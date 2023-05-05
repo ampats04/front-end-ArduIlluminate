@@ -89,9 +89,9 @@ class _TimerPageState extends State<TimerPage>
     final seconds = strDigits(_picked.inSeconds.remainder(60));
 
     return Scaffold(
-      backgroundColor: Color(0xFFD9D9D9),
+      backgroundColor: const Color(0xFFD9D9D9),
       appBar: AppBar(
-        backgroundColor: Color(0xFFD9D9D9),
+        backgroundColor: const Color(0xFFD9D9D9),
         title: const Text(
           'Timer Control',
           style: TextStyle(
@@ -159,7 +159,7 @@ class _TimerPageState extends State<TimerPage>
                             style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 32, vertical: 15),
-                                backgroundColor: Color(0xFF164e63),
+                                backgroundColor: const Color(0xFF164e63),
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
@@ -187,8 +187,8 @@ class _TimerPageState extends State<TimerPage>
                         style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 31, vertical: 15),
-                            primary: Color(0xFF164e63),
-                            onPrimary: Colors.white,
+                            backgroundColor: const Color(0xFF164e63),
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             )),

@@ -62,7 +62,6 @@ class _MainPageScreenState extends State<MainPage>
         brightness = value.round().toString();
       }
       _currentSliderValue = value;
-      print(brightness);
     });
   }
 
