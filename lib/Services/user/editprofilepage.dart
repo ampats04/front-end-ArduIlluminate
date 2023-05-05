@@ -64,20 +64,206 @@ String email = Auth().currentUser!.email!;
       appBar: AppBar(
         title: const Text('Profile'),
       ),
-      body: const SingleChildScrollView(
-         child: Center(
-            child: Padding(
-          padding: const EdgeInsets.all(30),
-      
-        child: FutureBuilder(builder: (BuildContext context, AsyncSnapshot snapshot){
+      body:  SingleChildScrollView(
+        padding:  const EdgeInsets.all(30),
+            
+      child: FutureBuilder(builder: (BuildContext context, AsyncSnapshot snapshot){
 
+         if(snapshot.connectionState == ConnectionState.done){
 
-        },
-        future: futureUser,
-        ),
+            if(snapshot.hasError){
+                return Center(child: Text('${snapshot.error} occured'),);
+            }
 
-        ),
-         ),
-    ),);
+             else if(snapshot.hasData){
+
+                String nameHint = snapshot.data.name;
+                String emailHint = Auth().currentUser!.email!;
+                String usernameHint = snapshot.data.username;
+                String birthdateHint = snapshot.data.birthdate.toString().substring(0,10);
+
+                return  Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text(
+                'Full Name',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold),
+              ),
+              TextField(
+                enabled: true,
+                controller: _fullnameController,
+                decoration:  InputDecoration(
+                  hintText: nameHint,
+                  prefixIcon: const Icon(Icons.person),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'Birthdate',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold),
+              ),
+              GestureDetector(
+                onTap: _presentDatePicker,
+                child: AbsorbPointer(
+                  child: TextField(
+                    decoration: InputDecoration(
+                     hintText: birthdateHint,
+                      prefixIcon: const Icon(Icons.calendar_today),
+                    ),
+                    controller: TextEditingController(
+                        text: selectedDateFormatted ?? ''),
+                    keyboardType: TextInputType.datetime,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text(
+                'Email',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextField(
+                enabled: true,
+                controller: _emailController,
+                decoration:  InputDecoration(
+                  hintText: emailHint,
+                  prefixIcon: const Icon(Icons.mark_email_read),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Username',
+                style: TextStyle(
+                  fontSize: 16,
+                 
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextField(
+                
+                controller: _usernameController,
+                decoration:  InputDecoration(
+                  hintText: usernameHint,
+                  enabled: true,
+                  prefixIcon: const Icon(Icons.account_circle),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text('Password',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.bold)),
+              const TextField(
+                decoration: InputDecoration(
+                  enabled: false,
+                  prefixIcon: Icon(Icons.lock),
+                ),
+              ),
+              const SizedBox(height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text(
+                                'Credentials Update?',
+                                style: TextStyle(
+                                    color: Color(0xFF0047FF),
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16),
+                              ),
+                              content: const Text(
+                                  'You are about to change details'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () async {
+                                    String birthdateString =
+                                        _selectedDate!.toIso8601String();
+                                    String birthdateOnlyString =
+                                        birthdateString.substring(0, 10);
+                                    try {
+                                      var userId = Auth().currentUser!.uid;
+                                      Map<String, dynamic> data = {
+                                        'name': _fullnameController.text,
+                                        'birthdate': birthdateOnlyString,
+                                        'username': _usernameController.text,
+                                      };
+
+                                      await apiService()
+                                          .put("/users/update/$userId", data)
+                                          .catchError((err) {
+                                        print(err.toString());
+                                      });
+                                    } catch (err) {
+                                     
+                                      throw Exception("Failed to update user $err");
+                                    }
+                                  },
+                                  child: const Text('Proceed'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(15.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      backgroundColor: const Color(0xFF0047FF),
+                    ),
+                    child: const Text(
+                      'Save Changes',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                          fontFamily: 'Poppins',
+                          color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                ],
+              ),
+            ],
+          );
+
+             }
+         }
+          return const Center(child: CircularProgressIndicator());
+      },
+
+      future: futureUser,
+      ),
+
+       
+    ),
+    );
   }
 }
