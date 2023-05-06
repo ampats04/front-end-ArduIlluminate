@@ -197,13 +197,9 @@ class _EditProfileState extends State<EditProfile> {
                                             };
 
                                             await apiService()
-                                                .put("/users/update/$uid", data).then((value) {
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const FirstScreen()));
-                                            });
+                                                .put("/users/update/$uid", data);
+                                                // ignore: use_build_context_synchronously
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstScreen()));
                                           } catch (err) {
                                             throw Exception(
                                                 "Failed to update user $err");

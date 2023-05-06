@@ -59,10 +59,12 @@ class apiService {
     };
 
     var response = await client.put(url, body: payload, headers: headers);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return response.body;
     } else {
-      throw Exception("cannot update");
+       print("Error updating data. Status code: ${response.statusCode}. Body: ${response.body}");
+      throw Exception("cannot update ${response.body}");
+      
     }
   }
 }
