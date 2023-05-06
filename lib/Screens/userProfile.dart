@@ -150,7 +150,7 @@ class _FirstScreenState extends State<FirstScreen> {
                                   });
                                   await apiService().get("/users/one/$uid");
                                   // ignore: use_build_context_synchronously
-                                  Navigator.pop(context);
+                                  Navigator.pop(context,true);
                                 },
                                 child: const Text('Cancel'),
                               ),
