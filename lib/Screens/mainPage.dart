@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
 
+import 'light_details.dart';
+
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -174,7 +176,15 @@ class _MainPageScreenState extends State<MainPage>
                 ],
               ),
               const SizedBox(height: 40),
-              Image.asset('assets/lightbulb.png', width: 80, height: 80),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EnlighteningDetails()),
+                  );
+                },
+                child: Image.asset('assets/lightbulb.png', width: 80, height: 80),
+              ),
               const SizedBox(height: 20),
               const Text(
                 'Current Bulb',
@@ -185,10 +195,10 @@ class _MainPageScreenState extends State<MainPage>
                 height: 20,
                 width: 150,
                 child: TextField(
-                  decoration: InputDecoration(hintText: 'E - 27 Bulb 18W'),
+                  decoration: InputDecoration(hintText: 'No light Bulb Deetected'),
                 ),
               ),
-            ],
+            ]
           ),
         ),
       ),
