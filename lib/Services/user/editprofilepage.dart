@@ -197,10 +197,7 @@ class _EditProfileState extends State<EditProfile> {
                                             };
 
                                             await apiService()
-                                                .put("/users/update/$uid", data)
-                                                .catchError((err) {
-                                              print(err.toString());
-                                            }).then((value) {
+                                                .put("/users/update/$uid", data).then((value) {
                                               Navigator.pushReplacement(
                                                   context,
                                                   MaterialPageRoute(
