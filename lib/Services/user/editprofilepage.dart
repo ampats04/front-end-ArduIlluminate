@@ -25,20 +25,34 @@ class _EditProfileState extends State<EditProfile> {
   String uid = Auth().currentUser!.uid;
   String email = Auth().currentUser!.email!;
 
-  void _presentDatePicker() {
-    showDatePicker(
+  void _presentDatePicker() async {
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime(2015),
+      initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime(2015),
-    ).then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
+      lastDate: DateTime.now(),
+    );
+    if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
         _selectedDate = pickedDate;
       });
-    });
+    }
+  }
+
+  void _update() async {
+    try {
+      Map<String, dynamic> data = {
+        'name': _fullnameController.text,
+        'birthdate':
+            _selectedDate!.toIso8601String().substring(0, 10).toString(),
+        'username': _usernameController.text,
+      };
+
+      await apiService().put("/users/update/$uid", data);
+      // ignore: use_build_context_synchronously
+    } catch (err) {
+      throw Exception("Failed to update user $err");
+    }
   }
 
   @override
@@ -87,9 +101,9 @@ class _EditProfileState extends State<EditProfile> {
                       enabled: true,
                       controller: _fullnameController,
                       decoration: InputDecoration(
-                        hintText: nameHint,
-                        prefixIcon: const Icon(Icons.person),
-                      ),
+                          hintText: nameHint,
+                          prefixIcon: const Icon(Icons.person),
+                          errorText: "Enter Something"),
                     ),
                     const SizedBox(
                       height: 16,
@@ -184,26 +198,14 @@ class _EditProfileState extends State<EditProfile> {
                                         'You are about to change details'),
                                     actions: [
                                       TextButton(
-                                        onPressed: () async {
-                                          try {
-                                            Map<String, dynamic> data = {
-                                              'name': _fullnameController.text,
-                                              'birthdate': _selectedDate!
-                                                  .toIso8601String()
-                                                  .substring(0, 10)
-                                                  .toString(),
-                                              'username':
-                                                  _usernameController.text,
-                                            };
-
-                                            await apiService()
-                                                .put("/users/update/$uid", data);
-                                                // ignore: use_build_context_synchronously
-                                                Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstScreen()));
-                                          } catch (err) {
-                                            throw Exception(
-                                                "Failed to update user $err");
-                                          }
+                                        onPressed: () {
+                                          _update();
+                                          // ignore: use_build_context_synchronously
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const FirstScreen()));
                                         },
                                         child: const Text('Proceed'),
                                       ),

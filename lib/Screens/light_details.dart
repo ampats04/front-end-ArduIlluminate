@@ -1,6 +1,9 @@
 import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../Screens/light_details.dart';
+import '../Services/api/apiService.dart';
+import 'mainPage.dart';
 
 class EnlighteningDetails extends StatefulWidget {
   const EnlighteningDetails({super.key});
@@ -12,6 +15,9 @@ class EnlighteningDetails extends StatefulWidget {
 class _EnlighteningDetailsState extends State<EnlighteningDetails> {
   DateTime? _selectedDate;
   TextEditingController dateController = TextEditingController();
+  TextEditingController bulbController = TextEditingController();
+  TextEditingController manufacturerController = TextEditingController();
+  TextEditingController powerController = TextEditingController();
   void _showDatePicker() {
     showDatePicker(
       context: context,
@@ -28,11 +34,32 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
     });
   }
 
+  void _register() async {
+    String birthdateString = _selectedDate!.toIso8601String();
+    String birthdateOnlyString = birthdateString.substring(0, 10);
+
+    try {
+      final Map<String, dynamic> lightData = {
+        'model': bulbController.text,
+        'manufacturer': manufacturerController.text,
+        'install_date':
+            _selectedDate!.toIso8601String().substring(0, 10).toString(),
+      };
+
+      await apiService().post("/light/add", lightData);
+
+      // ignore: use_build_context_synchronously
+    } catch (e) {
+      print("Failed to create Light info: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final DateFormat dateFormat = DateFormat.yMEd();
     final String? selectedDateFormatted =
         _selectedDate == null ? null : dateFormat.format(_selectedDate!);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Enlightening Details'),
@@ -52,18 +79,35 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
             const SizedBox(
               height: 30,
             ),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter Bulb Model...',
+            TextFormField(
+              controller: bulbController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  const InputDecoration(
+                      errorText: "Please Enter your Bulb Model");
+                  return;
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                hintText: 'Enter Bulb Model',
                 prefixIcon: Icon(Icons.lightbulb),
               ),
             ),
             const SizedBox(
               height: 30,
             ),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter Bulb Manufacturer...',
+            TextFormField(
+              controller: manufacturerController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  const InputDecoration(errorText: "Please Enter Manufacturer");
+                  return;
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                hintText: 'Enter Bulb Manufacturer',
                 prefixIcon: Icon(Icons.precision_manufacturing),
               ),
             ),
@@ -105,12 +149,12 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
                         actions: [
                           TextButton(
                             onPressed: () {
-                              Navigator.pop(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginPage(),
-                                ),
-                              );
+                              _register();
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: ((context) =>
+                                          const MainPage())));
                             },
                             child: const Text('Save'),
                           ),
@@ -118,7 +162,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text('REVERT'),
+                            child: const Text('Cancel'),
                           ),
                         ],
                       );

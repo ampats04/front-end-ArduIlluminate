@@ -110,6 +110,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               controller: fullNameController,
               validator: (value) {
                 if (value!.isEmpty) {
+                  const InputDecoration(
+                      errorText: "Please Enter your full name");
                   return "Please enter your full name";
                 }
                 return null;
