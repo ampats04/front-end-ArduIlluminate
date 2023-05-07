@@ -1,7 +1,7 @@
-import 'package:ardu_illuminate/Screens/login.dart';
+//import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../Screens/light_details.dart';
+//import '../Screens/lightProfile.dart';
 import '../Services/api/apiService.dart';
 import 'mainPage.dart';
 
@@ -35,9 +35,6 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
   }
 
   void _register() async {
-    String birthdateString = _selectedDate!.toIso8601String();
-    String birthdateOnlyString = birthdateString.substring(0, 10);
-
     try {
       final Map<String, dynamic> lightData = {
         'model': bulbController.text,
@@ -61,19 +58,23 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
         _selectedDate == null ? null : dateFormat.format(_selectedDate!);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Enlightening Details'),
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        child: AppBar(
+          title: const Text('Enlightening Details'),
+        ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(30),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const Text(
+            Text(
               'Fill-up the following Information Below, such as the Bulb Model, Manufacturer and the Installation date.',
               style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 16,
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
                   color: Color(0xFF0047FF)),
             ),
             const SizedBox(
@@ -138,12 +139,13 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: const Text(
+                        title: Text(
                           'BULB DETAILS',
                           style: TextStyle(
-                              color: Color(0xFF0047FF),
-                              fontFamily: 'Poppins',
-                              fontSize: 16),
+                            color: Color(0xFF0047FF),
+                            fontFamily: 'Poppins',
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
+                          ),
                         ),
                         content: const Text('Save Bulb Details?'),
                         actions: [
@@ -169,16 +171,19 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
                     });
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(15),
+                padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.05,
+                    vertical: MediaQuery.of(context).size.height * 0.02),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
                 backgroundColor: const Color(0xFF0047FF),
               ),
-              child: const Text(
+              child: Text(
                 'SAVE DETAILS',
                 style: TextStyle(
                   fontFamily: 'Poppins',
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
                   color: Colors.white,
                 ),
               ),

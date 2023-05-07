@@ -1,4 +1,6 @@
 import 'package:ardu_illuminate/Screens/login.dart';
+import 'package:ardu_illuminate/Services/user/editprofilepage.dart';
+import 'package:ardu_illuminate/Services/user/passReset.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/user/editPass.dart';
 import 'package:ardu_illuminate/Screens/addLight.dart';
@@ -16,8 +18,6 @@ class DrawHeader extends StatefulWidget {
 }
 
 class _DrawHeaderState extends State<DrawHeader> {
-  bool _darkMode = false;
-
   User? user = Auth().currentUser;
 
   Future<void> signOut() async {
@@ -33,55 +33,42 @@ class _DrawHeaderState extends State<DrawHeader> {
     return Drawer(
       child: MaterialApp(
         home: Scaffold(
-          appBar: AppBar(
-            title: const Text(''),
+          appBar: PreferredSize(
+            preferredSize:
+                Size.fromHeight(MediaQuery.of(context).size.height * 0.06),
+            child: AppBar(
+              title: Center(
+                child: Text(
+                  'Settings',
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: MediaQuery.of(context).size.width * 0.06,
+                      color: Colors.black),
+                ),
+              ),
+            ),
           ),
-          body: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const SizedBox(height: 5),
-                    const Text(
-                      'SETTINGS',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 20,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 50),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(25),
-                      child: Card(
-                        child: Column(
-                          children: [
-                            SwitchListTile(
-                              title: const Text(
-                                'Dark Mode',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 16,
-                                ),
-                              ),
-                              secondary: _darkMode
-                                  ? const Icon(Icons.nights_stay)
-                                  : const Icon(Icons.wb_sunny),
-                              value: _darkMode,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _darkMode = value;
-                                });
-                              },
-                            ),
-                            const Divider(),
-                            ListTile(
-                              title: const Text(
+          body: Center(
+            child: Padding(
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.08),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Card(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            child: ListTile(
+                              title: Text(
                                 'View Profile',
                                 style: TextStyle(
-                                    fontFamily: 'Poppins', fontSize: 16),
+                                    fontFamily: 'Poppins',
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04),
                               ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.list),
@@ -90,34 +77,43 @@ class _DrawHeaderState extends State<DrawHeader> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const EnlighteningDetailsView()));
+                                              const EditProfile()));
                                 },
                               ),
                             ),
-                            const Divider(),
-                            ListTile(
-                              title: const Text(
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            child: ListTile(
+                              title: Text(
                                 'Enlightening Details',
                                 style: TextStyle(
-                                    fontFamily: 'Poppins', fontSize: 16),
+                                    fontFamily: 'Poppins',
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04),
                               ),
                               trailing: IconButton(
-                                icon: const Icon(Icons.lightbulb),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const EnlighteningDetails()));
-                                },
-                              ),
+                                  icon: const Icon(Icons.lightbulb),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EnlighteningDetails()));
+                                  }),
                             ),
-                            const Divider(),
-                            ListTile(
-                              title: const Text(
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            child: ListTile(
+                              title: Text(
                                 'Edit Password',
                                 style: TextStyle(
-                                    fontFamily: 'Poppins', fontSize: 16),
+                                    fontFamily: 'Poppins',
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04),
                               ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.edit_square),
@@ -130,79 +126,111 @@ class _DrawHeaderState extends State<DrawHeader> {
                                 },
                               ),
                             ),
-                            const Divider(),
-                            ListTile(
-                              title: const Text(
+                          ),
+                          //const Divider(),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            child: ListTile(
+                              title: Text(
                                 'View Logs',
                                 style: TextStyle(
-                                    fontFamily: 'Poppins', fontSize: 16),
+                                    fontFamily: 'Poppins',
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04),
                               ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.data_exploration),
                                 onPressed: () {
                                   Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ViewLogsPage()),
-                                  );
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ViewLogsPage()));
                                 },
                               ),
                             ),
-                            const Divider(),
-                            ListTile(
-                              title: const Text(
-                                'Log out',
+                          ),
+
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            child: ListTile(
+                              title: Text(
+                                'Legal Basis',
                                 style: TextStyle(
-                                    fontFamily: 'Poppins', fontSize: 16),
+                                    fontFamily: 'Poppins',
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04),
                               ),
                               trailing: IconButton(
-                                icon: const Icon(Icons.logout),
+                                icon: const Icon(Icons.privacy_tip_rounded),
                                 onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text(
-                                          'Logout Account?',
-                                          style: TextStyle(
-                                              color: Color(0xFF0047FF),
-                                              fontFamily: 'Poppins',
-                                              fontSize: 16),
-                                        ),
-                                        content: const Text(
-                                            'Are you sure you want to log out?'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                isEditProfile = false;
-                                              });
-
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('Cancel'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              signOut();
-                                            },
-                                            child: const Text('Continue'),
-                                          )
-                                        ],
-                                      );
-                                    },
-                                  );
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ViewLogsPage())); //this should be the legal basis section
                                 },
                               ),
                             ),
-                          ],
-                        ),
+                          )
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 50),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                  Card(
+                    child: ListTile(
+                      title: Text(
+                        'Log out',
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: MediaQuery.of(context).size.width * 0.04),
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.logout),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(
+                                  'Logout Account?',
+                                  style: TextStyle(
+                                      color: const Color(0xFF0047FF),
+                                      fontFamily: 'Poppins',
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.05),
+                                ),
+                                content: const Text(
+                                    'Are you sure you want to log out?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        isEditProfile = false;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      signOut();
+                                    },
+                                    child: const Text('Continue'),
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
           ),

@@ -3,8 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
-
-import 'light_details.dart';
+import 'package:ardu_illuminate/Screens/lightProfile.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -71,79 +70,89 @@ class _MainPageScreenState extends State<MainPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.black
-          : const Color(0xFFD9D9D9),
-      appBar: AppBar(
-        title: const Text(
-          'Main Light Control',
-          style: TextStyle(
-            fontSize: 20,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
+      backgroundColor: Color(0xFFD9D9D9),
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        child: AppBar(
+          title: Text(
+            'Main Light Control',
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.06,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
           ),
+          backgroundColor: const Color(0xFFD9D9D9),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.arrow_drop_down_circle_sharp),
+              onPressed: () {
+                // Show a list of screens when the button is pressed
+                // You can implement this using a dialog, bottom sheet, or any other UI widget
+              },
+            ),
+          ],
         ),
-        backgroundColor: const Color(0xFFD9D9D9),
       ),
       drawer: const DrawHeader(),
       body: Container(
-        width: 1500,
-        height: 2000,
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
-            image: DecorationImage(
-          image: AssetImage('assets/bg.png'),
-          //fit: BoxFit.contain,
-          fit: BoxFit.fitHeight,
-          alignment: Alignment(1.5, 1.0),
-        )),
-        padding: const EdgeInsets.all(40),
-        child: SingleChildScrollView(
-          child: Column(
+          image: DecorationImage(
+            image: AssetImage('assets/bg.png'),
+            fit: BoxFit.fitHeight,
+            alignment: Alignment(1.5, 1.0),
+          ),
+        ),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.08),
+        child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 50),
-              const Align(
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Power',
                   style: TextStyle(
-                    fontSize: 23,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
                     fontFamily: 'Poppins',
                   ),
                   textAlign: TextAlign.start,
                 ),
               ),
-              const SizedBox(height: 30),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               Transform.scale(
-                scale: 1.5,
+                scale: MediaQuery.of(context).size.width * 0.004,
                 child: Switch(
                   thumbIcon: thumbIcon,
                   value: light1,
-                  inactiveThumbColor: Colors.red,
+                  inactiveThumbColor: Color(0XFFD30000),
                   activeColor: activeColor,
                   onChanged: _onPressed,
                 ),
               ),
-              const SizedBox(
-                height: 50,
-              ),
-              const Align(
+              SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+              Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Intensity',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    fontSize: 23,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
                   ),
                   textAlign: TextAlign.start,
                 ),
               ),
-              const SizedBox(height: 30),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.02,
+              ),
               Row(
                 children: [
                   const Icon(Icons.dark_mode_outlined),
                   SizedBox(
-                    width: 170,
+                    width: MediaQuery.of(context).size.width * 0.6,
                     child: Theme(
                       data: ThemeData(
                         sliderTheme: const SliderThemeData(
@@ -175,32 +184,37 @@ class _MainPageScreenState extends State<MainPage>
                   const Icon(Icons.sunny),
                 ],
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.04),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => EnlighteningDetails()),
+                    MaterialPageRoute(
+                        builder: (context) => const EnlighteningDetailsView()),
                   );
                 },
-                child: Image.asset('assets/lightbulb.png', width: 80, height: 80),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Current Bulb',
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 18),
-              ),
-              const SizedBox(height: 20),
-              const SizedBox(
-                height: 20,
-                width: 150,
-                child: TextField(
-                  decoration: InputDecoration(hintText: 'No light Bulb Deetected'),
+                child: Image.asset(
+                  'assets/lightbulb.png',
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  height: MediaQuery.of(context).size.width * 0.2,
                 ),
               ),
-            ]
-          ),
-        ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+              Text(
+                'Current Bulb',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.04,
+                width: MediaQuery.of(context).size.width * 0.4,
+                child: const Text('E - 27 Bulb 18W'),
+              ),
+              // ignore: unnecessary_null_comparison
+            ].where((child) => child != null).toList()),
       ),
     );
   }

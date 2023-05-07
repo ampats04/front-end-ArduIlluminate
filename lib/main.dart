@@ -17,28 +17,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          useMaterial3: true,
-          primarySwatch: Colors.grey,
-          visualDensity: VisualDensity.adaptivePlatformDensity),
+        useMaterial3: true,
+        primarySwatch: Colors.grey,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       home: Builder(
         builder: (BuildContext context) {
           return AnimatedSplashScreen(
-            splash: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      child: Center(
-                        child: Image.asset(
-                          "assets/ardu-ulliminate.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+            splash: Center(
+              child: Transform.scale(
+                scale: MediaQuery.of(context).size.width * 0.007,
+                child: Image.asset(
+                  'assets/ardu-ulliminate.png',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             duration: 1000,

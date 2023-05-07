@@ -72,11 +72,11 @@ class _PasswordScreenState extends State<EditPassword> {
         title: const Text('Create Password'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.08),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16.0),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             TextField(
               controller: _passwordController,
               obscureText: true,
@@ -85,7 +85,7 @@ class _PasswordScreenState extends State<EditPassword> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16.0),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.06),
             TextField(
               controller: _confirmController,
               obscureText: true,
@@ -94,7 +94,7 @@ class _PasswordScreenState extends State<EditPassword> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16.0),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.06),
             ElevatedButton(
               onPressed: _continuePressed,
               child: const Text('Continue'),

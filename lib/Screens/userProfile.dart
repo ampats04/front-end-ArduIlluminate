@@ -32,11 +32,17 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
+      backgroundColor: Color(0xFFD9D9D9),
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
+        child: AppBar(
+          backgroundColor: Color(0xFFD9D9D9),
+          title: const Text('Profile'),
+        ),
       ),
       body: SingleChildScrollView(
-          padding: const EdgeInsets.all(30),
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.08),
           child: FutureBuilder(
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
@@ -54,10 +60,11 @@ class _FirstScreenState extends State<FirstScreen> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text(
+                        Text(
                           'Full Name',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold),
                         ),
@@ -68,13 +75,14 @@ class _FirstScreenState extends State<FirstScreen> {
                             prefixIcon: Icon(Icons.person),
                           ),
                         ),
-                        const SizedBox(
-                          height: 16,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02,
                         ),
-                        const Text(
+                        Text(
                           'Birthdate',
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold),
                         ),
@@ -85,13 +93,13 @@ class _FirstScreenState extends State<FirstScreen> {
                             prefixIcon: Icon(Icons.calendar_today),
                           ),
                         ),
-                        const SizedBox(
-                          height: 16,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02,
                         ),
-                        const Text(
+                        Text(
                           'Email',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                           ),
@@ -103,11 +111,13 @@ class _FirstScreenState extends State<FirstScreen> {
                             prefixIcon: Icon(Icons.mark_email_read),
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        const Text(
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02,
+                        ),
+                        Text(
                           'Username',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
                           ),
@@ -119,7 +129,9 @@ class _FirstScreenState extends State<FirstScreen> {
                             prefixIcon: const Icon(Icons.account_circle),
                           ),
                         ),
-                        const SizedBox(height: 32),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.02,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -129,12 +141,16 @@ class _FirstScreenState extends State<FirstScreen> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text(
+                                        title: Text(
                                           'Credentials Update?',
                                           style: TextStyle(
-                                              color: Color(0xFF0047FF),
-                                              fontFamily: 'Poppins',
-                                              fontSize: 16),
+                                            color: Color(0xFF0047FF),
+                                            fontFamily: 'Poppins',
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.05,
+                                          ),
                                         ),
                                         content: const Text(
                                             'Do you want to update credentials?'),
@@ -165,17 +181,25 @@ class _FirstScreenState extends State<FirstScreen> {
                                     });
                               },
                               style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(15.0),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width *
+                                            0.05,
+                                    vertical:
+                                        MediaQuery.of(context).size.height *
+                                            0.02),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                                 backgroundColor: const Color(0xFF0047FF),
                               ),
-                              child: const Text(
+                              child: Text(
                                 'EDIT PROFILE',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 13,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.05,
                                     fontFamily: 'Poppins',
                                     color: Colors.white),
                               ),

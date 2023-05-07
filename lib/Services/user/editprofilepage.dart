@@ -68,11 +68,15 @@ class _EditProfileState extends State<EditProfile> {
         _selectedDate == null ? null : dateFormat.format(_selectedDate!);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        child: AppBar(
+          title: const Text('Profile'),
+        ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(30),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.08),
         child: FutureBuilder(
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
@@ -90,10 +94,10 @@ class _EditProfileState extends State<EditProfile> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
+                    Text(
                       'Full Name',
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.bold),
                     ),
@@ -105,13 +109,13 @@ class _EditProfileState extends State<EditProfile> {
                           prefixIcon: const Icon(Icons.person),
                           errorText: "Enter Something"),
                     ),
-                    const SizedBox(
-                      height: 16,
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
                     ),
-                    const Text(
+                    Text(
                       'Birthdate',
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.bold),
                     ),
@@ -129,13 +133,13 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 16,
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
                     ),
-                    const Text(
+                    Text(
                       'Email',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                       ),
@@ -148,11 +152,13 @@ class _EditProfileState extends State<EditProfile> {
                         prefixIcon: const Icon(Icons.mark_email_read),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
+                    Text(
                       'Username',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                       ),
@@ -165,10 +171,12 @@ class _EditProfileState extends State<EditProfile> {
                         prefixIcon: const Icon(Icons.account_circle),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    const Text('Password',
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
+                    Text('Password',
                         style: TextStyle(
-                            fontSize: 16,
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold)),
                     const TextField(
@@ -177,7 +185,9 @@ class _EditProfileState extends State<EditProfile> {
                         prefixIcon: Icon(Icons.lock),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -187,12 +197,15 @@ class _EditProfileState extends State<EditProfile> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: const Text(
+                                    title: Text(
                                       'Credentials Update?',
                                       style: TextStyle(
-                                          color: Color(0xFF0047FF),
-                                          fontFamily: 'Poppins',
-                                          fontSize: 16),
+                                        color: const Color(0xFF0047FF),
+                                        fontFamily: 'Poppins',
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.05,
+                                      ),
                                     ),
                                     content: const Text(
                                         'You are about to change details'),
@@ -211,7 +224,8 @@ class _EditProfileState extends State<EditProfile> {
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          Navigator.pop(context);
+                                          Navigator.pop(
+                                              context); //add another logic
                                         },
                                         child: const Text('Cancel'),
                                       ),
@@ -220,23 +234,25 @@ class _EditProfileState extends State<EditProfile> {
                                 });
                           },
                           style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(15.0),
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.05,
+                                vertical:
+                                    MediaQuery.of(context).size.height * 0.02),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
                             backgroundColor: const Color(0xFF0047FF),
                           ),
-                          child: const Text(
+                          child: Text(
                             'Save Changes',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 13,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.05,
                                 fontFamily: 'Poppins',
                                 color: Colors.white),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 15,
                         ),
                       ],
                     ),

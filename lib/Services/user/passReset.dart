@@ -1,5 +1,6 @@
 // ignore: file_names
-import 'package:ardu_illuminate/Services/auth/verifyCode.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -10,10 +11,13 @@ class ResetPassword extends StatefulWidget {
 }
 
 class ResetPasswordState extends State<ResetPassword> {
-  final TextEditingController emailController = TextEditingController();
+  final emailController = TextEditingController();
 
-  void _sendVerificationCode() {
-    // Ari ra mag add if unsaon pag send sa email. Ambot saon HAHA
+  //final SnackBar = const SnackBar(content: Text('Email Sent'));
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
   }
 
   @override
@@ -25,21 +29,24 @@ class ResetPasswordState extends State<ResetPassword> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(50),
+            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const SizedBox(height: 25),
-                const Text(
+                SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+                Text(
                   'Enter the email associated with your account and we’ll send a verification code in order to reset your password.',
                   style: TextStyle(
                     fontFamily: 'Poppins',
+                    fontSize: MediaQuery.of(context).size.width * 0.04,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                TextField(
+                SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                TextFormField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.done,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     labelText: 'Email',
@@ -47,77 +54,82 @@ class ResetPasswordState extends State<ResetPassword> {
                       fontFamily: 'Poppins',
                     ),
                   ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (email) =>
+                      email != null && EmailValidator.validate(email)
+                          ? null
+                          : 'Enter a valid Email',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                   ),
                 ),
-                const SizedBox(height: 50),
-                ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Verification Code Sent'),
-                          content: const Text(
-                              'Please check the 6 digit pin sent to your email.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text(''),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                _sendVerificationCode();
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        VerifyCode(email: emailController.text),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(255, 0, 71, 255),
-                              ),
-                              child: const Text(
-                                'Okay',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                Padding(
+                  padding:
+                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.09),
+                  child: ElevatedButton(
+                    onPressed: () => verifyEmail(),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.03,
+                          vertical: MediaQuery.of(context).size.height * 0.03),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      backgroundColor: const Color(0xFF0047FF),
                     ),
-                    backgroundColor: const Color(0xFF0047FF),
-                  ),
-                  child: const Text(
-                    'Send Code',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontFamily: 'Poppins',
-                      color: Colors.white,
+                    child: Text(
+                      'Reset Password',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.02,
+                        fontFamily: 'Poppins',
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 15),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> verifyEmail() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: emailController.text.trim());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+          'Email Sent, Please check Email Spam',
+          style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: MediaQuery.of(context).size.width * 0.04,
+              color: Colors.white),
+        )),
+      );
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Email Not Found, Please Try Again!',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: MediaQuery.of(context).size.width * 0.04,
+              color: Colors.white,
+            )),
+      ));
+      Navigator.of(context).pop();
+    }
   }
 }

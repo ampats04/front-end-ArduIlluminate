@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../api/apiService.dart';
 
 class CreateAccountPage extends StatefulWidget {
+  //final formKey = GlobalKey<FormState>();
   const CreateAccountPage({Key? key}) : super(key: key);
 
   @override
@@ -84,27 +85,32 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         _selectedDate == null ? null : dateFormat.format(_selectedDate!);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(top: 40), // Add top padding here
-          child: Center(
-            child: Text(
-              'Create Account',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+      backgroundColor: Color(0xFFD9D9D9),
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        child: AppBar(
+          title: Text(
+            'Create Account',
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.06,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
             ),
           ),
+          backgroundColor: const Color(0xFFD9D9D9),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.08),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text(
+            Text(
               'Full Name',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.05,
+              ),
             ),
             TextFormField(
               controller: fullNameController,
@@ -121,10 +127,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 prefixIcon: Icon(Icons.person),
               ),
             ),
-            const SizedBox(height: 16.0),
-            const Text(
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            Text(
               'Birthdate',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.05,
+              ),
             ),
             GestureDetector(
               onTap: _presentDatePicker,
@@ -146,10 +154,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 16.0),
-            const Text(
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            Text(
               'Email',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.05,
+              ),
             ),
             TextFormField(
               controller: emailController,
@@ -165,10 +175,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
               ),
               keyboardType: TextInputType.emailAddress,
             ),
-            const SizedBox(height: 16.0),
-            const Text(
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            Text(
               'Username',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.05,
+              ),
             ),
             TextFormField(
               controller: usernameController,
@@ -183,20 +195,27 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 prefixIcon: Icon(Icons.account_circle),
               ),
             ),
-            const SizedBox(height: 16.0),
-            const Text(
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+            Text(
               'Password',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.05,
+              ),
             ),
-            TextField(
+            TextFormField(
               controller: passwordController,
               obscureText: true,
+              textInputAction: TextInputAction.next,
               decoration: const InputDecoration(
                 hintText: 'Enter your password',
                 prefixIcon: Icon(Icons.lock),
               ),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: (value) => value != null && value.length < 8
+                  ? 'Enter a min. of 8 characters'
+                  : null,
             ),
-            const SizedBox(height: 16.0),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Row(
               children: <Widget>[
                 Checkbox(
@@ -207,15 +226,17 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     });
                   },
                 ),
-                const Expanded(
+                Expanded(
                   child: Text(
                     'By signing up, you agree to our Terms and Data Policy.',
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 32.0),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             ElevatedButton(
               onPressed: () {
                 _register();

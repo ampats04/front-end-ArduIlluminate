@@ -90,52 +90,54 @@ class _TimerPageState extends State<TimerPage>
 
     return Scaffold(
       backgroundColor: const Color(0xFFD9D9D9),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFD9D9D9),
-        title: const Text(
-          'Timer Control',
-          style: TextStyle(
-            fontSize: 20,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      appBar: PreferredSize(
+          preferredSize:
+              Size.fromHeight(MediaQuery.of(context).size.height * 0.06),
+          child: AppBar(
+            backgroundColor: const Color(0xFFD9D9D9),
+            title: Text(
+              'Timer Control',
+              style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.06,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )),
       drawer: const DrawHeader(),
       body: Container(
-        width: 1500,
-        height: 1600,
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/bg.png'),
-            //fit: BoxFit.contain,
             fit: BoxFit.fitHeight,
             alignment: Alignment(1.5, 1.0),
           ),
         ),
-        padding: const EdgeInsets.all(30),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(
-                height: 10,
-              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
               Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      const SizedBox(height: 30),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.01),
                       Text(
                         '$hours:$minutes:$seconds',
-                        style: const TextStyle(
-                          fontSize: 40,
+                        style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * 0.09,
                           fontFamily: 'Poppins',
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      // SizedBox(
+                      //     height: MediaQuery.of(context).size.height * 0.01),
                       SizedBox(
-                        width: 150,
-                        height: 150,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.3,
                         child: GestureDetector(
                           onTap: () {
                             durationPicked(context);
@@ -143,8 +145,8 @@ class _TimerPageState extends State<TimerPage>
                           child: Image.asset('assets/clock.png'),
                         ),
                       ),
-                      const SizedBox(
-                        height: 50,
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.01,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -157,25 +159,31 @@ class _TimerPageState extends State<TimerPage>
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 32, vertical: 15),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal:
+                                        MediaQuery.of(context).size.width *
+                                            0.08,
+                                    vertical:
+                                        MediaQuery.of(context).size.height *
+                                            0.03),
                                 backgroundColor: const Color(0xFF164e63),
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 )),
-                            child: const Text(
+                            child: Text(
                               'Start',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.04,
                                 fontFamily: 'Poppins',
                               ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 23,
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.03,
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -185,38 +193,45 @@ class _TimerPageState extends State<TimerPage>
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 31, vertical: 15),
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.08,
+                                vertical:
+                                    MediaQuery.of(context).size.height * 0.03),
                             backgroundColor: const Color(0xFF164e63),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             )),
-                        child: const Text(
+                        child: Text(
                           " Stop ",
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: MediaQuery.of(context).size.width * 0.04,
                             fontFamily: 'Poppins',
                           ),
                         ),
                       ),
-                      const SizedBox(height: 23),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03),
                       ElevatedButton(
                         onPressed: () {
                           resetTimer();
                         },
                         style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 15),
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.08,
+                                vertical:
+                                    MediaQuery.of(context).size.height * 0.03),
                             backgroundColor: const Color(0xFF164e63),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             )),
-                        child: const Text(
+                        child: Text(
                           'Reset',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: MediaQuery.of(context).size.width * 0.04,
                             fontFamily: 'Poppins',
                           ),
                         ),
