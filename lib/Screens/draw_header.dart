@@ -1,11 +1,12 @@
 import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/user/editPass.dart';
-import 'package:ardu_illuminate/Screens/light_details.dart';
+import 'package:ardu_illuminate/Screens/addLight.dart';
 import 'package:ardu_illuminate/Screens/userProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
-import 'view_logs.dart'; //
+import 'view_logs.dart';
+import 'package:ardu_illuminate/Screens/lightProfile.dart';
 
 class DrawHeader extends StatefulWidget {
   const DrawHeader({Key? key}) : super(key: key);
@@ -89,7 +90,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const FirstScreen()));
+                                              const EnlighteningDetailsView()));
                                 },
                               ),
                             ),
