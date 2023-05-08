@@ -1,8 +1,9 @@
 import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:ardu_illuminate/Services/user/editprofilepage.dart';
+import 'package:ardu_illuminate/Services/user/legalBasis.dart';
 import 'package:ardu_illuminate/Services/user/passReset.dart';
 import 'package:flutter/material.dart';
-import 'package:ardu_illuminate/Services/user/editPass.dart';
+import 'package:ardu_illuminate/Services/user/legalBasis.dart';
 import 'package:ardu_illuminate/Screens/addLight.dart';
 import 'package:ardu_illuminate/Screens/userProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -77,7 +78,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const EditProfile()));
+                                              const FirstScreen()));
                                 },
                               ),
                             ),
@@ -122,12 +123,11 @@ class _DrawHeaderState extends State<DrawHeader> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const EditPassword()));
+                                              const ResetPassword()));
                                 },
                               ),
                             ),
                           ),
-                          //const Divider(),
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.1,
                             child: ListTile(
@@ -151,7 +151,6 @@ class _DrawHeaderState extends State<DrawHeader> {
                               ),
                             ),
                           ),
-
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.1,
                             child: ListTile(
@@ -170,7 +169,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const ViewLogsPage())); //this should be the legal basis section
+                                              const LegalBasis())); //this should be the legal basis section
                                 },
                               ),
                             ),

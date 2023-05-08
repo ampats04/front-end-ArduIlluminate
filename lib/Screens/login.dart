@@ -17,10 +17,17 @@ class LoginPage extends StatefulWidget {
 
 // ignore: must_be_immutable
 class _LoginPageState extends State<LoginPage> {
+  bool passwordVisible = false;
   String? errorMessage = '';
   bool isLogin = true;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    passwordVisible = true;
+  }
 
   @override
   void dispose() {
@@ -32,11 +39,12 @@ class _LoginPageState extends State<LoginPage> {
 
   Future signIn() async {
     try {
-      
-      await Auth().signIn(
+      await Auth()
+          .signIn(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
-      ).then((value) {
+      )
+          .then((value) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const HomePage()));
       });
@@ -86,10 +94,10 @@ class _LoginPageState extends State<LoginPage> {
               TextFormField(
                 controller: passwordController,
                 textInputAction: TextInputAction.next,
-
+                obscureText: passwordVisible,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) => value != null && value.length < 8
-                    ? 'Enter min. 8 characters'
+                validator: (value) => value != null && value.length < 6
+                    ? 'Enter min. 6 characters'
                     : null,
 
                 // validator: (value) {
@@ -99,10 +107,23 @@ class _LoginPageState extends State<LoginPage> {
                 //     return null;
                 //   }
                 // },
-                obscureText: true,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.lock_open_rounded),
-                  suffixIcon: Icon(Icons.remove_red_eye),
+
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.lock_open_rounded),
+                  suffixIcon: IconButton(
+                    icon: Icon(passwordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(
+                        () {
+                          passwordVisible = !passwordVisible;
+                        },
+                      );
+                    },
+                  ),
+                  alignLabelWithHint: false,
+                  // filled: true,
                   labelText: 'Password',
                   labelStyle: TextStyle(
                     fontFamily: 'Poppins',

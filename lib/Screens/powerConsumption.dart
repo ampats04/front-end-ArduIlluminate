@@ -47,67 +47,73 @@ class _PowerConsumption extends State<PowerConsumption>
           ),
         ),
         padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(height: 16),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.3,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() {
-                      wattage = double.parse(value);
-                      kilowattHours = wattage / 1000 * 24;
-                      pesoCost = kilowattHours * 10;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    hintText: '',
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: (MediaQuery.of(context).size.height * 0.07)),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      setState(() {
+                        wattage = double.parse(value);
+                        kilowattHours = wattage / 1000 * 24;
+                        pesoCost = kilowattHours * 10;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      hintText: '',
+                    ),
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.06,
+                        fontFamily: 'Poppins',
+                        color: Color(0XFFD30000),
+                        fontWeight: FontWeight.bold),
                   ),
+                ),
+                SizedBox(height: (MediaQuery.of(context).size.height * 0.03)),
+                Text(
+                  'Watts',
                   style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width * 0.06,
+                      fontFamily: 'Poppins'),
+                ),
+                SizedBox(height: (MediaQuery.of(context).size.height * 0.05)),
+                Text(
+                  '${kilowattHours.toStringAsFixed(2)} kWh',
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.08,
+                      fontFamily: 'Poppins',
+                      color: const Color(0XFFD30000),
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'KwH',
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.06,
+                      fontFamily: 'Poppins'),
+                ),
+                SizedBox(height: (MediaQuery.of(context).size.height * 0.05)),
+                Text(
+                  'P ${pesoCost.toStringAsFixed(2)}',
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.08,
                       fontFamily: 'Poppins',
                       color: Color(0XFFD30000),
                       fontWeight: FontWeight.bold),
                 ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Watts',
-                style: TextStyle(fontSize: 20, fontFamily: 'Poppins'),
-              ),
-              const SizedBox(height: 32),
-              const SizedBox(height: 16),
-              Text(
-                '${kilowattHours.toStringAsFixed(2)} kWh',
-                style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.08,
-                    fontFamily: 'Poppins',
-                    color: const Color(0XFFD30000),
-                    fontWeight: FontWeight.bold),
-              ),
-              const Text(
-                'KwH',
-                style: TextStyle(fontSize: 20, fontFamily: 'Poppins'),
-              ),
-              const SizedBox(height: 32),
-              const SizedBox(height: 16),
-              Text(
-                'P ${pesoCost.toStringAsFixed(2)}',
-                style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.08,
-                    fontFamily: 'Poppins',
-                    color: Color(0XFFD30000),
-                    fontWeight: FontWeight.bold),
-              ),
-              const Text(
-                'Pesos', // - Per Day (at P10/kWh):
-                style: TextStyle(fontSize: 20, fontFamily: 'Poppins'),
-              ),
-            ],
+                Text(
+                  'Pesos', // - Per Day (at P10/kWh):
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.06,
+                      fontFamily: 'Poppins'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

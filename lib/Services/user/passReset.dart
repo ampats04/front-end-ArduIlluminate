@@ -23,8 +23,17 @@ class ResetPasswordState extends State<ResetPassword> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reset Password'),
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        child: AppBar(
+          title: Text(
+            'Reset Password',
+            style: TextStyle(
+                fontSize: MediaQuery.of(context).size.width * 0.05,
+                fontFamily: 'Poppins'),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -58,7 +67,9 @@ class ResetPasswordState extends State<ResetPassword> {
                   validator: (email) =>
                       email != null && EmailValidator.validate(email)
                           ? null
-                          : 'Enter a valid Email',
+                          : email == null || email.isEmpty
+                              ? '* Email is required'
+                              : '* Enter a valid Email',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                   ),
@@ -100,6 +111,7 @@ class ResetPasswordState extends State<ResetPassword> {
   }
 
   Future<void> verifyEmail() async {
+    BuildContext context = this.context;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -108,28 +120,112 @@ class ResetPasswordState extends State<ResetPassword> {
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+      Future.microtask(() {
+        Navigator.of(context).pop();
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              'Email Sent',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: MediaQuery.of(context).size.width * 0.06,
+                color: Color(0xFF0047FF),
+              ),
+            ),
             content: Text(
-          'Email Sent, Please check Email Spam',
-          style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: MediaQuery.of(context).size.width * 0.04,
-              color: Colors.white),
-        )),
-      );
-      Navigator.of(context).popUntil((route) => route.isFirst);
+              'Password reset link has been sucessfully delivered. Please check your email.',
+              style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: MediaQuery.of(context).size.width * 0.043),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.035,
+                vertical: MediaQuery.of(context).size.height * 0.025),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            actions: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.25,
+                height: MediaQuery.of(context).size.height * 0.065,
+                child: TextButton(
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Color(0xFF0047FF),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      });
     } on FirebaseAuthException catch (e) {
-      print(e);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Email Not Found, Please Try Again!',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              fontSize: MediaQuery.of(context).size.width * 0.04,
-              color: Colors.white,
-            )),
-      ));
       Navigator.of(context).pop();
+
+      print(e);
+      Future.microtask(() {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              'Problem Occured',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: const Color(0XFFD30000),
+                fontSize: MediaQuery.of(context).size.width * 0.06,
+              ),
+            ),
+            content: Text(
+              'The email you entered isn’t connected to an account.',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: MediaQuery.of(context).size.width * 0.04,
+                color: Color(0XFFD30000),
+              ),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.035,
+                vertical: MediaQuery.of(context).size.height * 0.025),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            actions: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.25,
+                height: MediaQuery.of(context).size.height * 0.065,
+                child: TextButton(
+                  child: const Text(
+                    'Go Back',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Color(0xFF0047FF),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      });
     }
   }
 }

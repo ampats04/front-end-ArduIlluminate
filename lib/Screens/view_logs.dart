@@ -17,7 +17,7 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
     },
     {
       'timestamp': '2022-05-05 8:25:21',
-      'action': 'Set brightness',
+      'action': 'Set Brightness',
       'status': '50%',
     },
     {
@@ -40,40 +40,54 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('View Logs'),
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        child: AppBar(
+          title: Text(
+            'View Logs',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: MediaQuery.of(context).size.width * 0.06,
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Logs',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
-            const SizedBox(height: 16),
             DataTable(
-              columns: const [
+              columns: [
                 DataColumn(
                   label: Text(
                     'Timestamp',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: MediaQuery.of(context).size.height * 0.04,
+                        fontFamily: 'Poppins'),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     'Action',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: MediaQuery.of(context).size.height * 0.04,
+                        fontFamily: 'Poppins'),
                   ),
                 ),
                 DataColumn(
                   label: Text(
                     'Status',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: MediaQuery.of(context).size.height * 0.04,
+                        fontFamily: 'Poppins'),
                   ),
                 ),
               ],

@@ -1,13 +1,14 @@
 // ignore: file_names
 
 import 'package:ardu_illuminate/Screens/mainPage.dart';
+import 'package:ardu_illuminate/Services/user/legalBasis.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../api/apiService.dart';
+import 'package:email_validator/email_validator.dart';
 
 class CreateAccountPage extends StatefulWidget {
-  //final formKey = GlobalKey<FormState>();
   const CreateAccountPage({Key? key}) : super(key: key);
 
   @override
@@ -16,6 +17,7 @@ class CreateAccountPage extends StatefulWidget {
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
+  final formGlobalKey = GlobalKey<FormState>();
   final TextEditingController fullNameController = TextEditingController();
   DateTime? _selectedDate;
   final TextEditingController emailController = TextEditingController();
@@ -103,163 +105,184 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.08),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Full Name',
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.05,
+        child: Form(
+          key: formGlobalKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Full Name',
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                ),
               ),
-            ),
-            TextFormField(
-              controller: fullNameController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  const InputDecoration(
-                      errorText: "Please Enter your full name");
-                  return "Please enter your full name";
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                hintText: 'Enter your full name',
-                prefixIcon: Icon(Icons.person),
+              TextFormField(
+                controller: fullNameController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    const InputDecoration(errorText: "* Full Name is Required");
+                    return "* Full Name is Required";
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Enter your full name',
+                  prefixIcon: Icon(Icons.person),
+                ),
               ),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Text(
-              'Birthdate',
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.05,
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Text(
+                'Birthdate',
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: _presentDatePicker,
-              child: AbsorbPointer(
-                child: TextFormField(
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter your Birthdate";
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    hintText: 'Select your birthdate',
-                    prefixIcon: Icon(Icons.calendar_today),
+              GestureDetector(
+                onTap: _presentDatePicker,
+                child: AbsorbPointer(
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        const InputDecoration(
+                            errorText: "* Birthdate is Required");
+                        return "* Birthdate is Required";
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'Select your birthdate',
+                      prefixIcon: Icon(Icons.calendar_today),
+                    ),
+                    controller: TextEditingController(
+                        text: selectedDateFormatted ?? ''),
+                    keyboardType: TextInputType.datetime,
                   ),
-                  controller:
-                      TextEditingController(text: selectedDateFormatted ?? ''),
-                  keyboardType: TextInputType.datetime,
                 ),
               ),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Text(
-              'Email',
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.05,
-              ),
-            ),
-            TextFormField(
-              controller: emailController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Please enter your Email";
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                hintText: 'Enter your email',
-                prefixIcon: Icon(Icons.email),
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Text(
-              'Username',
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.05,
-              ),
-            ),
-            TextFormField(
-              controller: usernameController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return "Please enter your Username";
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                hintText: 'Enter your username',
-                prefixIcon: Icon(Icons.account_circle),
-              ),
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Text(
-              'Password',
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.05,
-              ),
-            ),
-            TextFormField(
-              controller: passwordController,
-              obscureText: true,
-              textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(
-                hintText: 'Enter your password',
-                prefixIcon: Icon(Icons.lock),
-              ),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (value) => value != null && value.length < 8
-                  ? 'Enter a min. of 8 characters'
-                  : null,
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-            Row(
-              children: <Widget>[
-                Checkbox(
-                  value: _agreeToTermsAndPrivacy,
-                  onChanged: (value) {
-                    setState(() {
-                      _agreeToTermsAndPrivacy = value!;
-                    });
-                  },
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Text(
+                'Email',
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
                 ),
-                Expanded(
-                  child: Text(
-                    'By signing up, you agree to our Terms and Data Policy.',
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.05,
+              ),
+              TextFormField(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                controller: emailController,
+                validator: (value) =>
+                    value != null && EmailValidator.validate(value)
+                        ? null
+                        : value == null || value.isEmpty
+                            ? '* Email is required'
+                            : '* Enter a valid Email',
+                decoration: const InputDecoration(
+                  hintText: 'Enter your email',
+                  prefixIcon: Icon(Icons.email),
+                ),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Text(
+                'Username',
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                ),
+              ),
+              TextFormField(
+                controller: usernameController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    const InputDecoration(errorText: "* Username is Required");
+                    return "* Username is Required";
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Enter your username',
+                  prefixIcon: Icon(Icons.account_circle),
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Text(
+                'Password',
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.05,
+                ),
+              ),
+              TextFormField(
+                controller: passwordController,
+                obscureText: true,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  hintText: 'Enter your password',
+                  prefixIcon: Icon(Icons.lock),
+                ),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) => value != null && value.length < 6
+                    ? 'Enter a min. of 6 characters'
+                    : null,
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              Row(
+                children: <Widget>[
+                  Checkbox(
+                    value: _agreeToTermsAndPrivacy,
+                    onChanged: (value) {
+                      setState(() {
+                        _agreeToTermsAndPrivacy = value!;
+                      });
+                    },
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LegalBasis(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'By signing up, you agree to our Terms of use and Data Policy.',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.04,
+                        fontFamily: 'Poppins',
+                        color: const Color(0xFF0047FF),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-            ElevatedButton(
-              onPressed: () {
-                _register();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => const MainPage())));
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                backgroundColor: const Color(0xFF0047FF),
+                ],
               ),
-              child: const Text(
-                'Create Account',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+              SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+              ElevatedButton(
+                onPressed: () {
+                  if (formGlobalKey.currentState!.validate()) {
+                    _register();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => const MainPage())),
+                    );
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  backgroundColor: const Color(0xFF0047FF),
                 ),
-              ),
-            ),
-          ],
+                child: const Text(
+                  'Create Account',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
