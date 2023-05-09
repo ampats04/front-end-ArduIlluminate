@@ -121,8 +121,6 @@ class ResetPasswordState extends State<ResetPassword> {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim());
       Future.microtask(() {
-        Navigator.of(context).pop();
-
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -163,7 +161,7 @@ class ResetPasswordState extends State<ResetPassword> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                 ),
               ),
@@ -192,7 +190,7 @@ class ResetPasswordState extends State<ResetPassword> {
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: MediaQuery.of(context).size.width * 0.04,
-                color: Color(0XFFD30000),
+                color: Colors.black,
               ),
             ),
             contentPadding: EdgeInsets.symmetric(

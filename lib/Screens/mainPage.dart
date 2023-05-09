@@ -17,6 +17,7 @@ class _MainPageScreenState extends State<MainPage>
     with AutomaticKeepAliveClientMixin<MainPage> {
   @override
   bool get wantKeepAlive => true;
+
   bool light1 = false;
   Color activeColor = Colors.green;
   double _currentSliderValue = 20;
@@ -41,6 +42,11 @@ class _MainPageScreenState extends State<MainPage>
       return const Icon(Icons.close);
     },
   );
+  // void _isPowerOff(bool value) {
+  //   if (ledstatus == false) {
+
+  //   }
+  // }
 
   void _onPressed(bool value) {
     if (ledstatus) {
@@ -71,7 +77,7 @@ class _MainPageScreenState extends State<MainPage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Color(0xFFD9D9D9),
+      backgroundColor: const Color(0xFFD9D9D9),
       appBar: PreferredSize(
         preferredSize:
             Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
@@ -89,8 +95,46 @@ class _MainPageScreenState extends State<MainPage>
             IconButton(
               icon: const Icon(Icons.arrow_drop_down_circle_sharp),
               onPressed: () {
-                // Show a list of screens when the button is pressed
-                // You can implement this using a dialog, bottom sheet, or any other UI widget
+                showMenu(
+                  context: context,
+                  position: const RelativeRect.fromLTRB(25.0, 50.0, 0.0, 0.0),
+                  items: [
+                    PopupMenuItem<String>(
+                      value: 'bedroom',
+                      child: Text('Bedroom'),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'bathroom',
+                      child: Text('Bathroom'),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'living_room',
+                      child: Text('Living Room'),
+                    ),
+                    PopupMenuItem<String>(
+                      value: 'kitchen',
+                      child: Text('Kitchen'),
+                    ),
+                  ],
+                  elevation: 8.0,
+                ).then<void>((String? itemSelected) {
+                  if (itemSelected == null) return;
+                  // Do something when a choice is selected
+                  switch (itemSelected) {
+                    case 'bedroom':
+                      // Navigate to the bedroom screen or update state to show bedroom content
+                      break;
+                    case 'bathroom':
+                      // Navigate to the bathroom screen or update state to show bathroom content
+                      break;
+                    case 'living_room':
+                      // Navigate to the living room screen or update state to show living room content
+                      break;
+                    case 'kitchen':
+                      // Navigate to the kitchen screen or update state to show kitchen content
+                      break;
+                  }
+                });
               },
             ),
           ],
@@ -129,7 +173,7 @@ class _MainPageScreenState extends State<MainPage>
                 child: Switch(
                   thumbIcon: thumbIcon,
                   value: light1,
-                  inactiveThumbColor: Color(0XFFD30000),
+                  inactiveThumbColor: const Color(0XFFD30000),
                   activeColor: activeColor,
                   onChanged: _onPressed,
                 ),
