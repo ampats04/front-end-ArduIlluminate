@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 //import '../Screens/lightProfile.dart';
 import '../Services/api/apiService.dart';
+import 'login.dart';
 import 'mainPage.dart';
+
+TextEditingController bulbController = TextEditingController();
+TextEditingController manufacturerController = TextEditingController();
 
 class EnlighteningDetails extends StatefulWidget {
   const EnlighteningDetails({super.key});
@@ -16,9 +20,6 @@ class EnlighteningDetails extends StatefulWidget {
 class _EnlighteningDetailsState extends State<EnlighteningDetails> {
   DateTime? _selectedDate;
   TextEditingController dateController = TextEditingController();
-  TextEditingController bulbController = TextEditingController();
-  TextEditingController manufacturerController = TextEditingController();
-  TextEditingController powerController = TextEditingController();
   void _showDatePicker() {
     showDatePicker(
       context: context,
@@ -59,7 +60,6 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
     final DateFormat dateFormat = DateFormat.yMEd();
     final String? selectedDateFormatted =
         _selectedDate == null ? null : dateFormat.format(_selectedDate!);
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize:
@@ -83,35 +83,18 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
             const SizedBox(
               height: 30,
             ),
-            TextFormField(
-              controller: bulbController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  const InputDecoration(
-                      errorText: "Please Enter your Bulb Model");
-                  return;
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                hintText: 'Enter Bulb Model',
+            const TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter Bulb Model...',
                 prefixIcon: Icon(Icons.lightbulb),
               ),
             ),
             const SizedBox(
               height: 30,
             ),
-            TextFormField(
-              controller: manufacturerController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  const InputDecoration(errorText: "Please Enter Manufacturer");
-                  return;
-                }
-                return null;
-              },
-              decoration: const InputDecoration(
-                hintText: 'Enter Bulb Manufacturer',
+            const TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter Bulb Manufacturer...',
                 prefixIcon: Icon(Icons.precision_manufacturing),
               ),
             ),
@@ -154,12 +137,12 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
                         actions: [
                           TextButton(
                             onPressed: () {
-                              _register();
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: ((context) =>
-                                          const MainPage())));
+                              Navigator.pop(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
                             },
                             child: const Text('Save'),
                           ),
@@ -167,7 +150,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text('Cancel'),
+                            child: const Text('REVERT'),
                           ),
                         ],
                       );
