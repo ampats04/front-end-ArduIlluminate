@@ -101,7 +101,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const EnlighteningDetails()));
+                                                const EnlighteningDetailsView()));
                                   }),
                             ),
                           ),

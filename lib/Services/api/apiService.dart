@@ -10,7 +10,7 @@ const String baseUrl = "http://10.0.2.2:8000/api";
 class apiService {
   var client = http.Client();
 
-  Future<UserModel> get(String api) async {
+  Future<dynamic> get(String api) async {
     try {
       var response = await client.get(
         Uri.parse(baseUrl + api),
@@ -22,7 +22,7 @@ class apiService {
 
       if (response.statusCode == 200) {
         //resuest sucesss
-        return UserModel.fromJson(jsonDecode(response.body));
+        return json.decode(response.body);
       } else {
         // The request failed
         throw Exception('Failed to load data from server ${response.body}');

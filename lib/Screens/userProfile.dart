@@ -19,7 +19,7 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
-  late Future<UserModel> futureUser;
+  late Future<dynamic> futureUser;
   String uid = Auth().currentUser!.uid;
   String? email = Auth().currentUser!.email;
 
@@ -37,7 +37,7 @@ class _FirstScreenState extends State<FirstScreen> {
         preferredSize:
             Size.fromHeight(MediaQuery.of(context).size.height * 0.05),
         child: AppBar(
-          backgroundColor: Color(0xFFD9D9D9),
+          backgroundColor: const Color(0xFFD9D9D9),
           title: const Text('Profile'),
         ),
       ),
@@ -51,11 +51,10 @@ class _FirstScreenState extends State<FirstScreen> {
                       child: Text('${snapshot.error} occured'),
                     );
                   } else if (snapshot.hasData) {
-                    _fullnameController.text = snapshot.data.name;
+                    _fullnameController.text = snapshot.data['name'];
                     _emailController.text = email!;
-                    _birthdateController.text =
-                        snapshot.data.birthdate.toString().substring(0, 10);
-                    _usernameController.text = snapshot.data.username;
+                    _birthdateController.text = snapshot.data['birthdate'];
+                    _usernameController.text = snapshot.data['username'];
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

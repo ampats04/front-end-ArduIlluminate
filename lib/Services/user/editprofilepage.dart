@@ -20,7 +20,7 @@ class _EditProfileState extends State<EditProfile> {
   DateTime? _selectedDate;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  late Future<UserModel> futureUser;
+  late Future<dynamic> futureUser;
 
   String uid = Auth().currentUser!.uid;
   String email = Auth().currentUser!.email!;
@@ -85,11 +85,10 @@ class _EditProfileState extends State<EditProfile> {
                   child: Text('${snapshot.error} occured'),
                 );
               } else if (snapshot.hasData) {
-                String nameHint = snapshot.data.name;
+                String nameHint = snapshot.data['name'];
                 String emailHint = Auth().currentUser!.email!;
-                String usernameHint = snapshot.data.username;
-                String birthdateHint =
-                    snapshot.data.birthdate.toString().substring(0, 10);
+                String usernameHint = snapshot.data['username'];
+                String birthdateHint = snapshot.data['birthdate'];
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

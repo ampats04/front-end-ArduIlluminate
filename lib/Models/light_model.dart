@@ -11,21 +11,21 @@ class LightModel {
 
   LightModel({
     // ignore: non_constant_identifier_names
-    this.light_id,
+    this.user_id,
     this.model,
     this.manufacturer,
     this.installDate,
     this.powerCons,
   });
   // ignore: non_constant_identifier_names
-  String? light_id;
+  String? user_id;
   String? model;
   String? manufacturer;
   DateTime? installDate;
   String? powerCons;
 
   factory LightModel.fromJson(Map<String, dynamic> json) => LightModel(
-        light_id: json['light_id'],
+        user_id: json['user_id'],
         model: json['model'],
         manufacturer: json['manufacturer'],
         installDate: DateTime.parse(json['install_date']),
@@ -33,6 +33,7 @@ class LightModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "user_id": user_id,
         "model": model,
         "manufacturer": manufacturer,
         "instalL_date": installDate.toString(),

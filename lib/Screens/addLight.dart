@@ -1,4 +1,5 @@
 //import 'package:ardu_illuminate/Screens/login.dart';
+import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 //import '../Screens/lightProfile.dart';
@@ -37,6 +38,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
   void _register() async {
     try {
       final Map<String, dynamic> lightData = {
+        'user_id': Auth().currentUser!.uid,
         'model': bulbController.text,
         'manufacturer': manufacturerController.text,
         'install_date':
@@ -44,6 +46,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
       };
 
       await apiService().post("/light/add", lightData);
+      print("Ligh succesfully created");
 
       // ignore: use_build_context_synchronously
     } catch (e) {

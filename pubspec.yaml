@@ -34,11 +34,10 @@ dependencies:
   flutter_settings_screens: ^0.2.2+1
   email_validator: ^2.0.1
   email_auth: ^1.0.0
-  
+
   flutter:
     sdk: flutter
-  
-    
+
   animated_splash_screen:
   curved_navigation_bar: ^1.0.3
   # The following adds the Cupertino Icons font to your application.

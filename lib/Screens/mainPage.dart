@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
 import 'package:ardu_illuminate/Screens/lightProfile.dart';
+import 'package:ardu_illuminate/Screens/addLight.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -190,7 +191,7 @@ class _MainPageScreenState extends State<MainPage>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const EnlighteningDetailsView()),
+                        builder: (context) => const EnlighteningDetails()),
                   );
                 },
                 child: Image.asset(
