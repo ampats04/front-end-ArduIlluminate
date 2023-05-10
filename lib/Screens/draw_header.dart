@@ -50,15 +50,16 @@ class _DrawHeaderState extends State<DrawHeader> {
               ),
             ),
           ),
-          body: Center(
-            child: Padding(
-              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.08),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: Card(
+          body: SingleChildScrollView(
+            child: Center(
+              child: Padding(
+                padding:
+                    EdgeInsets.all(MediaQuery.of(context).size.width * 0.08),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
                       child: Column(
                         children: [
                           SizedBox(
@@ -200,10 +201,8 @@ class _DrawHeaderState extends State<DrawHeader> {
                         ],
                       ),
                     ),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                  Card(
-                    child: ListTile(
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+                    ListTile(
                       title: Text(
                         'Log out',
                         style: TextStyle(
@@ -251,8 +250,8 @@ class _DrawHeaderState extends State<DrawHeader> {
                         },
                       ),
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
           ),

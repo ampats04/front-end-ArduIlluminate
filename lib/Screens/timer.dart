@@ -92,7 +92,7 @@ class _TimerPageState extends State<TimerPage>
       backgroundColor: const Color(0xFFD9D9D9),
       appBar: PreferredSize(
           preferredSize:
-              Size.fromHeight(MediaQuery.of(context).size.height * 0.06),
+              Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
           child: AppBar(
             backgroundColor: const Color(0xFFD9D9D9),
             title: Text(
@@ -115,11 +115,11 @@ class _TimerPageState extends State<TimerPage>
             alignment: Alignment(1.5, 1.0),
           ),
         ),
-        padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.009),
               Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
