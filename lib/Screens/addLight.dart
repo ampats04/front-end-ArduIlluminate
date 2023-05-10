@@ -47,7 +47,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
       };
 
       await apiService().post("/light/add", lightData);
-      print("Ligh succesfully created");
+      print("Light succesfully created");
 
       // ignore: use_build_context_synchronously
     } catch (e) {

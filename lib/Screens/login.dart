@@ -46,12 +46,14 @@ class _LoginPageState extends State<LoginPage> {
       )
           .then((value) {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
       });
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
       });
+
+      print("${errorMessage}asdad");
     }
   }
 
@@ -75,6 +77,12 @@ class _LoginPageState extends State<LoginPage> {
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Please enter your Username";
+                  } else if (errorMessage ==
+                      "There is no user record corresponding to this identifier. The user may have been deleted") {
+                    return "No such Email Found";
+                  } else if (errorMessage ==
+                      "The email address is badly formatted.") {
+                    return "Please input a legitimate Email";
                   } else {
                     return null;
                   }
@@ -96,18 +104,16 @@ class _LoginPageState extends State<LoginPage> {
                 textInputAction: TextInputAction.next,
                 obscureText: passwordVisible,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) => value != null && value.length < 6
-                    ? 'Enter min. 6 characters'
-                    : null,
-
-                // validator: (value) {
-                //   if (value!.isEmpty) {
-                //     return "Please enter your password";
-                //   } else {
-                //     return null;
-                //   }
-                // },
-
+                validator: (value) {
+                  if (value != null && value.length < 6) {
+                    return "Enter min. 6 characters";
+                  } else if (value == null) {
+                    return "Please enter a password";
+                  } else if (errorMessage ==
+                      "The password is invalid or the user does not have a password.") {
+                    return "Invalid Password";
+                  }
+                },
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.lock_open_rounded),
                   suffixIcon: IconButton(
@@ -125,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                   alignLabelWithHint: false,
                   // filled: true,
                   labelText: 'Password',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     fontFamily: 'Poppins',
                   ),
                 ),

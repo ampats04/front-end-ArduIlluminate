@@ -26,8 +26,11 @@ class _DrawHeaderState extends State<DrawHeader> {
     await FirebaseAuth.instance.signOut();
 
     // ignore: use_build_context_synchronously
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const LoginPage()));
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+      (route) => false,
+    );
   }
 
   @override

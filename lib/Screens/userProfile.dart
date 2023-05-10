@@ -20,8 +20,8 @@ class FirstScreen extends StatefulWidget {
 
 class _FirstScreenState extends State<FirstScreen> {
   late Future<dynamic> futureUser;
-  String uid = Auth().currentUser!.uid;
-  String? email = Auth().currentUser!.email;
+  String? uid = Auth().currentUser?.uid;
+  String? email = Auth().currentUser?.email;
 
   @override
   void initState() {
