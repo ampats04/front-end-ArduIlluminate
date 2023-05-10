@@ -2,6 +2,7 @@ import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:ardu_illuminate/Services/user/editprofilepage.dart';
 import 'package:ardu_illuminate/Services/user/legalBasis.dart';
 import 'package:ardu_illuminate/Services/user/passReset.dart';
+import 'package:ardu_illuminate/Services/user/wifiSetup.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/user/legalBasis.dart';
 import 'package:ardu_illuminate/Screens/addLight.dart';
@@ -81,6 +82,28 @@ class _DrawHeaderState extends State<DrawHeader> {
                                               const FirstScreen()));
                                 },
                               ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            child: ListTile(
+                              title: Text(
+                                'WI-FI setup',
+                                style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04),
+                              ),
+                              trailing: IconButton(
+                                  icon: const Icon(Icons.wifi_outlined),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const NetworkSettingsPage()));
+                                  }),
                             ),
                           ),
                           SizedBox(
