@@ -4,16 +4,16 @@ import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:flutter/material.dart';
 import 'package:duration_picker/duration_picker.dart';
 
-class TimerPage extends StatefulWidget {
-  const TimerPage({Key? key}) : super(key: key);
+class TimerrPage extends StatefulWidget {
+  const TimerrPage({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _TimerPageState createState() => _TimerPageState();
+  _TimerrPageState createState() => _TimerrPageState();
 }
 
-class _TimerPageState extends State<TimerPage>
-    with AutomaticKeepAliveClientMixin<TimerPage> {
+class _TimerrPageState extends State<TimerrPage>
+    with AutomaticKeepAliveClientMixin<TimerrPage> {
   @override
   bool get wantKeepAlive => true;
   Duration _picked = const Duration(hours: 0, minutes: 0);

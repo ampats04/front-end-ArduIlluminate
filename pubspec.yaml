@@ -37,7 +37,8 @@ dependencies:
 
   flutter:
     sdk: flutter
-
+  timer_builder: ^2.0.0
+  
   animated_splash_screen:
   curved_navigation_bar: ^1.0.3
   # The following adds the Cupertino Icons font to your application.

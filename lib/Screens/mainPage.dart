@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
-import 'package:ardu_illuminate/Screens/lightProfile.dart';
 import 'package:ardu_illuminate/Screens/addLight.dart';
 
 class MainPage extends StatefulWidget {
@@ -96,6 +95,53 @@ class _MainPageScreenState extends State<MainPage>
             ),
           ),
           backgroundColor: const Color(0xFFD9D9D9),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.arrow_drop_down_circle_sharp),
+              onPressed: () {
+                showMenu(
+                  context: context,
+                  position: const RelativeRect.fromLTRB(25.0, 50.0, 0.0, 0.0),
+                  items: [
+                    const PopupMenuItem<String>(
+                      value: 'bedroom',
+                      child: Text('Bedroom'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'bathroom',
+                      child: Text('Bathroom'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'living_room',
+                      child: Text('Living Room'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'kitchen',
+                      child: Text('Kitchen'),
+                    ),
+                  ],
+                  elevation: 8.0,
+                ).then<void>((String? itemSelected) {
+                  if (itemSelected == null) return;
+                  // Do something when a choice is selected
+                  switch (itemSelected) {
+                    case 'bedroom':
+                      // Navigate to the bedroom screen or update state to show bedroom content
+                      break;
+                    case 'bathroom':
+                      // Navigate to the bathroom screen or update state to show bathroom content
+                      break;
+                    case 'living_room':
+                      // Navigate to the living room screen or update state to show living room content
+                      break;
+                    case 'kitchen':
+                      // Navigate to the kitchen screen or update state to show kitchen content
+                      break;
+                  }
+                });
+              },
+            ),
+          ],
         ),
       ),
       drawer: const DrawHeader(),
