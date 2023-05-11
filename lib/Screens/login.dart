@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (value!.isEmpty) {
                     return "Please enter your Username";
                   } else if (errorMessage ==
-                      "There is no user record corresponding to this identifier. The user may have been deleted") {
+                      "There is no user record corresponding to this identifier. The user may have been deleted.") {
                     return "No such Email Found";
                   } else if (errorMessage ==
                       "The email address is badly formatted.") {
@@ -105,9 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                 obscureText: passwordVisible,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
-                  if (value != null && value.length < 6) {
-                    return "Enter min. 6 characters";
-                  } else if (value == null) {
+                  if (value == null) {
                     return "Please enter a password";
                   } else if (errorMessage ==
                       "The password is invalid or the user does not have a password.") {

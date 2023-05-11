@@ -18,12 +18,11 @@ class _TimerPageState extends State<TimerPage>
     with AutomaticKeepAliveClientMixin<TimerPage> {
   @override
   bool get wantKeepAlive => true;
-
   bool isStarted = false;
   bool isPaused = false;
   Timer? countdownTimer;
   int secondsRemaining = 0;
-  bool isTimeSet = false;
+  bool isTimeSet = false; // Para sa Start and reset button nga di ma fishlit
 
   @override
   void initState() {
@@ -162,58 +161,63 @@ class _TimerPageState extends State<TimerPage>
                 style: const TextStyle(fontSize: 48),
               ),
               const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: isTimeSet && secondsRemaining > 0
-                    ? () {
-                        if (secondsRemaining <= 0) {
-                          return;
-                        }
-                        startTimer();
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isStarted && !isPaused
-                      ? Colors.orange
-                      : (isStarted ? Colors.blue : Colors.green),
-                  foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: isTimeSet && secondsRemaining > 0
+                        ? () {
+                            if (secondsRemaining <= 0) {
+                              return;
+                            }
+                            startTimer();
+                          }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isStarted && !isPaused
+                          ? Colors.orange
+                          : (isStarted ? Colors.blue : Colors.green),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 24),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      elevation: 2,
+                    ),
+                    icon: SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: isStarted && !isPaused
+                          ? const Icon(Icons.pause, size: 40)
+                          : isPaused
+                              ? const Icon(Icons.play_arrow, size: 40)
+                              : const Icon(Icons.play_arrow, size: 40),
+                    ),
+                    label: const SizedBox.shrink(),
                   ),
-                  elevation: 2,
-                ),
-                icon: isStarted && !isPaused
-                    ? const Icon(Icons.pause, size: 32)
-                    : isPaused
-                        ? const Icon(Icons.play_arrow, size: 32)
-                        : const Icon(Icons.play_arrow, size: 32),
-                label: Text(
-                  isStarted && !isPaused
-                      ? 'Pause'
-                      : (isPaused ? 'Resume' : 'Start'),
-                  style: const TextStyle(fontSize: 24),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: isTimeSet ? resetTimer : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                  const SizedBox(width: 25),
+                  ElevatedButton.icon(
+                    onPressed: isTimeSet ? resetTimer : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 24),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      elevation: 2,
+                    ),
+                    icon: const SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: Icon(Icons.refresh, size: 40),
+                    ),
+                    label: const SizedBox.shrink(),
                   ),
-                  elevation: 2,
-                ),
-                icon: const Icon(Icons.refresh, size: 32),
-                label: const Text(
-                  'Reset',
-                  style: TextStyle(fontSize: 24),
-                ),
-              ),
+                ],
+              )
             ],
           ),
         ),
