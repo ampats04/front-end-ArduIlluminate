@@ -26,7 +26,10 @@ class _FirstScreenState extends State<FirstScreen> {
   @override
   void initState() {
     super.initState();
-    futureUser = apiService().get("/users/one/$uid");
+  }
+
+  Future<dynamic> getUser() {
+    return apiService().get("/users/one/$uid");
   }
 
   @override
@@ -214,7 +217,7 @@ class _FirstScreenState extends State<FirstScreen> {
                 }
                 return const Center(child: CircularProgressIndicator());
               },
-              future: futureUser)),
+              future: getUser())),
     );
   }
 }

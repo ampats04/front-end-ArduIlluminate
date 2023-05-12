@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 
+import '../Services/auth/auth.dart';
+
 final TextEditingController _modelController = TextEditingController();
 final TextEditingController _manufacturerController = TextEditingController();
 final TextEditingController _installDateController = TextEditingController();
@@ -21,7 +23,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
   @override
   void initState() {
     super.initState();
-    futureLight = apiService().get("/light/one/${10}");
+    futureLight = apiService().get("/light/one/${Auth().currentUser?.uid}");
   }
 
   @override
