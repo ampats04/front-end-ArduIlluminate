@@ -1,14 +1,15 @@
-//import 'package:ardu_illuminate/Screens/login.dart';
+import 'dart:convert';
+
+import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-//import '../Screens/lightProfile.dart';
 import '../Services/api/apiService.dart';
-import 'login.dart';
-import 'mainPage.dart';
+import 'package:http/http.dart' as http;
 
 TextEditingController bulbController = TextEditingController();
 TextEditingController manufacturerController = TextEditingController();
+TextEditingController wattController = TextEditingController();
 
 class EnlighteningDetails extends StatefulWidget {
   const EnlighteningDetails({super.key});
@@ -23,8 +24,8 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
   void _showDatePicker() {
     showDatePicker(
       context: context,
-      initialDate: DateTime(2000),
-      firstDate: DateTime(1990),
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
       lastDate: DateTime.now(),
     ).then((pickedDate) {
       if (pickedDate == null) {
@@ -39,15 +40,18 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
   void _register() async {
     try {
       final Map<String, dynamic> lightData = {
-        'user_id': Auth().currentUser!.uid,
+        'user_id': Auth().currentUser?.uid,
         'model': bulbController.text,
         'manufacturer': manufacturerController.text,
         'install_date':
             _selectedDate!.toIso8601String().substring(0, 10).toString(),
+        'watt': wattController.text,
       };
 
-      await apiService().post("/light/add", lightData);
-      print("Ligh succesfully created");
+      final response = await apiService().post("/light/add", lightData);
+      final lightID = response['light_id'];
+
+      print("Light succesfully created $lightID");
 
       // ignore: use_build_context_synchronously
     } catch (e) {
@@ -57,7 +61,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat dateFormat = DateFormat.yMEd();
+    final DateFormat dateFormat = DateFormat.yMMMMd('en_US');
     final String? selectedDateFormatted =
         _selectedDate == null ? null : dateFormat.format(_selectedDate!);
     return Scaffold(
@@ -78,24 +82,36 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
               style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: MediaQuery.of(context).size.width * 0.05,
-                  color: Color(0xFF0047FF)),
+                  color: const Color(0xFF0047FF)),
             ),
             const SizedBox(
               height: 30,
             ),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter Bulb Model...',
+            TextFormField(
+              controller: bulbController,
+              decoration: const InputDecoration(
+                hintText: 'Enter Bulb Model',
                 prefixIcon: Icon(Icons.lightbulb),
               ),
             ),
             const SizedBox(
               height: 30,
             ),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter Bulb Manufacturer...',
+            TextFormField(
+              controller: manufacturerController,
+              decoration: const InputDecoration(
+                hintText: 'Enter Bulb Manufacturer',
                 prefixIcon: Icon(Icons.precision_manufacturing),
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: wattController,
+              decoration: const InputDecoration(
+                hintText: 'Bulb Wattage',
+                prefixIcon: Icon(Icons.energy_savings_leaf),
               ),
             ),
             const SizedBox(
@@ -106,7 +122,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
               child: AbsorbPointer(
                 child: TextField(
                   decoration: const InputDecoration(
-                    hintText: 'Enter Installation Date...',
+                    hintText: 'Enter Installation Date',
                     prefixIcon: Icon(Icons.date_range),
                   ),
                   controller:
@@ -118,7 +134,6 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
             const SizedBox(
               height: 30,
             ),
-            //add birthdate selector here
             ElevatedButton(
               onPressed: () {
                 showDialog(
@@ -128,7 +143,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
                         title: Text(
                           'BULB DETAILS',
                           style: TextStyle(
-                            color: Color(0xFF0047FF),
+                            color: const Color(0xFF0047FF),
                             fontFamily: 'Poppins',
                             fontSize: MediaQuery.of(context).size.width * 0.05,
                           ),
@@ -137,10 +152,11 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
                         actions: [
                           TextButton(
                             onPressed: () {
-                              Navigator.pop(
+                              _register();
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const LoginPage(),
+                                  builder: (context) => MainPage(),
                                 ),
                               );
                             },

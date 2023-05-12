@@ -21,7 +21,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
   @override
   void initState() {
     super.initState();
-    futureLight = apiService().get("/light/one/");
+    futureLight = apiService().get("/light/one/${10}");
   }
 
   @override
@@ -57,8 +57,9 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                       const SizedBox(
                         height: 30,
                       ),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextFormField(
+                        controller: _modelController,
+                        decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.lightbulb),
                         ),
                         readOnly: true,
@@ -66,8 +67,9 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                       const SizedBox(
                         height: 30,
                       ),
-                      const TextField(
-                        decoration: InputDecoration(
+                      TextFormField(
+                        controller: _manufacturerController,
+                        decoration: const InputDecoration(
                           prefixIcon: Icon(Icons.precision_manufacturing),
                         ),
                         readOnly: true,
@@ -92,7 +94,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                         height: 30,
                       ),
                       ElevatedButton(
-                        onPressed: null,
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.all(15),
                           shape: RoundedRectangleBorder(
