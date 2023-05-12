@@ -3,10 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
+import 'package:ardu_illuminate/Screens/lightProfile.dart';
 import 'package:ardu_illuminate/Screens/addLight.dart';
+import 'package:get/get.dart';
+
+import '../controllers/maincontroller.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  MainPage({Key? key}) : super(key: key);
 
   @override
   _MainPageScreenState createState() => _MainPageScreenState();
@@ -16,7 +20,7 @@ class _MainPageScreenState extends State<MainPage>
     with AutomaticKeepAliveClientMixin<MainPage> {
   @override
   bool get wantKeepAlive => true;
-  bool _isPowerOn = false;
+
   bool light1 = false;
   Color activeColor = Colors.green;
   double _currentSliderValue = 20;
@@ -51,22 +55,13 @@ class _MainPageScreenState extends State<MainPage>
 
       ledstatus = true;
     }
+    Get.find<MainController>().isPowerOn.value = ledstatus;
     setState(() {
       light1 = value;
       activeColor = value ? Colors.green : Colors.red;
     });
   }
 
-  // void _onSliderChanged(double value) {
-  //   var brightness = value.round().toString();
-  //   ws.sendcmd("brightness$brightness");
-  //   setState(() {
-  //     if (ledstatus == false) {
-  //       brightness = value.round().toString();
-  //     }
-  //     _currentSliderValue = value;
-  //   });
-  // }
   void _onSliderChanged(double value) {
     if (!isPowerOn) return; // Exit early if power is off
 
@@ -80,6 +75,7 @@ class _MainPageScreenState extends State<MainPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFFD9D9D9),
       appBar: PreferredSize(
@@ -103,19 +99,19 @@ class _MainPageScreenState extends State<MainPage>
                   context: context,
                   position: const RelativeRect.fromLTRB(25.0, 50.0, 0.0, 0.0),
                   items: [
-                    const PopupMenuItem<String>(
+                    PopupMenuItem<String>(
                       value: 'bedroom',
                       child: Text('Bedroom'),
                     ),
-                    const PopupMenuItem<String>(
+                    PopupMenuItem<String>(
                       value: 'bathroom',
                       child: Text('Bathroom'),
                     ),
-                    const PopupMenuItem<String>(
+                    PopupMenuItem<String>(
                       value: 'living_room',
                       child: Text('Living Room'),
                     ),
-                    const PopupMenuItem<String>(
+                    PopupMenuItem<String>(
                       value: 'kitchen',
                       child: Text('Kitchen'),
                     ),
@@ -130,12 +126,6 @@ class _MainPageScreenState extends State<MainPage>
                       break;
                     case 'bathroom':
                       // Navigate to the bathroom screen or update state to show bathroom content
-                      break;
-                    case 'living_room':
-                      // Navigate to the living room screen or update state to show living room content
-                      break;
-                    case 'kitchen':
-                      // Navigate to the kitchen screen or update state to show kitchen content
                       break;
                   }
                 });
@@ -179,7 +169,7 @@ class _MainPageScreenState extends State<MainPage>
                   value: light1,
                   inactiveThumbColor: const Color(0XFFD30000),
                   activeColor: activeColor,
-                  onChanged: isPowerOn ? _onPressed : _onPressed,
+                  onChanged: _onPressed,
                   // onChanged: _onPressed,
                 ),
               ),
@@ -279,50 +269,3 @@ class _MainPageScreenState extends State<MainPage>
     );
   }
 }
-// actions: [
-          //   IconButton(
-          //     icon: const Icon(Icons.arrow_drop_down_circle_sharp),
-          //     onPressed: () {
-          //       showMenu(
-          //         context: context,
-          //         position: const RelativeRect.fromLTRB(25.0, 50.0, 0.0, 0.0),
-          //         items: [
-          //           PopupMenuItem<String>(
-          //             value: 'bedroom',
-          //             child: Text('Bedroom'),
-          //           ),
-          //           PopupMenuItem<String>(
-          //             value: 'bathroom',
-          //             child: Text('Bathroom'),
-          //           ),
-          //           PopupMenuItem<String>(
-          //             value: 'living_room',
-          //             child: Text('Living Room'),
-          //           ),
-          //           PopupMenuItem<String>(
-          //             value: 'kitchen',
-          //             child: Text('Kitchen'),
-          //           ),
-          //         ],
-          //         elevation: 8.0,
-          //       ).then<void>((String? itemSelected) {
-          //         if (itemSelected == null) return;
-          //         // Do something when a choice is selected
-          //         switch (itemSelected) {
-          //           case 'bedroom':
-          //             // Navigate to the bedroom screen or update state to show bedroom content
-          //             break;
-          //           case 'bathroom':
-          //             // Navigate to the bathroom screen or update state to show bathroom content
-          //             break;
-          //           case 'living_room':
-          //             // Navigate to the living room screen or update state to show living room content
-          //             break;
-          //           case 'kitchen':
-          //             // Navigate to the kitchen screen or update state to show kitchen content
-          //             break;
-          //         }
-          //       });
-          //     },
-          //   ),
-          // ],

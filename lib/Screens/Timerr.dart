@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
+import 'package:ardu_illuminate/controllers/maincontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:duration_picker/duration_picker.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart';
 
 Websocket ws = Websocket();
 
@@ -111,10 +114,12 @@ class _TimerPageState extends State<TimerPage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    final mainController = Get.find<MainController>();
+
     return Scaffold(
       backgroundColor: const Color(0xFFD9D9D9),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.06),
+        preferredSize: Size.fromHeight(screenHeight * 0.08),
         child: AppBar(
           backgroundColor: const Color(0xFFD9D9D9),
           title: Text(
@@ -138,26 +143,30 @@ class _TimerPageState extends State<TimerPage> {
             alignment: Alignment(1.5, 1.0),
           ),
         ),
-        padding: EdgeInsets.all(screenHeight * 0.02),
+        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.08),
         child: SingleChildScrollView(
           child: Column(
             children: [
               GestureDetector(
                 onTap: () {
-                  setTimer(context);
+                  if (mainController.isPowerOn.value) {
+                    setTimer(context);
+                  }
                 },
                 child: Image.asset(
                   'assets/clock.png',
-                  width: 200,
-                  height: 200,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.3,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
               Text(
                 formatTime(secondsRemaining),
-                style: const TextStyle(fontSize: 48),
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.1,
+                    fontFamily: 'Poppins'),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
               ElevatedButton.icon(
                 onPressed: isTimeSet && secondsRemaining > 0
                     ? () {
@@ -172,42 +181,49 @@ class _TimerPageState extends State<TimerPage> {
                       ? Colors.orange
                       : (isStarted ? Colors.blue : Colors.green),
                   foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * 0.028,
+                      horizontal: MediaQuery.of(context).size.width * 0.035),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                   elevation: 2,
                 ),
                 icon: isStarted && !isPaused
-                    ? const Icon(Icons.pause, size: 32)
+                    ? Icon(Icons.pause,
+                        size: MediaQuery.of(context).size.width * 0.1)
                     : isPaused
-                        ? const Icon(Icons.play_arrow, size: 32)
-                        : const Icon(Icons.play_arrow, size: 32),
+                        ? Icon(Icons.play_arrow,
+                            size: MediaQuery.of(context).size.width * 0.1)
+                        : Icon(Icons.play_arrow,
+                            size: MediaQuery.of(context).size.width * 0.1),
                 label: Text(
                   isStarted && !isPaused
                       ? 'Pause'
                       : (isPaused ? 'Resume' : 'Start'),
-                  style: const TextStyle(fontSize: 24),
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.06),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
               ElevatedButton.icon(
                 onPressed: isTimeSet ? resetTimer : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * 0.028,
+                      horizontal: MediaQuery.of(context).size.width * 0.035),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
                   elevation: 2,
                 ),
                 icon: const Icon(Icons.refresh, size: 32),
-                label: const Text(
+                label: Text(
                   'Reset',
-                  style: TextStyle(fontSize: 24),
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.06),
                 ),
               ),
             ],

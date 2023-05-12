@@ -34,11 +34,15 @@ dependencies:
   flutter_settings_screens: ^0.2.2+1
   email_validator: ^2.0.1
   email_auth: ^1.0.0
+  cupertino_icons: ^1.0.5
+  
+
 
   flutter:
     sdk: flutter
-  timer_builder: ^2.0.0
   
+  timer_builder: ^2.0.0
+  provider: ^5.0.0
   animated_splash_screen:
   curved_navigation_bar: ^1.0.3
   # The following adds the Cupertino Icons font to your application.
@@ -72,6 +76,11 @@ flutter:
         - asset: assets/Poppins/Poppins-Regular.ttf
         - asset: assets/Poppins/Poppins-Bold.ttf
           weight: 700
+
+    - family: Roboto
+      fonts:
+        - asset: assets/Roboto/Roboto-Regular.ttf
+        - asset: assets/Roboto/Roboto-Medium.ttf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

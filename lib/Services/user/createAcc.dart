@@ -262,8 +262,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     _register();
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                          builder: ((context) => const MainPage())),
+                      MaterialPageRoute(builder: ((context) => MainPage())),
                     );
                   }
                 },

@@ -2,7 +2,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Screens/powerConsumption.dart';
-import 'package:ardu_illuminate/Screens/timer.dart';
+
 import './mainPage.dart';
 import 'Timerr.dart';
 
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     _selectedPageIndex = 0;
     _pages = [
       const TimerPage(),
-      const MainPage(),
+      MainPage(),
       const PowerConsumption(),
     ];
 
@@ -54,9 +54,9 @@ class _HomePageState extends State<HomePage> {
           children: _pages,
         ),
         bottomNavigationBar: CurvedNavigationBar(
-          backgroundColor: const Color.fromRGBO(228, 195, 173, 1),
-          color: const Color.fromRGBO(158, 163, 176, 1),
-          height: 57.0,
+          backgroundColor: Color(0xFF24AFC1),
+          color: Color(0xFF1795A8),
+          height: MediaQuery.of(context).size.height * 0.09,
           animationDuration: const Duration(milliseconds: 400),
           items: [
             Icon(
@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
               // kamo lang bahala sa color boss
               for (int i = 0; i < _iconColors.length; i++) {
                 if (i == selectedPageIndex) {
-                  _iconColors[i] = const Color.fromARGB(255, 226, 255, 6);
+                  _iconColors[i] = Color(0xFFFCCF47);
                 } else {
                   _iconColors[i] = const Color.fromARGB(255, 255, 255, 255);
                 }

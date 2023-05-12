@@ -14,6 +14,8 @@ class Websocket {
   bool connected = false;
   bool ledstatus = false;
 
+  bool get isPowerOn => false;
+
   channelconnect() {
     try {
       channel = IOWebSocketChannel.connect(

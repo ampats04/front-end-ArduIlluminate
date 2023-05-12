@@ -147,62 +147,67 @@ class _LegalBasisState extends State<LegalBasis> {
           preferredSize: Size.fromHeight(
             MediaQuery.of(context).size.height * 0.09,
           ),
-          child: BottomAppBar(
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Row(
-                    children: [
-                      Text(
-                        'Cancel',
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.035,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
+          child: Container(
+            color: Color(0xFFf59e0b),
+            child: BottomAppBar(
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          'Cancel',
+                          style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.035,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            color: Color(0XFFD30000),
+                          ),
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width *
+                                0.02), // add some spacing between the text and icon
+                        Icon(
+                          Icons.close,
                           color: Color(0XFFD30000),
+                          size: MediaQuery.of(context).size.width * 0.04,
                         ),
-                      ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width *
-                              0.02), // add some spacing between the text and icon
-                      Icon(
-                        Icons.close,
-                        color: Color(0XFFD30000),
-                        size: MediaQuery.of(context).size.width * 0.04,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Row(
-                    children: [
-                      Text(
-                        'Accept',
-                        style: TextStyle(
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          'Accept',
+                          style: TextStyle(
+                            color: const Color(0xFF0047FF),
+                            fontSize: MediaQuery.of(context).size.width * 0.035,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.02),
+                        Icon(
+                          Icons.check,
                           color: const Color(0xFF0047FF),
-                          fontSize: MediaQuery.of(context).size.width * 0.035,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Poppins',
+                          size: MediaQuery.of(context).size.width * 0.04,
                         ),
-                      ),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                      Icon(
-                        Icons.check,
-                        color: const Color(0xFF0047FF),
-                        size: MediaQuery.of(context).size.width * 0.04,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ));
