@@ -19,11 +19,11 @@ class EnlighteningDetailsView extends StatefulWidget {
 
 class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
   late Future<dynamic> futureLight;
-
+  String? uid = Auth().currentUser!.uid;
   @override
   void initState() {
     super.initState();
-    futureLight = apiService().get("/light/one/${Auth().currentUser?.uid}");
+    futureLight = apiService().get("/light/one/$uid");
   }
 
   @override

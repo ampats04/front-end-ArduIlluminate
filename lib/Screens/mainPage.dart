@@ -1,5 +1,7 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison
 
+import 'package:ardu_illuminate/Services/api/apiService.dart';
+import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
@@ -18,9 +20,8 @@ class MainPage extends StatefulWidget {
 
 class _MainPageScreenState extends State<MainPage>
     with AutomaticKeepAliveClientMixin<MainPage> {
-  @override
-  bool get wantKeepAlive => true;
-
+  late Future<dynamic> futureLight;
+  TextEditingController modelController = TextEditingController();
   bool light1 = false;
   Color activeColor = Colors.green;
   double _currentSliderValue = 20;
@@ -28,12 +29,16 @@ class _MainPageScreenState extends State<MainPage>
 
   late Websocket ws = Websocket();
 
-  void initstate() {
+  String? uid = Auth().currentUser!.uid;
+
+  @override
+  void initState() {
     Future.delayed(Duration.zero, () async {
       ws.channelconnect();
     });
 
     super.initState();
+    futureLight = apiService().get("/light/one/$uid");
   }
 
   final MaterialStateProperty<Icon?> thumbIcon =
@@ -62,15 +67,8 @@ class _MainPageScreenState extends State<MainPage>
     });
   }
 
-  void _onSliderChanged(double value) {
-    if (!isPowerOn) return; // Exit early if power is off
-
-    var brightness = value.round().toString();
-    ws.sendcmd("brightness$brightness");
-    setState(() {
-      _currentSliderValue = value;
-    });
-  }
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -99,21 +97,13 @@ class _MainPageScreenState extends State<MainPage>
                   context: context,
                   position: const RelativeRect.fromLTRB(25.0, 50.0, 0.0, 0.0),
                   items: [
-                    PopupMenuItem<String>(
+                    const PopupMenuItem<String>(
                       value: 'bedroom',
                       child: Text('Bedroom'),
                     ),
-                    PopupMenuItem<String>(
+                    const PopupMenuItem<String>(
                       value: 'bathroom',
                       child: Text('Bathroom'),
-                    ),
-                    PopupMenuItem<String>(
-                      value: 'living_room',
-                      child: Text('Living Room'),
-                    ),
-                    PopupMenuItem<String>(
-                      value: 'kitchen',
-                      child: Text('Kitchen'),
                     ),
                   ],
                   elevation: 8.0,
@@ -173,7 +163,6 @@ class _MainPageScreenState extends State<MainPage>
                   // onChanged: _onPressed,
                 ),
               ),
-
               SizedBox(height: MediaQuery.of(context).size.height * 0.06),
               Align(
                 alignment: Alignment.centerLeft,
@@ -258,12 +247,34 @@ class _MainPageScreenState extends State<MainPage>
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.04,
-                width: MediaQuery.of(context).size.width * 0.4,
-                child: const Text('E - 27 Bulb 18W'),
+              FutureBuilder<dynamic>(
+                future: futureLight,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasData) {
+                    String model = snapshot.data['model'];
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: TextFormField(
+                        initialValue: model,
+                        readOnly: true,
+                        style: const TextStyle(fontSize: 22),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none, // Remove the underline
+                        ),
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.04,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                  );
+                },
               ),
-              // ignore: unnecessary_null_comparison
             ].where((child) => child != null).toList()),
       ),
     );

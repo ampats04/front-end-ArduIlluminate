@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:ardu_illuminate/Services/api/apiService.dart';
+import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
 
 import 'draw_header.dart';
@@ -13,11 +15,29 @@ class PowerConsumption extends StatefulWidget {
 
 class _PowerConsumption extends State<PowerConsumption>
     with AutomaticKeepAliveClientMixin<PowerConsumption> {
-  @override
-  bool get wantKeepAlive => true;
   double wattage = 0.0;
   double kilowattHours = 0.0;
   double pesoCost = 0.0;
+
+  String? uid = Auth().currentUser!.uid;
+  late Future<dynamic> futureLight;
+
+  @override
+  void initState() {
+    super.initState();
+    futureLight = apiService().get("/light/one/$uid");
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  void updateValues(double watt) {
+    setState(() {
+      wattage = watt;
+      kilowattHours = wattage / 1000 * 24;
+      pesoCost = kilowattHours * 10;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,23 +80,39 @@ class _PowerConsumption extends State<PowerConsumption>
                 SizedBox(height: (MediaQuery.of(context).size.height * 0.03)),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      setState(() {
-                        wattage = double.parse(value);
-                        kilowattHours = wattage / 1000 * 24;
-                        pesoCost = kilowattHours * 10;
-                      });
+                  child: FutureBuilder<dynamic>(
+                    future: futureLight,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasData) {
+                        double watt = snapshot.data['watt'];
+
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.04,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: TextFormField(
+                            initialValue: watt.toString(),
+                            readOnly: true,
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.06,
+                                fontFamily: 'Poppins',
+                                color: const Color(0XFFD30000),
+                                fontWeight: FontWeight.bold),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none, // Remove the underline
+                            ),
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      }
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        width: MediaQuery.of(context).size.width * 0.4,
+                      );
                     },
-                    decoration: const InputDecoration(
-                      hintText: '',
-                    ),
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.06,
-                        fontFamily: 'Poppins',
-                        color: Color(0XFFD30000),
-                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(height: (MediaQuery.of(context).size.height * 0.03)),
@@ -92,7 +128,7 @@ class _PowerConsumption extends State<PowerConsumption>
                   style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width * 0.08,
                       fontFamily: 'Poppins',
-                      color: Color(0XFFD30000),
+                      color: const Color(0XFFD30000),
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: (MediaQuery.of(context).size.height * 0.009)),
