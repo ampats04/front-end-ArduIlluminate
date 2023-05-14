@@ -17,7 +17,8 @@ class TimerPage extends StatefulWidget {
   _TimerPageState createState() => _TimerPageState();
 }
 
-class _TimerPageState extends State<TimerPage> {
+class _TimerPageState extends State<TimerPage>
+    with AutomaticKeepAliveClientMixin<TimerPage> {
   bool isStarted = false;
   bool isPaused = false;
   Timer? countdownTimer;
@@ -110,7 +111,11 @@ class _TimerPageState extends State<TimerPage> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 

@@ -53,8 +53,8 @@ class _HomePageState extends State<HomePage> {
           children: _pages,
         ),
         bottomNavigationBar: CurvedNavigationBar(
-          backgroundColor: Color(0xFF24AFC1),
-          color: Color(0xFF1795A8),
+          backgroundColor: const Color(0xFF24AFC1),
+          color: const Color(0xFF1795A8),
           height: MediaQuery.of(context).size.height * 0.09,
           animationDuration: const Duration(milliseconds: 400),
           items: [
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
               // kamo lang bahala sa color boss
               for (int i = 0; i < _iconColors.length; i++) {
                 if (i == selectedPageIndex) {
-                  _iconColors[i] = Color(0xFFFCCF47);
+                  _iconColors[i] = const Color(0xFFFCCF47);
                 } else {
                   _iconColors[i] = const Color.fromARGB(255, 255, 255, 255);
                 }
