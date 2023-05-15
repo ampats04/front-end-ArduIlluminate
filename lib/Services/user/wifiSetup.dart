@@ -1,13 +1,12 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, duplicate_ignore
-
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class NetworkSettingsPage extends StatefulWidget {
-  const NetworkSettingsPage({super.key});
+  const NetworkSettingsPage({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _NetworkSettingsPageState createState() => _NetworkSettingsPageState();
 }
 
@@ -16,15 +15,14 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isConnecting = false;
 
-  late Websocket ws = Websocket();
+  final DatabaseReference databaseReference =
+      FirebaseDatabase.instance.reference();
+  final String ssidPath = '/network/ssid';
+  final String passwordPath = '/network/password';
   String? response;
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () async {
-      ws.channelconnect();
-    });
-
     super.initState();
   }
 
@@ -33,7 +31,6 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
     final ssid = _ssidController.text;
     final password = _passwordController.text;
 
-    print(ssid + password);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Network Settings"),
@@ -57,13 +54,36 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
-                ws.sendcmd("ssid$ssid");
-                //ws.sendcmd("password$password");
-
+              onPressed: () async {
                 setState(() {
                   _isConnecting = true;
                 });
+
+                await databaseReference.child(ssidPath).set(ssid);
+                await databaseReference.child(passwordPath).set(password);
+
+                setState(() {
+                  _isConnecting = false;
+                });
+
+                // ignore: use_build_context_synchronously
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Data Sent"),
+                      content: const Text("Settings saved successfully!"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
               child: _isConnecting
                   ? const CircularProgressIndicator()

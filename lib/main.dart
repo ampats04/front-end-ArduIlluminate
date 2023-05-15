@@ -5,14 +5,22 @@ import 'package:ardu_illuminate/Screens/widget_tree.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
-Future main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      name: 'Ardu-Illuminate',
+      options: const FirebaseOptions(
+          apiKey: 'AIzaSyDFfBO1Ta6Myec-H5bLsRu3109mBJg1RGI',
+          appId: '1:791737884654:android:6bb118fd67d18c4fa4b8ff',
+          messagingSenderId: '791737884654',
+          projectId: 'ardu-illuminate',
+          databaseURL:
+              'https://ardu-illuminate-default-rtdb.asia-southeast1.firebasedatabase.app'));
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

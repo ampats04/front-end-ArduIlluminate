@@ -32,6 +32,7 @@ dependencies:
   firebase_core: any
   firebase_auth: any
   firebase_database: any
+  firebase_storage: any
   flutter_settings_screens: ^0.2.2+1
   email_validator: ^2.0.1
   email_auth: ^1.0.0

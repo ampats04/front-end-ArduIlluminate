@@ -171,66 +171,63 @@ class _TimerPageState extends State<TimerPage>
                     fontSize: MediaQuery.of(context).size.width * 0.1,
                     fontFamily: 'Poppins'),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              ElevatedButton.icon(
-                onPressed: isTimeSet && secondsRemaining > 0
-                    ? () {
-                        if (secondsRemaining <= 0) {
-                          return;
-                        }
-                        startTimer();
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isStarted && !isPaused
-                      ? Colors.orange
-                      : (isStarted ? Colors.blue : Colors.green),
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * 0.028,
-                      horizontal: MediaQuery.of(context).size.width * 0.035),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: isTimeSet && secondsRemaining > 0
+                        ? () {
+                            if (secondsRemaining <= 0) {
+                              return;
+                            }
+                            startTimer();
+                          }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isStarted && !isPaused
+                          ? Colors.orange
+                          : (isStarted ? Colors.blue : Colors.green),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 24),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      elevation: 2,
+                    ),
+                    icon: SizedBox(
+                      height: 40, // Increase the height for bigger icons
+                      width: 40, // Increase the width for bigger icons
+                      child: isStarted && !isPaused
+                          ? const Icon(Icons.pause, size: 32)
+                          : isPaused
+                              ? const Icon(Icons.play_arrow, size: 32)
+                              : const Icon(Icons.play_arrow, size: 32),
+                    ),
+                    label: const SizedBox.shrink(), // Hide the label
                   ),
-                  elevation: 2,
-                ),
-                icon: isStarted && !isPaused
-                    ? Icon(Icons.pause,
-                        size: MediaQuery.of(context).size.width * 0.1)
-                    : isPaused
-                        ? Icon(Icons.play_arrow,
-                            size: MediaQuery.of(context).size.width * 0.1)
-                        : Icon(Icons.play_arrow,
-                            size: MediaQuery.of(context).size.width * 0.1),
-                label: Text(
-                  isStarted && !isPaused
-                      ? 'Pause'
-                      : (isPaused ? 'Resume' : 'Start'),
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.06),
-                ),
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              ElevatedButton.icon(
-                onPressed: isTimeSet ? resetTimer : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(
-                      vertical: MediaQuery.of(context).size.height * 0.028,
-                      horizontal: MediaQuery.of(context).size.width * 0.035),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                  const SizedBox(width: 20),
+                  ElevatedButton.icon(
+                    onPressed: isTimeSet ? resetTimer : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 24),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      elevation: 2,
+                    ),
+                    icon: const SizedBox(
+                      height: 40, // Increase the height for bigger icons
+                      width: 40, // Increase the width for bigger icons
+                      child: Icon(Icons.refresh, size: 32),
+                    ),
+                    label: const SizedBox.shrink(), // Hide the label
                   ),
-                  elevation: 2,
-                ),
-                icon: const Icon(Icons.refresh, size: 32),
-                label: Text(
-                  'Reset',
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.06),
-                ),
-              ),
+                ],
+              )
             ],
           ),
         ),
