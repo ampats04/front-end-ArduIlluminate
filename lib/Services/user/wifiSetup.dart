@@ -1,12 +1,12 @@
-import 'package:ardu_illuminate/Services/api/webSocket.dart';
+// ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class NetworkSettingsPage extends StatefulWidget {
   const NetworkSettingsPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _NetworkSettingsPageState createState() => _NetworkSettingsPageState();
 }
 
@@ -22,11 +22,6 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
   String? response;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final ssid = _ssidController.text;
     final password = _passwordController.text;
@@ -35,62 +30,84 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
       appBar: AppBar(
         title: const Text("Network Settings"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _ssidController,
-              decoration: const InputDecoration(
-                labelText: "SSID",
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.wifi,
+                size: 80,
+                color: Colors.blue,
               ),
-            ),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: "Password",
+              const SizedBox(height: 16.0),
+              const Text(
+                "Enter the SSID of your network:",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () async {
-                setState(() {
-                  _isConnecting = true;
-                });
+              const SizedBox(height: 8.0),
+              TextField(
+                controller: _ssidController,
+                decoration: const InputDecoration(
+                  labelText: "SSID",
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () async {
+                  setState(() {
+                    _isConnecting = true;
+                  });
 
-                await databaseReference.child(ssidPath).set(ssid);
-                await databaseReference.child(passwordPath).set(password);
+                  await databaseReference.child(ssidPath).set(ssid);
+                  await databaseReference.child(passwordPath).set(password);
 
-                setState(() {
-                  _isConnecting = false;
-                });
+                  setState(() {
+                    _isConnecting = false;
+                  });
 
-                // ignore: use_build_context_synchronously
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text("Data Sent"),
-                      content: const Text("Settings saved successfully!"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text("OK"),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: _isConnecting
-                  ? const CircularProgressIndicator()
-                  : const Text("Save Settings"),
-            ),
-            response != null ? Text(response!) : Container(),
-          ],
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Data Sent"),
+                        content: const Text("Settings saved successfully!"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("OK"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16.0),
+                  textStyle: const TextStyle(fontSize: 20),
+                ),
+                child: _isConnecting
+                    ? const CircularProgressIndicator()
+                    : const Text("Save Settings"),
+              ),
+              response != null ? Text(response!) : Container(),
+            ],
+          ),
         ),
       ),
     );
