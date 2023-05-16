@@ -11,8 +11,10 @@ final TextEditingController _installDateController = TextEditingController();
 final TextEditingController _wattController = TextEditingController();
 
 class UpdatedLightDetails extends StatefulWidget {
-  const UpdatedLightDetails({Key? key, this.data}) : super(key: key);
+  const UpdatedLightDetails({Key? key, this.data, required this.lightId})
+      : super(key: key);
   final dynamic data;
+  final String lightId;
 
   @override
   _UpdatedLightDetailsState createState() => _UpdatedLightDetailsState();
@@ -21,7 +23,6 @@ class UpdatedLightDetails extends StatefulWidget {
 class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
   late Future<dynamic> futureLight;
   String? uid = Auth().currentUser!.uid;
-  int lightId = 12;
 
   @override
   void initState() {
@@ -44,7 +45,9 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
         'watt': _wattController.text,
       };
 
-      await apiService().put("/lights/update/$uid/$lightId", data);
+      print(widget.data['light_id'].toString());
+      await apiService().put(
+          "/lights/update/$uid/${widget.data['light_id'].toString()}", data);
     } catch (err) {
       throw Exception("Failed to update lights $err");
     }

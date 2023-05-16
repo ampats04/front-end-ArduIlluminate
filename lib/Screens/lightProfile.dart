@@ -11,6 +11,7 @@ class EnlighteningDetailsView extends StatefulWidget {
   const EnlighteningDetailsView({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _EnlighteningDetailsViewState createState() =>
       _EnlighteningDetailsViewState();
 }
@@ -23,13 +24,6 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
   void initState() {
     super.initState();
     futureLight = apiService().get("/light/one/$uid");
-  }
-
-  void navigateToUpdateDetails(Map<String, dynamic> data) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => UpdatedLightDetails(data: data)),
-    );
   }
 
   @override
@@ -50,6 +44,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
               } else if (snapshot.hasData) {
                 final data = snapshot.data;
 
+                String lightId = data['light_id'].toString();
                 _modelController.text = data['model'];
                 _manufacturerController.text = data['manufacturer'];
                 _installDateController.text = data['install_date'];
@@ -108,8 +103,10 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                UpdatedLightDetails(data: snapshot.data),
+                            builder: (context) => UpdatedLightDetails(
+                              data: snapshot.data,
+                              lightId: lightId,
+                            ),
                           ),
                         );
                       },

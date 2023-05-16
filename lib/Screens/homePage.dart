@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: CurvedNavigationBar(
           backgroundColor: const Color(0xFF24AFC1),
           color: const Color(0xFF1795A8),
-          height: MediaQuery.of(context).size.height * 0.09,
+          height: 60.0, // MediaQuery.of(context).size.height * 0.09,
           animationDuration: const Duration(milliseconds: 400),
           items: [
             Icon(
