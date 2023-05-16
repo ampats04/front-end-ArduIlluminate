@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../Models/user_model.dart';
 
 // ignore: camel_case_types
 

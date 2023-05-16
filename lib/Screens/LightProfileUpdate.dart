@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import '../Services/auth/auth.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 final TextEditingController _modelController = TextEditingController();
 final TextEditingController _manufacturerController = TextEditingController();
 final TextEditingController _installDateController = TextEditingController();
+final TextEditingController _wattController = TextEditingController();
 
 class UpdatedLightDetails extends StatefulWidget {
   const UpdatedLightDetails({Key? key, this.data}) : super(key: key);
@@ -18,6 +21,7 @@ class UpdatedLightDetails extends StatefulWidget {
 class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
   late Future<dynamic> futureLight;
   String? uid = Auth().currentUser!.uid;
+  int lightId = 12;
 
   @override
   void initState() {
@@ -28,12 +32,22 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
     _modelController.text = widget.data['model'];
     _manufacturerController.text = widget.data['manufacturer'];
     _installDateController.text = widget.data['install_date'];
+    _wattController.text = widget.data['watt'].toString();
   }
 
-  void updateDetails() {
-    // Implement the logic to update the details here
-    // You can access the updated values using _modelController.text,
-    // _manufacturerController.text, and _installDateController.text
+  void _update() async {
+    try {
+      Map<String, dynamic> data = {
+        'model': _modelController.text,
+        'manufacturer': _manufacturerController.text,
+        'install_date': _installDateController.text,
+        'watt': _wattController.text,
+      };
+
+      await apiService().put("/lights/update/$uid/$lightId", data);
+    } catch (err) {
+      throw Exception("Failed to update lights $err");
+    }
   }
 
   void openCalendarPicker() {
@@ -104,8 +118,17 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: _wattController,
+              decoration: const InputDecoration(
+                labelText: 'Watts',
+              ),
+            ),
             ElevatedButton(
-              onPressed: updateDetails,
+              onPressed: _update,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(15),
                 shape: RoundedRectangleBorder(
