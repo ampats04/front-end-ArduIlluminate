@@ -45,9 +45,9 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
         'watt': _wattController.text,
       };
 
-      print(widget.data['light_id'].toString());
+      print("${widget.data['light_id']}  MAO MN GD NI SIYA YAWA");
       await apiService().put(
-          "/lights/update/$uid/${widget.data['light_id'].toString()}", data);
+          "/light/update/$uid/${widget.data['light_id'].toString()}", data);
     } catch (err) {
       throw Exception("Failed to update lights $err");
     }

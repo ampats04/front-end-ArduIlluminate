@@ -35,6 +35,7 @@ class apiService {
     var url = Uri.parse(baseUrl + api);
     var headers = {
       'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
     };
     var payload = jsonEncode(object);
 
@@ -52,6 +53,7 @@ class apiService {
     var payload = json.encode(object);
     var headers = {
       'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
     };
 
     var response = await client.put(url, body: payload, headers: headers);
