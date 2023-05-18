@@ -32,7 +32,7 @@ class Auth {
       return uid;
     } catch (e) {
       // Handle errors that occurred during registration
-      return '';
+      return 'okay nigga $e';
     }
   }
 

@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:ardu_illuminate/Screens/lightProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import '../Services/auth/auth.dart';
@@ -52,7 +53,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
     } catch (err) {
       throw Exception("Failed to update lights $err");
     }
-
+  }
     void updateDetails() {
       showDialog(
         context: context,
@@ -70,7 +71,11 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
               TextButton(
                 child: const Text('UPDATE'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  _update();
+               Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: ((context) => const EnlighteningDetailsView())),
+                    );
                 },
               ),
             ],
@@ -183,4 +188,4 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
       );
     }
   }
-}
+

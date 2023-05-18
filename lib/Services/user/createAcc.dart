@@ -1,5 +1,6 @@
 // ignore: file_names
 
+import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:ardu_illuminate/Services/user/legalBasis.dart';
 import 'package:flutter/material.dart';
@@ -262,7 +263,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     _register();
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: ((context) => MainPage())),
+                      MaterialPageRoute(builder: ((context) => const LoginPage())),
                     );
                   }
                 },
