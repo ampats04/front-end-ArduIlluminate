@@ -9,6 +9,7 @@ final TextEditingController _modelController = TextEditingController();
 final TextEditingController _manufacturerController = TextEditingController();
 final TextEditingController _installDateController = TextEditingController();
 final TextEditingController _wattController = TextEditingController();
+late final String light_id;
 
 class UpdatedLightDetails extends StatefulWidget {
   const UpdatedLightDetails({Key? key, this.data, required this.lightId})
@@ -29,11 +30,11 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
     super.initState();
     futureLight = apiService().get("/light/one/$uid");
 
-    // Set the initial values of the text controllers here
     _modelController.text = widget.data['model'];
     _manufacturerController.text = widget.data['manufacturer'];
     _installDateController.text = widget.data['install_date'];
     _wattController.text = widget.data['watt'].toString();
+    light_id = widget.data['light_id'].toString();
   }
 
   void _update() async {
@@ -51,105 +52,135 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
     } catch (err) {
       throw Exception("Failed to update lights $err");
     }
-  }
 
-  void openCalendarPicker() {
-    DatePicker.showDatePicker(
-      context,
-      showTitleActions: true,
-      onConfirm: (date) {
-        setState(() {
-          _installDateController.text = date.toString();
-        });
-      },
-      currentTime: DateTime.now(),
-    );
-  }
+    void updateDetails() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Confirmation'),
+            content: const Text('Are you sure you want to update the details?'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('CANCEL'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: const Text('UPDATE'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Updated Enlightening Details'),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Bulb Details',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 24,
-                color: Color(0xFF0047FF),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              controller: _modelController,
-              decoration: const InputDecoration(
-                labelText: 'Bulb Model',
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              controller: _manufacturerController,
-              decoration: const InputDecoration(
-                labelText: 'Manufacturer',
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-                openCalendarPicker();
-              },
-              child: AbsorbPointer(
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Installation Date',
-                  ),
-                  controller: _installDateController,
-                  keyboardType: TextInputType.datetime,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              controller: _wattController,
-              decoration: const InputDecoration(
-                labelText: 'Watts',
-              ),
-            ),
-            ElevatedButton(
-              onPressed: _update,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                backgroundColor: const Color(0xFF0047FF),
-              ),
-              child: const Text(
-                'UPDATE DETAILS',
+    void openCalendarPicker() {
+      DatePicker.showDatePicker(
+        context,
+        showTitleActions: true,
+        onConfirm: (date) {
+          setState(() {
+            _installDateController.text = date.toString();
+          });
+        },
+        currentTime: DateTime.now(),
+      );
+    }
+
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Updated Enlightening Details'),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                'Bulb Details',
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  color: Colors.white,
+                  fontSize: 24,
+                  color: Color(0xFF0047FF),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                controller: _modelController,
+                decoration: const InputDecoration(
+                  labelText: 'Bulb Model',
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                controller: _manufacturerController,
+                decoration: const InputDecoration(
+                  labelText: 'Manufacturer',
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  openCalendarPicker();
+                },
+                child: AbsorbPointer(
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Installation Date',
+                    ),
+                    controller: _installDateController,
+                    keyboardType: TextInputType.datetime,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                controller: _wattController,
+                decoration: const InputDecoration(
+                  labelText: 'Watts',
+                ),
+              ),
+              const SizedBox(height: 30),
+              Container(
+                margin: const EdgeInsets.only(top: 20),
+                child: ElevatedButton(
+                  onPressed: updateDetails,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    backgroundColor: const Color(0xFF0047FF),
+                  ),
+                  child: const Text(
+                    'UPDATE DETAILS',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 }
