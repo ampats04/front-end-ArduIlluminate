@@ -9,9 +9,8 @@ import '../auth/auth.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
-  @override
 
-  // ignore: library_private_types_in_public_api
+  @override
   _EditProfileState createState() => _EditProfileState();
 }
 
@@ -43,8 +42,7 @@ class _EditProfileState extends State<EditProfile> {
     try {
       Map<String, dynamic> data = {
         'name': _fullnameController.text,
-        'birthdate':
-            _selectedDate!.toIso8601String().substring(0, 10).toString(),
+        'birthdate': _selectedDate!.toIso8601String().substring(0, 10).toString(),
         'username': _usernameController.text,
       };
 
@@ -69,8 +67,7 @@ class _EditProfileState extends State<EditProfile> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
         child: AppBar(
           title: const Text('Profile'),
         ),
@@ -96,17 +93,19 @@ class _EditProfileState extends State<EditProfile> {
                     Text(
                       'Full Name',
                       style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.05,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold),
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     TextField(
                       enabled: true,
                       controller: _fullnameController,
                       decoration: InputDecoration(
-                          hintText: nameHint,
-                          prefixIcon: const Icon(Icons.person),
-                          errorText: "Enter Something"),
+                        hintText: nameHint,
+                        prefixIcon: const Icon(Icons.person),
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.02,
@@ -114,9 +113,10 @@ class _EditProfileState extends State<EditProfile> {
                     Text(
                       'Birthdate',
                       style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.05,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold),
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     GestureDetector(
                       onTap: _presentDatePicker,
@@ -125,9 +125,9 @@ class _EditProfileState extends State<EditProfile> {
                           decoration: InputDecoration(
                             hintText: birthdateHint,
                             prefixIcon: const Icon(Icons.calendar_today),
+                            border: OutlineInputBorder(),
                           ),
-                          controller: TextEditingController(
-                              text: selectedDateFormatted ?? ''),
+                          controller: TextEditingController(text: selectedDateFormatted ?? ''),
                           keyboardType: TextInputType.datetime,
                         ),
                       ),
@@ -149,6 +149,7 @@ class _EditProfileState extends State<EditProfile> {
                       decoration: InputDecoration(
                         hintText: emailHint,
                         prefixIcon: const Icon(Icons.mark_email_read),
+                        border: OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(
@@ -168,20 +169,25 @@ class _EditProfileState extends State<EditProfile> {
                         hintText: usernameHint,
                         enabled: true,
                         prefixIcon: const Icon(Icons.account_circle),
+                        border: OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.02,
                     ),
-                    Text('Password',
-                        style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.width * 0.05,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold)),
+                    Text(
+                      'Password',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const TextField(
                       decoration: InputDecoration(
                         enabled: false,
                         prefixIcon: Icon(Icons.lock),
+                        border: OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(
@@ -193,51 +199,48 @@ class _EditProfileState extends State<EditProfile> {
                         ElevatedButton(
                           onPressed: () {
                             showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      'Credentials Update?',
-                                      style: TextStyle(
-                                        color: const Color(0xFF0047FF),
-                                        fontFamily: 'Poppins',
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.05,
-                                      ),
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    'Credentials Update?',
+                                    style: TextStyle(
+                                      color: const Color(0xFF0047FF),
+                                      fontFamily: 'Poppins',
+                                      fontSize: MediaQuery.of(context).size.width * 0.05,
                                     ),
-                                    content: const Text(
-                                        'You are about to change details'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          _update();
-                                          // ignore: use_build_context_synchronously
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const FirstScreen()));
-                                        },
-                                        child: const Text('Proceed'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(
-                                              context); //add another logic
-                                        },
-                                        child: const Text('Cancel'),
-                                      ),
-                                    ],
-                                  );
-                                });
+                                  ),
+                                  content: const Text('You are about to change details'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        _update();
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const FirstScreen(),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text('Proceed'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.05,
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.02),
+                              horizontal: MediaQuery.of(context).size.width * 0.05,
+                              vertical: MediaQuery.of(context).size.height * 0.02,
+                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -246,11 +249,11 @@ class _EditProfileState extends State<EditProfile> {
                           child: Text(
                             'Save Changes',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.05,
-                                fontFamily: 'Poppins',
-                                color: Colors.white),
+                              fontWeight: FontWeight.bold,
+                              fontSize: MediaQuery.of(context).size.width * 0.05,
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ],

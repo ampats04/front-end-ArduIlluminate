@@ -53,6 +53,7 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
               TextField(
                 controller: _ssidController,
                 decoration: const InputDecoration(
+                   border: OutlineInputBorder(),
                   labelText: "SSID",
                 ),
               ),
@@ -61,6 +62,7 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
                 controller: _passwordController,
                 obscureText: true,
                 decoration: const InputDecoration(
+                   border: OutlineInputBorder(),
                   labelText: "Password",
                 ),
               ),

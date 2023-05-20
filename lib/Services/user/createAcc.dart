@@ -68,7 +68,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   void _presentDatePicker() {
     showDatePicker(
       context: context,
-      initialDate: DateTime(2015),
+      initialDate: DateTime(2010),
       firstDate: DateTime(1950),
       lastDate: DateTime(2015),
     ).then((pickedDate) {
@@ -112,7 +112,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Full Name',
+                '',
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width * 0.05,
                 ),
@@ -121,19 +121,23 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 controller: fullNameController,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    const InputDecoration(errorText: "* Full Name is Required");
                     return "* Full Name is Required";
                   }
                   return null;
                 },
                 decoration: const InputDecoration(
-                  hintText: 'Enter your full name',
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter your Full Name',
                   prefixIcon: Icon(Icons.person),
+                  labelText: 'Full Name',
+                  labelStyle: TextStyle(
+                    fontFamily: 'Poppins',
+                  ),
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
               Text(
-                'Birthdate',
+                '',
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width * 0.05,
                 ),
@@ -144,14 +148,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   child: TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
-                        const InputDecoration(
-                            errorText: "* Birthdate is Required");
                         return "* Birthdate is Required";
                       }
                       return null;
                     },
                     decoration: const InputDecoration(
-                      hintText: 'Select your birthdate',
+                      border: OutlineInputBorder(),
+                      hintText: 'Birthdate',
                       prefixIcon: Icon(Icons.calendar_today),
                     ),
                     controller: TextEditingController(
@@ -160,9 +163,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.00),
               Text(
-                'Email',
+                '',
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width * 0.05,
                 ),
@@ -177,14 +180,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             ? '* Email is required'
                             : '* Enter a valid Email',
                 decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
                   hintText: 'Enter your email',
                   prefixIcon: Icon(Icons.email),
+                  labelText: 'Email',
+                  labelStyle: TextStyle(
+                    fontFamily: 'Poppins',
+                  ),
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.00),
               Text(
-                'Username',
+                '',
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width * 0.05,
                 ),
@@ -194,19 +202,23 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    const InputDecoration(errorText: "* Username is Required");
                     return "* Username is Required";
                   }
                   return null;
                 },
                 decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
                   hintText: 'Enter your username',
-                  prefixIcon: Icon(Icons.account_circle),
+                  prefixIcon: Icon(Icons.perm_identity_sharp),
+                  labelText: 'Username',
+                  labelStyle: TextStyle(
+                    fontFamily: 'Poppins',
+                  ),
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.00),
               Text(
-                'Password',
+                '',
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width * 0.05,
                 ),
@@ -216,8 +228,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 obscureText: true,
                 textInputAction: TextInputAction.next,
                 decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
                   hintText: 'Enter your password',
                   prefixIcon: Icon(Icons.lock),
+                  labelText: 'Password',
+                  labelStyle: TextStyle(
+                    fontFamily: 'Poppins',
+                  ),
                 ),
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) => value != null && value.length < 6
