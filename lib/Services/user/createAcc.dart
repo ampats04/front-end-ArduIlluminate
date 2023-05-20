@@ -245,7 +245,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       );
                     },
                     child: Text(
-                      'By signing up, you agree to our Terms of use and Data Policy.',
+                      "By signing up, you agree to our \nTerms of use and Data Policy.",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.04,
@@ -263,7 +263,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     _register();
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: ((context) => const LoginPage())),
+                      MaterialPageRoute(
+                          builder: ((context) => const LoginPage())),
                     );
                   }
                 },
