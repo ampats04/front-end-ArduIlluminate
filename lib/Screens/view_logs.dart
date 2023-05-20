@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 
 class ViewLogsPage extends StatefulWidget {
@@ -9,8 +11,7 @@ class ViewLogsPage extends StatefulWidget {
 }
 
 class _ViewLogsPageState extends State<ViewLogsPage> {
-  final List<Map<String, String>> logs = [];
-
+  final ref = FirebaseDatabase.instance.ref("POST");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,50 +28,19 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            DataTable(
-              columns: [
-                DataColumn(
-                  label: Text(
-                    'Timestamp',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.of(context).size.height * 0.025,
-                        fontFamily: 'Poppins'),
-                  ),
-                ),
-                DataColumn(
-                  label: Text(
-                    'Action',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.of(context).size.height * 0.025,
-                        fontFamily: 'Poppins'),
-                  ),
-                ),
-
-              ],
-              rows: logs
-                  .map(
-                    (log) => DataRow(
-                      cells: [
-                        DataCell(Text(log['time']!)),
-                        DataCell(Text(log['action']!)),
-                      ],
-                    ),
-                  )
-                  .toList(),
-            ),
-          ],
-        ),
-      ),
+      body: Column(children: [
+        Expanded(
+            child: FirebaseAnimatedList(
+          query: ref,
+          defaultChild: const Text('Loading'),
+          itemBuilder: ((context, snapshot, animation, index) {
+            return ListTile(
+              title: Text(snapshot.child('action').value.toString()),
+              subtitle: Text(snapshot.child('timestamp').value.toString()),
+            );
+          }),
+        ))
+      ]),
     );
   }
 }

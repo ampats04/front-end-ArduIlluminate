@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison
 
+import 'dart:async';
+
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageScreenState extends State<MainPage>
     with AutomaticKeepAliveClientMixin<MainPage> {
-    
   //Api call
   late Future<dynamic> futureLight;
 
@@ -32,19 +33,15 @@ class _MainPageScreenState extends State<MainPage>
   bool ledstatus = false;
   late Websocket ws = Websocket();
   String action = "";
+  int ctr = 0;
 
   //Authentication
   String? uid = Auth().currentUser!.uid;
 
   //firebase realtime
- 
+
   final DatabaseReference databaseReference =
-      FirebaseDatabase.instance.ref();
-    
-  final String timePath =   '/logs/time';
-  final String actionPath = '/logs/action';
-
-
+      FirebaseDatabase.instance.ref('POST');
 
   @override
   void initState() {
@@ -65,23 +62,33 @@ class _MainPageScreenState extends State<MainPage>
       return const Icon(Icons.close);
     },
   );
-  bool get isPowerOn => ledstatus;
-  void _onPressed(bool value)  {
 
+  bool get isPowerOn => ledstatus;
+  void _onPressed(bool value) {
     DateTime now = DateTime.now();
     String format = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
     if (ledstatus) {
       ws.sendcmd("poweroff");
-        action = "Power Off";
-        databaseReference.child(timePath).set(format);
-        databaseReference.child(actionPath).set(action);
+      action = "Power Off";
+
+      databaseReference.child("$ctr").set({
+        'action': action,
+        'timestamp': format,
+      });
+
       ledstatus = false;
+      ctr++;
+      print(ctr);
     } else {
       ws.sendcmd("poweron");
-        action = "Power On";
-        databaseReference.child(timePath).set(format);
-        databaseReference.child(actionPath).set(action);
+      action = "Power On";
+      databaseReference.child("$ctr").set({
+        'action': action,
+        'timestamp': format,
+      });
       ledstatus = true;
+      ctr++;
+      print(ctr);
     }
     Get.find<MainController>().isPowerOn.value = ledstatus;
     setState(() {
