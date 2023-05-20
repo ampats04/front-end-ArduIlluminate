@@ -54,138 +54,139 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
       throw Exception("Failed to update lights $err");
     }
   }
-    void updateDetails() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Confirmation'),
-            content: const Text('Are you sure you want to update the details?'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('CANCEL'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: const Text('UPDATE'),
-                onPressed: () {
-                  _update();
-               Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: ((context) => const EnlighteningDetailsView())),
-                    );
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
 
-    void openCalendarPicker() {
-      DatePicker.showDatePicker(
-        context,
-        showTitleActions: true,
-        onConfirm: (date) {
-          setState(() {
-            _installDateController.text = date.toString();
-          });
-        },
-        currentTime: DateTime.now(),
-      );
-    }
-
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Updated Enlightening Details'),
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'Bulb Details',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 24,
-                  color: Color(0xFF0047FF),
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                controller: _modelController,
-                decoration: const InputDecoration(
-                  labelText: 'Bulb Model',
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                controller: _manufacturerController,
-                decoration: const InputDecoration(
-                  labelText: 'Manufacturer',
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  openCalendarPicker();
-                },
-                child: AbsorbPointer(
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Installation Date',
-                    ),
-                    controller: _installDateController,
-                    keyboardType: TextInputType.datetime,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                controller: _wattController,
-                decoration: const InputDecoration(
-                  labelText: 'Watts',
-                ),
-              ),
-              const SizedBox(height: 30),
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-                child: ElevatedButton(
-                  onPressed: updateDetails,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    backgroundColor: const Color(0xFF0047FF),
-                  ),
-                  child: const Text(
-                    'UPDATE DETAILS',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+  void updateDetails() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmation'),
+          content: const Text('Are you sure you want to update the details?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('UPDATE'),
+              onPressed: () {
+                _update();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => const EnlighteningDetailsView())),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
+  void openCalendarPicker() {
+    DatePicker.showDatePicker(
+      context,
+      showTitleActions: true,
+      onConfirm: (date) {
+        setState(() {
+          _installDateController.text = date.toString();
+        });
+      },
+      currentTime: DateTime.now(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Updated Enlightening Details'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'Bulb Details',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 24,
+                color: Color(0xFF0047FF),
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: _modelController,
+              decoration: const InputDecoration(
+                labelText: 'Bulb Model',
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: _manufacturerController,
+              decoration: const InputDecoration(
+                labelText: 'Manufacturer',
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+                openCalendarPicker();
+              },
+              child: AbsorbPointer(
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Installation Date',
+                  ),
+                  controller: _installDateController,
+                  keyboardType: TextInputType.datetime,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              controller: _wattController,
+              decoration: const InputDecoration(
+                labelText: 'Watts',
+              ),
+            ),
+            const SizedBox(height: 30),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: ElevatedButton(
+                onPressed: updateDetails,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  backgroundColor: const Color(0xFF0047FF),
+                ),
+                child: const Text(
+                  'UPDATE DETAILS',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

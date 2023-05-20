@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:ardu_illuminate/Screens/addLight.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:ardu_illuminate/BedroomScreen/bedroom_mainPage.dart';
 import '../controllers/maincontroller.dart';
+import 'package:ardu_illuminate/BedroomScreen/bedroom_homePage.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -27,9 +30,8 @@ class _MainPageScreenState extends State<MainPage>
 
   //widgets
   TextEditingController modelController = TextEditingController();
-  bool light1 = false;
   Color activeColor = Colors.green;
-  double _currentSliderValue = 20;
+
   bool ledstatus = false;
   late Websocket ws = Websocket();
   String action = "";
@@ -90,9 +92,8 @@ class _MainPageScreenState extends State<MainPage>
       ctr++;
       print(ctr);
     }
-    Get.find<MainController>().isPowerOn.value = ledstatus;
+    Get.find<MainController>().isBathroomPowerOn.value = value;
     setState(() {
-      light1 = value;
       activeColor = value ? Colors.green : Colors.red;
     });
   }
@@ -103,7 +104,7 @@ class _MainPageScreenState extends State<MainPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
+    final mainController = Get.find<MainController>();
     return Scaffold(
       backgroundColor: const Color(0xFFD9D9D9),
       appBar: PreferredSize(
@@ -111,7 +112,7 @@ class _MainPageScreenState extends State<MainPage>
             Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
         child: AppBar(
           title: Text(
-            'Main Light Control',
+            'Bathroom Light',
             style: TextStyle(
               fontSize: MediaQuery.of(context).size.width * 0.06,
               fontFamily: 'Poppins',
@@ -131,21 +132,19 @@ class _MainPageScreenState extends State<MainPage>
                       value: 'bedroom',
                       child: Text('Bedroom'),
                     ),
-                    const PopupMenuItem<String>(
-                      value: 'bathroom',
-                      child: Text('Bathroom'),
-                    ),
                   ],
                   elevation: 8.0,
                 ).then<void>((String? itemSelected) {
                   if (itemSelected == null) return;
-                  // Do something when a choice is selected
+
                   switch (itemSelected) {
                     case 'bedroom':
-                      // Navigate to the bedroom screen or update state to show bedroom content
-                      break;
-                    case 'bathroom':
-                      // Navigate to the bathroom screen or update state to show bathroom content
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BedroomHomePage(),
+                        ),
+                      );
                       break;
                   }
                 });
@@ -184,14 +183,13 @@ class _MainPageScreenState extends State<MainPage>
               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
               Transform.scale(
                 scale: MediaQuery.of(context).size.width * 0.004,
-                child: Switch(
-                  thumbIcon: thumbIcon,
-                  value: light1,
-                  inactiveThumbColor: const Color(0XFFD30000),
-                  activeColor: activeColor,
-                  onChanged: _onPressed,
-                  // onChanged: _onPressed,
-                ),
+                child: Obx(() => Switch(
+                      thumbIcon: thumbIcon,
+                      value: Get.find<MainController>().isBathroomPowerOn.value,
+                      inactiveThumbColor: const Color(0XFFD30000),
+                      activeColor: activeColor,
+                      onChanged: _onPressed,
+                    )),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.06),
               Align(
@@ -232,21 +230,26 @@ class _MainPageScreenState extends State<MainPage>
                               .grey, // Set the color of the inactive part of the slider
                         ),
                       ),
-                      child: Slider(
-                        value: _currentSliderValue,
-                        max: 100,
-                        divisions: 100,
-                        label: _currentSliderValue.round().toString(),
-                        onChanged: isPowerOn
-                            ? (value) {
-                                var brightness = value.round().toString();
-                                ws.sendcmd('brightness$brightness');
-                                setState(() {
-                                  _currentSliderValue = value;
-                                });
-                              }
-                            : null,
-                        // onChanged: _onSliderChanged,
+                      child: Obx(
+                        () => Slider(
+                          value: mainController.bathroomSliderValue.value,
+                          max: 100,
+                          divisions: 100,
+                          label: mainController.bathroomSliderValue
+                              .round()
+                              .toString(),
+                          onChanged: mainController.isBathroomPowerOn.value
+                              ? (value) {
+                                  var brightness = value.round().toString();
+                                  ws.sendcmd('brightness$brightness');
+                                  setState(() {
+                                    mainController.bathroomSliderValue.value =
+                                        value;
+                                  });
+                                }
+                              : null,
+                          // onChanged: _onSliderChanged,
+                        ),
                       ),
                     ),
                   ),
@@ -276,7 +279,7 @@ class _MainPageScreenState extends State<MainPage>
                   fontSize: MediaQuery.of(context).size.width * 0.05,
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
               FutureBuilder<dynamic>(
                 future: futureLight,
                 builder: (context, snapshot) {
@@ -290,7 +293,8 @@ class _MainPageScreenState extends State<MainPage>
                       child: TextFormField(
                         initialValue: model,
                         readOnly: true,
-                        style: const TextStyle(fontSize: 22),
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.05),
                         decoration: const InputDecoration(
                           border: InputBorder.none, // Remove the underline
                         ),

@@ -1,9 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:ardu_illuminate/Screens/powerConsumption.dart';
-import './mainPage.dart';
-import 'Timerr.dart';
+//import 'package:ardu_illuminate/Screens/powerConsumption.dart';
+import 'package:ardu_illuminate/main.dart';
+//import 'Timerr.dart';
+import 'package:ardu_illuminate/BedroomScreen/bedroom_mainPage.dart';
+import 'bedroom_powerConsumption.dart';
+import 'bedroom_timerPage.dart';
 
 List<Color> _iconColors = [
   Colors.white,
@@ -11,13 +14,13 @@ List<Color> _iconColors = [
   Colors.white,
 ];
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class BedroomHomePage extends StatefulWidget {
+  const BedroomHomePage({Key? key}) : super(key: key);
   @override
-  _HomePageState createState() => _HomePageState();
+  _BedroomHomePageState createState() => _BedroomHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _BedroomHomePageState extends State<BedroomHomePage> {
   // ignore: prefer_typing_uninitialized_variables
   var _selectedPageIndex;
   late List<Widget> _pages;
@@ -29,9 +32,9 @@ class _HomePageState extends State<HomePage> {
 
     _selectedPageIndex = 0;
     _pages = [
-      const TimerPage(),
-      const MainPage(),
-      const PowerConsumption(),
+      const BedroomTimerPage(),
+      const BedroomMainPage(),
+      const BedroomPowerConsumption(),
     ];
 
     _pageController = PageController(initialPage: _selectedPageIndex);
@@ -55,7 +58,7 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: CurvedNavigationBar(
           backgroundColor: const Color(0xFF24AFC1),
           color: const Color(0xFF1795A8),
-          height: 60.0, // MediaQuery.of(context).size.height * 0.09,
+          height: MediaQuery.of(context).size.height * 0.09,
           animationDuration: const Duration(milliseconds: 400),
           items: [
             Icon(
@@ -76,7 +79,6 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               _selectedPageIndex = selectedPageIndex;
 
-              // kamo lang bahala sa color boss
               for (int i = 0; i < _iconColors.length; i++) {
                 if (i == selectedPageIndex) {
                   _iconColors[i] = const Color(0xFFFCCF47);

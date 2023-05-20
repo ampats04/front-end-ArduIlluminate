@@ -9,17 +9,18 @@ import 'package:http/http.dart';
 
 Websocket ws = Websocket();
 
-class TimerPage extends StatefulWidget {
-  const TimerPage({Key? key}) : super(key: key);
+class BedroomTimerPage extends StatefulWidget {
+  const BedroomTimerPage({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _TimerPageState createState() => _TimerPageState();
+  _BedroomTimerPageState createState() => _BedroomTimerPageState();
 }
 
-class _TimerPageState extends State<TimerPage>
-    with AutomaticKeepAliveClientMixin<TimerPage> {
+class _BedroomTimerPageState extends State<BedroomTimerPage>
+    with AutomaticKeepAliveClientMixin<BedroomTimerPage> {
   final mainController = Get.find<MainController>();
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
@@ -29,64 +30,62 @@ class _TimerPageState extends State<TimerPage>
   }
 
   void startTimer() {
-    if (mainController.bathroomSecondsRemaining.value <= 0) {
+    if (mainController.bedroomnSecondsRemaining.value <= 0) {
       resetTimer();
     }
 
-    if (!mainController.bathroomStarted.value) {
-      mainController.bathroomSecondsRemaining.value--;
-      if (mainController.bathroomSecondsRemaining.value <= 0) {
+    if (!mainController.bedroomStarted.value) {
+      mainController.bedroomnSecondsRemaining.value--;
+      if (mainController.bedroomnSecondsRemaining.value <= 0) {
         stopTimer();
         ws.sendcmd("poweroff");
       }
-      mainController.bathroomCountDownTimer =
+
+      mainController.bedroomCountDownTimer =
           Timer.periodic(const Duration(seconds: 1), (_) {
-        if (!mainController.bathroomPaused.value) {
-          mainController.bathroomSecondsRemaining.value--;
+        if (!mainController.bedroomPaused.value) {
+          mainController.bedroomnSecondsRemaining.value--;
         }
-        if (mainController.bathroomSecondsRemaining.value <= 0) {
+
+        if (mainController.bedroomnSecondsRemaining.value <= 0) {
           stopTimer();
         }
       });
-      mainController.bathroomStarted.value = true;
-      mainController.bathroomPaused.value = false;
-    } else if (mainController.bathroomPaused.value) {
+      mainController.bedroomStarted.value = true;
+      mainController.bedroomPaused.value = false;
+    } else if (mainController.bedroomPaused.value) {
       setState(() {
-        mainController.bathroomPaused.value = false;
+        mainController.bedroomPaused.value = false;
       });
-      mainController.bathroomCountDownTimer?.cancel();
-
-      mainController.bathroomCountDownTimer =
+      mainController.bedroomCountDownTimer?.cancel();
+      mainController.bedroomCountDownTimer =
           Timer.periodic(const Duration(seconds: 1), (_) {
-        mainController.bathroomSecondsRemaining.value--;
+        mainController.bedroomnSecondsRemaining.value--;
 
-        if (mainController.bathroomSecondsRemaining.value <= 0) {
+        if (mainController.bedroomnSecondsRemaining.value <= 0) {
           stopTimer();
         }
       });
     } else {
       setState(() {
-        mainController.bathroomPaused.value = true;
+        mainController.bedroomPaused.value = true;
       });
-      mainController.bathroomCountDownTimer?.cancel();
+      mainController.bedroomCountDownTimer?.cancel();
     }
   }
 
   void stopTimer() {
-    mainController.bathroomCountDownTimer?.cancel();
-
-    mainController.bathroomStarted.value = false;
-    mainController.bathroomPaused.value = false;
-
-    mainController.bathroomSecondsRemaining.value = 0;
+    mainController.bedroomCountDownTimer?.cancel();
+    mainController.bedroomStarted.value = false;
+    mainController.bedroomPaused.value = false;
+    mainController.bedroomnSecondsRemaining.value = 0;
   }
 
   void resetTimer() {
     stopTimer();
-    mainController.bathroomSecondsRemaining.value = 0;
-
+    mainController.bedroomnSecondsRemaining.value = 0;
     setState(() {
-      mainController.bathroomTimeSet.value = false;
+      mainController.bedroomTimeSet.value = false;
     });
   }
 
@@ -96,9 +95,9 @@ class _TimerPageState extends State<TimerPage>
       initialTime: const Duration(hours: 0, minutes: 15),
     );
     if (selectedTime != null) {
-      mainController.bathroomSecondsRemaining.value = selectedTime.inSeconds;
+      mainController.bedroomnSecondsRemaining.value = selectedTime.inSeconds;
       setState(() {
-        mainController.bathroomTimeSet.value = true;
+        mainController.bedroomTimeSet.value = true;
       });
     }
   }
@@ -128,7 +127,7 @@ class _TimerPageState extends State<TimerPage>
         child: AppBar(
           backgroundColor: const Color(0xFFD9D9D9),
           title: Text(
-            'Bathroom Timer',
+            'Bedroom Timer',
             style: TextStyle(
               fontSize: screenWidth * 0.06,
               fontFamily: 'Poppins',
@@ -154,7 +153,7 @@ class _TimerPageState extends State<TimerPage>
             children: [
               GestureDetector(
                 onTap: () {
-                  if (mainController.isBathroomPowerOn.value) {
+                  if (mainController.isBedroomPowerOn.value) {
                     setTimer(context);
                   } else {
                     null;
@@ -167,31 +166,30 @@ class _TimerPageState extends State<TimerPage>
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-              Obx(
-                () => Text(
-                  formatTime(mainController.bathroomSecondsRemaining.value),
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.1,
-                      fontFamily: 'Poppins'),
-                ),
-              ),
+              Obx(() => Text(
+                    formatTime(mainController.bedroomnSecondsRemaining.value),
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.1,
+                        fontFamily: 'Poppins'),
+                  )),
               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
               Obx(
                 () => ElevatedButton.icon(
-                  onPressed: mainController.bathroomTimeSet.value &&
-                          mainController.bathroomSecondsRemaining.value > 0
+                  onPressed: mainController.bedroomTimeSet.value &&
+                          mainController.bedroomnSecondsRemaining.value > 0
                       ? () {
-                          if (mainController.bathroomSecondsRemaining <= 0) {
+                          if (mainController.bedroomnSecondsRemaining.value <=
+                              0) {
                             return;
                           }
                           startTimer();
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: mainController.bathroomStarted.value &&
-                            !mainController.bathroomPaused.value
+                    backgroundColor: mainController.bedroomStarted.value &&
+                            !mainController.bedroomPaused.value
                         ? Colors.orange
-                        : (mainController.bathroomStarted.value
+                        : (mainController.bedroomStarted.value
                             ? Colors.blue
                             : Colors.green),
                     foregroundColor: Colors.white,
@@ -203,28 +201,21 @@ class _TimerPageState extends State<TimerPage>
                     ),
                     elevation: 2,
                   ),
-                  icon: mainController.bathroomStarted.value &&
-                          !mainController.bathroomPaused.value
+                  icon: mainController.bedroomStarted.value &&
+                          !mainController.bedroomPaused.value
                       ? Icon(Icons.pause,
                           size: MediaQuery.of(context).size.width * 0.1)
-                      : mainController.bathroomPaused.value
+                      : mainController.bedroomPaused.value
                           ? Icon(Icons.play_arrow,
                               size: MediaQuery.of(context).size.width * 0.1)
                           : Icon(Icons.play_arrow,
                               size: MediaQuery.of(context).size.width * 0.1),
                   label: Text(
-                    // mainController.bathroomStarted.value &&
-                    //         !mainController.bathroomPaused.value
-                    //     ? 'Pause'
-                    //     : (mainController.bathroomPaused.value
-                    //         ? 'Resume'
-                    //         : 'Start'),
-                    !mainController.bathroomStarted.value
+                    !mainController.bedroomStarted.value
                         ? 'Start'
-                        : mainController.bathroomPaused.value
+                        : mainController.bedroomPaused.value
                             ? 'Resume'
                             : 'Pause',
-
                     style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.06),
                   ),
@@ -234,7 +225,7 @@ class _TimerPageState extends State<TimerPage>
               Obx(
                 () => ElevatedButton.icon(
                   onPressed:
-                      mainController.bathroomTimeSet.value ? resetTimer : null,
+                      mainController.bedroomTimeSet.value ? resetTimer : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     foregroundColor: Colors.white,

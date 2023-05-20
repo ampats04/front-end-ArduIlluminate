@@ -4,17 +4,17 @@ import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
 
-import 'draw_header.dart';
+import 'package:ardu_illuminate/Screens/draw_header.dart';
 
-class PowerConsumption extends StatefulWidget {
-  const PowerConsumption({super.key});
+class BedroomPowerConsumption extends StatefulWidget {
+  const BedroomPowerConsumption({super.key});
 
   @override
-  _PowerConsumption createState() => _PowerConsumption();
+  _BedroomPowerConsumption createState() => _BedroomPowerConsumption();
 }
 
-class _PowerConsumption extends State<PowerConsumption>
-    with AutomaticKeepAliveClientMixin<PowerConsumption> {
+class _BedroomPowerConsumption extends State<BedroomPowerConsumption>
+    with AutomaticKeepAliveClientMixin<BedroomPowerConsumption> {
   double wattage = 0.0;
   double kilowattHours = 0.0;
   double pesoCost = 0.0;
@@ -48,7 +48,7 @@ class _PowerConsumption extends State<PowerConsumption>
             Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
         child: AppBar(
           title: Text(
-            'Bathroom Power',
+            'Bedroom Power',
             style: TextStyle(
               fontSize: MediaQuery.of(context).size.width * 0.06,
               fontFamily: 'Poppins',
