@@ -1,7 +1,6 @@
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:ardu_illuminate/Services/user/editprofilepage.dart';
 import 'package:flutter/material.dart';
-import 'package:ardu_illuminate/Models/user_model.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 
 final TextEditingController _fullnameController = TextEditingController();
@@ -73,6 +72,10 @@ class _FirstScreenState extends State<FirstScreen> {
                         TextField(
                           enabled: isEditProfile,
                           controller: _fullnameController,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                           decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.person),
                           ),
@@ -91,8 +94,12 @@ class _FirstScreenState extends State<FirstScreen> {
                         TextField(
                           enabled: isEditProfile,
                           controller: _birthdateController,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                           decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.calendar_today),
+                            prefixIcon: Icon(Icons.calendar_month),
                           ),
                         ),
                         SizedBox(
@@ -109,8 +116,12 @@ class _FirstScreenState extends State<FirstScreen> {
                         TextField(
                           enabled: isEditProfile,
                           controller: _emailController,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                           decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.mark_email_read),
+                            prefixIcon: Icon(Icons.email),
                           ),
                         ),
                         SizedBox(
@@ -125,10 +136,14 @@ class _FirstScreenState extends State<FirstScreen> {
                           ),
                         ),
                         TextField(
+                          enabled: isEditProfile,
                           controller: _usernameController,
-                          decoration: InputDecoration(
-                            enabled: isEditProfile,
-                            prefixIcon: const Icon(Icons.account_circle),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Icons.person_2),
                           ),
                         ),
                         SizedBox(

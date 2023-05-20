@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:duration_picker/duration_picker.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 
 Websocket ws = Websocket();
 
@@ -176,83 +175,75 @@ class _TimerPageState extends State<TimerPage>
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              Obx(
-                () => ElevatedButton.icon(
-                  onPressed: mainController.bathroomTimeSet.value &&
-                          mainController.bathroomSecondsRemaining.value > 0
-                      ? () {
-                          if (mainController.bathroomSecondsRemaining <= 0) {
-                            return;
-                          }
-                          startTimer();
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: mainController.bathroomStarted.value &&
-                            !mainController.bathroomPaused.value
-                        ? Colors.orange
-                        : (mainController.bathroomStarted.value
-                            ? Colors.blue
-                            : Colors.green),
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height * 0.028,
-                        horizontal: MediaQuery.of(context).size.width * 0.035),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: Obx(
+                      () => ElevatedButton(
+                        onPressed: mainController.bathroomTimeSet.value &&
+                                mainController.bathroomSecondsRemaining.value >
+                                    0
+                            ? () {
+                                if (mainController.bathroomSecondsRemaining <=
+                                    0) {
+                                  return;
+                                }
+                                startTimer();
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(0),
+                          backgroundColor:
+                              mainController.bathroomStarted.value &&
+                                      !mainController.bathroomPaused.value
+                                  ? Colors.orange
+                                  : (mainController.bathroomStarted.value
+                                      ? Colors.blue
+                                      : Colors.green),
+                          shape: const CircleBorder(),
+                          elevation: 2,
+                          minimumSize: const Size(100, 100),
+                        ),
+                        child: Center(
+                          child: mainController.bathroomStarted.value &&
+                                  !mainController.bathroomPaused.value
+                              ? const Icon(Icons.pause,
+                                  size: 50, color: Colors.white)
+                              : mainController.bathroomPaused.value
+                                  ? const Icon(Icons.play_arrow,
+                                      size: 50, color: Colors.white)
+                                  : const Icon(Icons.play_arrow,
+                                      size: 50, color: Colors.white),
+                        ),
+                      ),
                     ),
-                    elevation: 2,
                   ),
-                  icon: mainController.bathroomStarted.value &&
-                          !mainController.bathroomPaused.value
-                      ? Icon(Icons.pause,
-                          size: MediaQuery.of(context).size.width * 0.1)
-                      : mainController.bathroomPaused.value
-                          ? Icon(Icons.play_arrow,
-                              size: MediaQuery.of(context).size.width * 0.1)
-                          : Icon(Icons.play_arrow,
-                              size: MediaQuery.of(context).size.width * 0.1),
-                  label: Text(
-                    // mainController.bathroomStarted.value &&
-                    //         !mainController.bathroomPaused.value
-                    //     ? 'Pause'
-                    //     : (mainController.bathroomPaused.value
-                    //         ? 'Resume'
-                    //         : 'Start'),
-                    !mainController.bathroomStarted.value
-                        ? 'Start'
-                        : mainController.bathroomPaused.value
-                            ? 'Resume'
-                            : 'Pause',
-
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.06),
-                  ),
-                ),
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              Obx(
-                () => ElevatedButton.icon(
-                  onPressed:
-                      mainController.bathroomTimeSet.value ? resetTimer : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height * 0.028,
-                        horizontal: MediaQuery.of(context).size.width * 0.035),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                  SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: Obx(
+                      () => ElevatedButton(
+                        onPressed: mainController.bathroomTimeSet.value
+                            ? resetTimer
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(0),
+                          backgroundColor: Colors.red,
+                          shape: const CircleBorder(),
+                          elevation: 2,
+                          minimumSize: const Size(100, 100),
+                        ),
+                        child: const Center(
+                          child:
+                              Icon(Icons.pause, size: 50, color: Colors.white),
+                        ),
+                      ),
                     ),
-                    elevation: 2,
                   ),
-                  icon: const Icon(Icons.refresh, size: 32),
-                  label: Text(
-                    'Reset',
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.06),
-                  ),
-                ),
+                ],
               ),
             ],
           ),

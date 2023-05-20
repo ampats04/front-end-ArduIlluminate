@@ -90,6 +90,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
             TextFormField(
               controller: bulbController,
               decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: 'Enter Bulb Model',
                 prefixIcon: Icon(Icons.lightbulb),
               ),
@@ -100,6 +101,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
             TextFormField(
               controller: manufacturerController,
               decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: 'Enter Bulb Manufacturer',
                 prefixIcon: Icon(Icons.precision_manufacturing),
               ),
@@ -110,6 +112,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
             TextFormField(
               controller: wattController,
               decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 hintText: 'Bulb Wattage',
                 prefixIcon: Icon(Icons.energy_savings_leaf),
               ),
@@ -122,6 +125,7 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
               child: AbsorbPointer(
                 child: TextField(
                   decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
                     hintText: 'Enter Installation Date',
                     prefixIcon: Icon(Icons.date_range),
                   ),

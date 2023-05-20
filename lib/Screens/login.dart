@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                 width: MediaQuery.of(context).size.width * 0.7,
                 height: MediaQuery.of(context).size.height * 0.2,
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.15),
               TextFormField(
                 controller: emailController,
                 validator: (value) {
@@ -88,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.perm_identity_sharp),
                   labelText: 'Username',
                   labelStyle: TextStyle(
@@ -113,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.lock_open_rounded),
                   suffixIcon: IconButton(
                     icon: Icon(passwordVisible

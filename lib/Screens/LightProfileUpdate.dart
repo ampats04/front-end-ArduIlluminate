@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:ardu_illuminate/Screens/lightProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/apiService.dart';
@@ -10,6 +11,7 @@ final TextEditingController _modelController = TextEditingController();
 final TextEditingController _manufacturerController = TextEditingController();
 final TextEditingController _installDateController = TextEditingController();
 final TextEditingController _wattController = TextEditingController();
+// ignore: non_constant_identifier_names
 late final String light_id;
 
 class UpdatedLightDetails extends StatefulWidget {
@@ -35,10 +37,10 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
     _manufacturerController.text = widget.data['manufacturer'];
     _installDateController.text = widget.data['install_date'];
     _wattController.text = widget.data['watt'].toString();
-    light_id = widget.data['light_id'].toString();
   }
 
   void _update() async {
+    light_id = widget.data['light_id'].toString();
     try {
       Map<String, dynamic> data = {
         'model': _modelController.text,
@@ -47,9 +49,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
         'watt': _wattController.text,
       };
 
-      print("${widget.data['light_id']}  MAO MN GD NI SIYA YAWA");
-      await apiService().put(
-          "/light/update/$uid/${widget.data['light_id'].toString()}", data);
+      await apiService().put("/light/update/$uid/$light_id", data);
     } catch (err) {
       throw Exception("Failed to update lights $err");
     }
@@ -76,7 +76,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: ((context) => const EnlighteningDetailsView())),
+                      builder: ((context) => const HomePage())),
                 );
               },
             ),
@@ -103,7 +103,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Updated Enlightening Details'),
+        title: const Text('Light Details'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(30),
@@ -111,7 +111,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Bulb Details',
+              'Update Bulb Details',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 24,
@@ -125,6 +125,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
               controller: _modelController,
               decoration: const InputDecoration(
                 labelText: 'Bulb Model',
+                prefixIcon: Icon(Icons.lightbulb),
               ),
             ),
             const SizedBox(
@@ -134,6 +135,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
               controller: _manufacturerController,
               decoration: const InputDecoration(
                 labelText: 'Manufacturer',
+                prefixIcon: Icon(Icons.business),
               ),
             ),
             const SizedBox(
@@ -148,6 +150,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
                 child: TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Installation Date',
+                    prefixIcon: Icon(Icons.calendar_today),
                   ),
                   controller: _installDateController,
                   keyboardType: TextInputType.datetime,
@@ -161,6 +164,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
               controller: _wattController,
               decoration: const InputDecoration(
                 labelText: 'Watts',
+                prefixIcon: Icon(Icons.electrical_services),
               ),
             ),
             const SizedBox(height: 30),

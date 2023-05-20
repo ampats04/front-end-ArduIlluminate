@@ -6,12 +6,12 @@ import 'LightProfileUpdate.dart';
 final TextEditingController _modelController = TextEditingController();
 final TextEditingController _manufacturerController = TextEditingController();
 final TextEditingController _installDateController = TextEditingController();
+final TextEditingController _wattController = TextEditingController();
 
 class EnlighteningDetailsView extends StatefulWidget {
   const EnlighteningDetailsView({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _EnlighteningDetailsViewState createState() =>
       _EnlighteningDetailsViewState();
 }
@@ -30,7 +30,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Enlightening Details'),
+        title: const Text('Light Details'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(30),
@@ -39,7 +39,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
                 return Center(
-                  child: Text('${snapshot.error} occred'),
+                  child: Text('${snapshot.error} occurred'),
                 );
               } else if (snapshot.hasData) {
                 final data = snapshot.data;
@@ -48,6 +48,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                 _modelController.text = data['model'];
                 _manufacturerController.text = data['manufacturer'];
                 _installDateController.text = data['install_date'];
+                _wattController.text = data['watt'].toString();
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -65,6 +66,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                     TextFormField(
                       controller: _modelController,
                       decoration: const InputDecoration(
+                        labelText: 'Bulb Model',
                         prefixIcon: Icon(Icons.lightbulb),
                       ),
                       readOnly: true,
@@ -75,7 +77,8 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                     TextFormField(
                       controller: _manufacturerController,
                       decoration: const InputDecoration(
-                        prefixIcon: Icon(Icons.precision_manufacturing),
+                        labelText: 'Manufacturer',
+                        prefixIcon: Icon(Icons.business),
                       ),
                       readOnly: true,
                     ),
@@ -85,15 +88,27 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                     GestureDetector(
                       onTap: () {},
                       child: AbsorbPointer(
-                        child: TextField(
+                        child: TextFormField(
                           decoration: const InputDecoration(
-                            prefixIcon: Icon(Icons.date_range),
+                            labelText: 'Installation Date',
+                            prefixIcon: Icon(Icons.calendar_today),
                           ),
                           controller: _installDateController,
                           keyboardType: TextInputType.datetime,
                           readOnly: true,
                         ),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    TextFormField(
+                      controller: _wattController,
+                      decoration: const InputDecoration(
+                        labelText: 'Watts',
+                        prefixIcon: Icon(Icons.electrical_services),
+                      ),
+                      readOnly: true,
                     ),
                     const SizedBox(
                       height: 30,
