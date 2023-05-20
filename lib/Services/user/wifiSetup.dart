@@ -16,7 +16,7 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
   bool _isConnecting = false;
 
   final DatabaseReference databaseReference =
-      FirebaseDatabase.instance.reference();
+      FirebaseDatabase.instance.ref();
   final String ssidPath = '/network/ssid';
   final String passwordPath = '/network/password';
   String? response;

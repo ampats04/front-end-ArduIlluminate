@@ -9,33 +9,7 @@ class ViewLogsPage extends StatefulWidget {
 }
 
 class _ViewLogsPageState extends State<ViewLogsPage> {
-  final List<Map<String, String>> logs = [
-    {
-      'timestamp': '2022-05-05 8:30:09',
-      'action': 'Turned on',
-      'status': 'On',
-    },
-    {
-      'timestamp': '2022-05-05 8:25:21',
-      'action': 'Set Brightness',
-      'status': '50%',
-    },
-    {
-      'timestamp': '2022-05-05 8:20:42',
-      'action': 'Turned off',
-      'status': 'Off',
-    },
-    {
-      'timestamp': '2022-05-05 9:20:00',
-      'action': 'Timer: 50 Minutes',
-      'status': 'On',
-    },
-    {
-      'timestamp': '2022-05-05 10:30:00',
-      'action': 'Timer: 50 Minutes',
-      'status': 'Off',
-    },
-  ];
+  final List<Map<String, String>> logs = [];
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +42,7 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
                     'Timestamp',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.of(context).size.height * 0.04,
+                        fontSize: MediaQuery.of(context).size.height * 0.025,
                         fontFamily: 'Poppins'),
                   ),
                 ),
@@ -77,27 +51,18 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
                     'Action',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.of(context).size.height * 0.04,
+                        fontSize: MediaQuery.of(context).size.height * 0.025,
                         fontFamily: 'Poppins'),
                   ),
                 ),
-                DataColumn(
-                  label: Text(
-                    'Status',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: MediaQuery.of(context).size.height * 0.04,
-                        fontFamily: 'Poppins'),
-                  ),
-                ),
+
               ],
               rows: logs
                   .map(
                     (log) => DataRow(
                       cells: [
-                        DataCell(Text(log['timestamp']!)),
+                        DataCell(Text(log['time']!)),
                         DataCell(Text(log['action']!)),
-                        DataCell(Text(log['status']!)),
                       ],
                     ),
                   )

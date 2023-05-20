@@ -5,14 +5,14 @@ import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
-import 'package:ardu_illuminate/Screens/lightProfile.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:ardu_illuminate/Screens/addLight.dart';
 import 'package:get/get.dart';
-
+import 'package:intl/intl.dart';
 import '../controllers/maincontroller.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage({Key? key}) : super(key: key);
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   _MainPageScreenState createState() => _MainPageScreenState();
@@ -20,16 +20,31 @@ class MainPage extends StatefulWidget {
 
 class _MainPageScreenState extends State<MainPage>
     with AutomaticKeepAliveClientMixin<MainPage> {
+    
+  //Api call
   late Future<dynamic> futureLight;
+
+  //widgets
   TextEditingController modelController = TextEditingController();
   bool light1 = false;
   Color activeColor = Colors.green;
   double _currentSliderValue = 20;
   bool ledstatus = false;
-
   late Websocket ws = Websocket();
+  String action = "";
 
+  //Authentication
   String? uid = Auth().currentUser!.uid;
+
+  //firebase realtime
+ 
+  final DatabaseReference databaseReference =
+      FirebaseDatabase.instance.ref();
+    
+  final String timePath =   '/logs/time';
+  final String actionPath = '/logs/action';
+
+
 
   @override
   void initState() {
@@ -51,13 +66,21 @@ class _MainPageScreenState extends State<MainPage>
     },
   );
   bool get isPowerOn => ledstatus;
-  void _onPressed(bool value) {
+  void _onPressed(bool value)  {
+
+    DateTime now = DateTime.now();
+    String format = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
     if (ledstatus) {
       ws.sendcmd("poweroff");
+        action = "Power Off";
+        databaseReference.child(timePath).set(format);
+        databaseReference.child(actionPath).set(action);
       ledstatus = false;
     } else {
       ws.sendcmd("poweron");
-
+        action = "Power On";
+        databaseReference.child(timePath).set(format);
+        databaseReference.child(actionPath).set(action);
       ledstatus = true;
     }
     Get.find<MainController>().isPowerOn.value = ledstatus;

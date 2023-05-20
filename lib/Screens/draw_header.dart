@@ -36,7 +36,7 @@ class _DrawHeaderState extends State<DrawHeader> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.75,
       child: Drawer(
         child: MaterialApp(
@@ -211,7 +211,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          const ViewLogsPage(),
+                                           ViewLogsPage(),
                                     ),
                                   );
                                 },
