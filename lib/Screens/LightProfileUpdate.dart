@@ -124,6 +124,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
             TextFormField(
               controller: _modelController,
               decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 labelText: 'Bulb Model',
                 prefixIcon: Icon(Icons.lightbulb),
               ),
@@ -134,6 +135,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
             TextFormField(
               controller: _manufacturerController,
               decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 labelText: 'Manufacturer',
                 prefixIcon: Icon(Icons.business),
               ),
@@ -149,6 +151,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
               child: AbsorbPointer(
                 child: TextFormField(
                   decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
                     labelText: 'Installation Date',
                     prefixIcon: Icon(Icons.calendar_today),
                   ),
@@ -163,6 +166,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
             TextFormField(
               controller: _wattController,
               decoration: const InputDecoration(
+                border: OutlineInputBorder(),
                 labelText: 'Watts',
                 prefixIcon: Icon(Icons.electrical_services),
               ),

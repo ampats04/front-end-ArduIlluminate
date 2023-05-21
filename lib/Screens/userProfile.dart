@@ -62,87 +62,107 @@ class _FirstScreenState extends State<FirstScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Full Name',
+                          '',
                           style: TextStyle(
                               fontSize:
-                                  MediaQuery.of(context).size.width * 0.05,
+                                  MediaQuery.of(context).size.width * 0.02,
                               fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.normal),
                         ),
                         TextField(
                           enabled: isEditProfile,
                           controller: _fullnameController,
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                             color: Colors.black,
                           ),
                           decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.person),
+                            labelText: 'Full Name',
+                            labelStyle: TextStyle(
+                              fontFamily: 'Poppins',
+                            ),
                           ),
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02,
+                          height: MediaQuery.of(context).size.height * 0.00,
                         ),
                         Text(
-                          'Birthdate',
+                          '',
                           style: TextStyle(
                               fontSize:
                                   MediaQuery.of(context).size.width * 0.05,
                               fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.normal),
                         ),
                         TextField(
                           enabled: isEditProfile,
                           controller: _birthdateController,
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                             color: Colors.black,
                           ),
                           decoration: const InputDecoration(
+                            labelText: 'Birthdate',
+                            labelStyle: TextStyle(
+                              fontFamily: 'Poppins',
+                            ),
+                            border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.calendar_month),
                           ),
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02,
+                          height: MediaQuery.of(context).size.height * 0.00,
                         ),
                         Text(
-                          'Email',
+                          '',
                           style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.05,
                             fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                           ),
                         ),
                         TextField(
                           enabled: isEditProfile,
                           controller: _emailController,
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                             color: Colors.black,
                           ),
                           decoration: const InputDecoration(
+                            labelText: 'Email',
+                            labelStyle: TextStyle(
+                              fontFamily: 'Poppins',
+                            ),
+                            border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.email),
                           ),
                         ),
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.02,
+                          height: MediaQuery.of(context).size.height * 0.00,
                         ),
                         Text(
-                          'Username',
+                          '',
                           style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.05,
                             fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                           ),
                         ),
                         TextField(
                           enabled: isEditProfile,
                           controller: _usernameController,
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                             color: Colors.black,
                           ),
                           decoration: const InputDecoration(
+                            labelText: 'Username',
+                            labelStyle: TextStyle(
+                              fontFamily: 'Poppins',
+                            ),
+                            border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.person_2),
                           ),
                         ),

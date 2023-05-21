@@ -66,6 +66,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                     TextFormField(
                       controller: _modelController,
                       decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
                         labelText: 'Bulb Model',
                         prefixIcon: Icon(Icons.lightbulb),
                       ),
@@ -77,6 +78,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                     TextFormField(
                       controller: _manufacturerController,
                       decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
                         labelText: 'Manufacturer',
                         prefixIcon: Icon(Icons.business),
                       ),
@@ -90,6 +92,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                       child: AbsorbPointer(
                         child: TextFormField(
                           decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
                             labelText: 'Installation Date',
                             prefixIcon: Icon(Icons.calendar_today),
                           ),
@@ -105,6 +108,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                     TextFormField(
                       controller: _wattController,
                       decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
                         labelText: 'Watts',
                         prefixIcon: Icon(Icons.electrical_services),
                       ),
