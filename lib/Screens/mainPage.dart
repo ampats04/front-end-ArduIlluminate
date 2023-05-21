@@ -2,7 +2,6 @@
 
 import 'dart:async';
 
-import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:ardu_illuminate/Screens/addLight.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:ardu_illuminate/BedroomScreen/bedroom_mainPage.dart';
 import '../controllers/maincontroller.dart';
 import 'package:ardu_illuminate/BedroomScreen/bedroom_homePage.dart';
 
@@ -23,11 +21,13 @@ class MainPage extends StatefulWidget {
   _MainPageScreenState createState() => _MainPageScreenState();
 }
 
+DateTime now = DateTime.now();
+
 class _MainPageScreenState extends State<MainPage>
     with AutomaticKeepAliveClientMixin<MainPage> {
   //Api call
   late Future<dynamic> futureLight;
-
+  late Future<dynamic> futre;
   //widgets
   TextEditingController modelController = TextEditingController();
   Color activeColor = Colors.green;
@@ -35,24 +35,35 @@ class _MainPageScreenState extends State<MainPage>
   bool ledstatus = false;
   late Websocket ws = Websocket();
   String action = "";
-  int ctr = 0;
+  String format = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
 
   //Authentication
   String? uid = Auth().currentUser!.uid;
 
   //firebase realtime
+  final DatabaseReference uidRef = FirebaseDatabase.instance.ref('post/uid');
 
-  final DatabaseReference databaseReference =
-      FirebaseDatabase.instance.ref('POST');
+  final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
+
+  late int ctr;
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () async {
-      ws.channelconnect();
-    });
-
+    // Future.delayed(Duration.zero, () async {
+    //   ws.channelconnect();
+    // });
     super.initState();
     futureLight = apiService().get("/light/one/$uid");
+  }
+
+  void _test() {
+    Stream<DatabaseEvent> stream = ctrRef.child('ctr').onValue;
+
+    stream.listen((DatabaseEvent event) {
+      ctr = event.snapshot.value as int;
+
+      print("value of ctr rightnow $ctr");
+    });
   }
 
   final MaterialStateProperty<Icon?> thumbIcon =
@@ -67,30 +78,21 @@ class _MainPageScreenState extends State<MainPage>
 
   bool get isPowerOn => ledstatus;
   void _onPressed(bool value) {
-    DateTime now = DateTime.now();
-    String format = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+    _test();
     if (ledstatus) {
       ws.sendcmd("poweroff");
       action = "Power Off";
-
-      databaseReference.child("$ctr").set({
-        'action': action,
-        'timestamp': format,
-      });
-
       ledstatus = false;
-      ctr++;
-      print(ctr);
+
+      ctrRef.child("ctr").set(++ctr);
+      Auth().uidPostData(ctr, action, format, uid!);
     } else {
       ws.sendcmd("poweron");
       action = "Power On";
-      databaseReference.child("$ctr").set({
-        'action': action,
-        'timestamp': format,
-      });
+
       ledstatus = true;
-      ctr++;
-      print(ctr);
+      ctrRef.child("ctr").set(++ctr);
+      Auth().uidPostData(ctr, action, format, uid!);
     }
     Get.find<MainController>().isBathroomPowerOn.value = value;
     setState(() {
@@ -104,6 +106,8 @@ class _MainPageScreenState extends State<MainPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    String format = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
     final mainController = Get.find<MainController>();
     return Scaffold(
       backgroundColor: const Color(0xFFD9D9D9),
@@ -241,14 +245,15 @@ class _MainPageScreenState extends State<MainPage>
                           onChanged: mainController.isBathroomPowerOn.value
                               ? (value) {
                                   var brightness = value.round().toString();
+                                  action = "Adjusted Brightness: $brightness%";
                                   ws.sendcmd('brightness$brightness');
+                                  Auth().uidPostData(ctr, action, format, uid!);
                                   setState(() {
                                     mainController.bathroomSliderValue.value =
                                         value;
                                   });
                                 }
                               : null,
-                          // onChanged: _onSliderChanged,
                         ),
                       ),
                     ),

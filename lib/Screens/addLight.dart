@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../Services/api/apiService.dart';
-import 'package:http/http.dart' as http;
 
 TextEditingController bulbController = TextEditingController();
 TextEditingController manufacturerController = TextEditingController();

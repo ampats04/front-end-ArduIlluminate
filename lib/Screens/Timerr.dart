@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
+import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:ardu_illuminate/controllers/maincontroller.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:duration_picker/duration_picker.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 Websocket ws = Websocket();
 
@@ -16,15 +19,35 @@ class TimerPage extends StatefulWidget {
   _TimerPageState createState() => _TimerPageState();
 }
 
+DateTime now = DateTime.now();
+
 class _TimerPageState extends State<TimerPage>
     with AutomaticKeepAliveClientMixin<TimerPage> {
   final mainController = Get.find<MainController>();
+
+  String format = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+  Websocket ws = Websocket();
+  String action = "";
+  late int ctr;
+  String uid = Auth().currentUser!.uid;
+  final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
       ws.channelconnect();
     });
     super.initState();
+  }
+
+  void _test() {
+    Stream<DatabaseEvent> stream = ctrRef.child('ctr').onValue;
+
+    stream.listen((DatabaseEvent event) {
+      ctr = event.snapshot.value as int;
+
+      print("value of ctr right in Timer $ctr");
+    });
   }
 
   void startTimer() {
@@ -35,6 +58,8 @@ class _TimerPageState extends State<TimerPage>
     if (!mainController.bathroomStarted.value) {
       mainController.bathroomSecondsRemaining.value--;
       if (mainController.bathroomSecondsRemaining.value <= 0) {
+        mainController.bathroomTimeSet.value = false;
+
         stopTimer();
         ws.sendcmd("poweroff");
       }
@@ -78,6 +103,9 @@ class _TimerPageState extends State<TimerPage>
     mainController.bathroomPaused.value = false;
 
     mainController.bathroomSecondsRemaining.value = 0;
+    action = "Timer Stopped";
+    ctrRef.child("ctr").set(++ctr);
+    Auth().uidPostData(ctr, action, format, uid);
   }
 
   void resetTimer() {
@@ -90,12 +118,22 @@ class _TimerPageState extends State<TimerPage>
   }
 
   void setTimer(BuildContext context) async {
+    _test();
     final selectedTime = await showDurationPicker(
       context: context,
       initialTime: const Duration(hours: 0, minutes: 15),
     );
     if (selectedTime != null) {
       mainController.bathroomSecondsRemaining.value = selectedTime.inSeconds;
+
+      if (selectedTime.inMinutes == 1) {
+        action = "Timer Set : ${selectedTime.inMinutes} minute";
+      } else {
+        action = "Timer Set : ${selectedTime.inMinutes} minutes";
+      }
+
+      ctrRef.child("ctr").set(++ctr);
+      Auth().uidPostData(ctr, action, format, uid);
       setState(() {
         mainController.bathroomTimeSet.value = true;
       });
@@ -192,6 +230,9 @@ class _TimerPageState extends State<TimerPage>
                                   return;
                                 }
                                 startTimer();
+                                action = "Timer Started";
+                                ctrRef.child("ctr").set(++ctr);
+                                Auth().uidPostData(ctr, action, format, uid);
                               }
                             : null,
                         style: ElevatedButton.styleFrom(
