@@ -42,7 +42,8 @@ class _EditProfileState extends State<EditProfile> {
     try {
       Map<String, dynamic> data = {
         'name': _fullnameController.text,
-        'birthdate': _selectedDate!.toIso8601String().substring(0, 10).toString(),
+        'birthdate':
+            _selectedDate!.toIso8601String().substring(0, 10).toString(),
         'username': _usernameController.text,
       };
 
@@ -67,9 +68,10 @@ class _EditProfileState extends State<EditProfile> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
         child: AppBar(
-          title: const Text('Profile'),
+          title: const Text('Edit Profile'),
         ),
       ),
       body: SingleChildScrollView(
@@ -91,9 +93,9 @@ class _EditProfileState extends State<EditProfile> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'Full Name',
+                      '',
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontSize: MediaQuery.of(context).size.width * 0.01,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                       ),
@@ -104,14 +106,18 @@ class _EditProfileState extends State<EditProfile> {
                       decoration: InputDecoration(
                         hintText: nameHint,
                         prefixIcon: const Icon(Icons.person),
+                        labelText: 'Full Name',
+                        labelStyle: const TextStyle(
+                          fontFamily: 'Poppins',
+                        ),
                         border: OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
+                      height: MediaQuery.of(context).size.height * 0.00,
                     ),
                     Text(
-                      'Birthdate',
+                      '',
                       style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.05,
                         fontFamily: 'Poppins',
@@ -125,18 +131,23 @@ class _EditProfileState extends State<EditProfile> {
                           decoration: InputDecoration(
                             hintText: birthdateHint,
                             prefixIcon: const Icon(Icons.calendar_today),
+                            labelText: 'Birthdate',
+                            labelStyle: const TextStyle(
+                              fontFamily: 'Poppins',
+                            ),
                             border: OutlineInputBorder(),
                           ),
-                          controller: TextEditingController(text: selectedDateFormatted ?? ''),
+                          controller: TextEditingController(
+                              text: selectedDateFormatted ?? ''),
                           keyboardType: TextInputType.datetime,
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
+                      height: MediaQuery.of(context).size.height * 0.00,
                     ),
                     Text(
-                      'Email',
+                      '',
                       style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.05,
                         fontFamily: 'Poppins',
@@ -149,14 +160,18 @@ class _EditProfileState extends State<EditProfile> {
                       decoration: InputDecoration(
                         hintText: emailHint,
                         prefixIcon: const Icon(Icons.mark_email_read),
+                        labelText: 'Email',
+                        labelStyle: const TextStyle(
+                          fontFamily: 'Poppins',
+                        ),
                         border: OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
+                      height: MediaQuery.of(context).size.height * 0.00,
                     ),
                     Text(
-                      'Username',
+                      '',
                       style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.05,
                         fontFamily: 'Poppins',
@@ -169,14 +184,18 @@ class _EditProfileState extends State<EditProfile> {
                         hintText: usernameHint,
                         enabled: true,
                         prefixIcon: const Icon(Icons.account_circle),
+                        labelText: 'Username',
+                        labelStyle: const TextStyle(
+                          fontFamily: 'Poppins',
+                        ),
                         border: OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
+                      height: MediaQuery.of(context).size.height * 0.00,
                     ),
                     Text(
-                      'Password',
+                      '',
                       style: TextStyle(
                         fontSize: MediaQuery.of(context).size.width * 0.05,
                         fontFamily: 'Poppins',
@@ -187,72 +206,86 @@ class _EditProfileState extends State<EditProfile> {
                       decoration: InputDecoration(
                         enabled: false,
                         prefixIcon: Icon(Icons.lock),
+                        labelText: 'Password',
+                        labelStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                        ),
                         border: OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
+                      height: MediaQuery.of(context).size.height * 0.00,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text(
-                                    'Credentials Update?',
-                                    style: TextStyle(
-                                      color: const Color(0xFF0047FF),
-                                      fontFamily: 'Poppins',
-                                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                        Container(
+                          margin:
+                              EdgeInsets.only(top: 30.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Credentials Update?',
+                                      style: TextStyle(
+                                        color: const Color(0xFF0047FF),
+                                        fontFamily: 'Poppins',
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.05,
+                                      ),
                                     ),
-                                  ),
-                                  content: const Text('You are about to change details'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        _update();
-                                        // ignore: use_build_context_synchronously
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => const FirstScreen(),
-                                          ),
-                                        );
-                                      },
-                                      child: const Text('Proceed'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: MediaQuery.of(context).size.width * 0.05,
-                              vertical: MediaQuery.of(context).size.height * 0.02,
+                                    content: const Text(
+                                        'You are about to change details'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          _update();
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const FirstScreen(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text('Proceed'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.05,
+                                vertical:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              backgroundColor: const Color(0xFF0047FF),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            backgroundColor: const Color(0xFF0047FF),
-                          ),
-                          child: Text(
-                            'Save Changes',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: MediaQuery.of(context).size.width * 0.05,
-                              fontFamily: 'Poppins',
-                              color: Colors.white,
+                            child: Text(
+                              'Save Changes',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.05,
+                                fontFamily: 'Poppins',
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
