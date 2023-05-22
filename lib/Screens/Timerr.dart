@@ -25,7 +25,8 @@ class _TimerPageState extends State<TimerPage>
     with AutomaticKeepAliveClientMixin<TimerPage> {
   final mainController = Get.find<MainController>();
 
-  String format = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+  String formatDate = DateFormat('yyyy-MM-dd').format(now);
+  String formatTimee = DateFormat('HH:mm a').format(now);
   Websocket ws = Websocket();
   String action = "";
   late int ctr;
@@ -105,7 +106,7 @@ class _TimerPageState extends State<TimerPage>
     mainController.bathroomSecondsRemaining.value = 0;
     action = "Timer Stopped";
     ctrRef.child("ctr").set(++ctr);
-    Auth().uidPostData(ctr, action, format, uid);
+    Auth().uidPostData(ctr, action, formatDate, formatTimee, uid);
   }
 
   void resetTimer() {
@@ -133,7 +134,7 @@ class _TimerPageState extends State<TimerPage>
       }
 
       ctrRef.child("ctr").set(++ctr);
-      Auth().uidPostData(ctr, action, format, uid);
+      Auth().uidPostData(ctr, action, formatDate, formatTimee, uid);
       setState(() {
         mainController.bathroomTimeSet.value = true;
       });
@@ -232,7 +233,8 @@ class _TimerPageState extends State<TimerPage>
                                 startTimer();
                                 action = "Timer Started";
                                 ctrRef.child("ctr").set(++ctr);
-                                Auth().uidPostData(ctr, action, format, uid);
+                                Auth().uidPostData(
+                                    ctr, action, formatDate, formatTimee, uid);
                               }
                             : null,
                         style: ElevatedButton.styleFrom(
