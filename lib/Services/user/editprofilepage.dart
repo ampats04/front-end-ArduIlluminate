@@ -164,7 +164,7 @@ class _EditProfileState extends State<EditProfile> {
                         labelStyle: const TextStyle(
                           fontFamily: 'Poppins',
                         ),
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(

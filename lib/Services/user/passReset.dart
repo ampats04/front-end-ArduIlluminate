@@ -57,9 +57,9 @@ class ResetPasswordState extends State<ResetPassword> {
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
                   decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.email),
                     labelText: 'Email',
-                    
                     labelStyle: TextStyle(
                       fontFamily: 'Poppins',
                     ),
@@ -96,12 +96,13 @@ class ResetPasswordState extends State<ResetPassword> {
                         fontSize: MediaQuery.of(context).size.height * 0.02,
                         fontFamily: 'Poppins',
                         color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
+                  height: MediaQuery.of(context).size.height * 0.01,
                 ),
               ],
             ),
