@@ -22,16 +22,21 @@ class ResetPasswordState extends State<ResetPassword> {
 
   @override
   Widget build(BuildContext context) {
+   final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        preferredSize: Size.fromHeight(screenHeight * 0.08),
         child: AppBar(
+          backgroundColor: const Color(0xFFD9D9D9),
           title: Text(
             'Reset Password',
             style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.05,
-                fontFamily: 'Poppins'),
+              fontSize: screenWidth * 0.06,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              
+            ),
           ),
         ),
       ),

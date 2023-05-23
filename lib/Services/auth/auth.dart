@@ -44,11 +44,17 @@ class Auth {
     await _firebaseAuth.signOut();
   }
 
-  Future<void> uidPostData(
-      int ctr, String action, String format, String uid) async {
+  Future<void> uidPostData(int ctr, String action, String formatDate,
+      String formatTime, String uid) async {
     await uidRef.child("$uid/$ctr").set({
       'action': action,
-      'timestamp': format,
+      'date': formatDate,
+      'time': formatTime,
     });
+  }
+
+  Future<void> tryData() async {
+    DatabaseReference dateRef = FirebaseDatabase.instance.ref("post/uid/");
+    DatabaseEvent event = await dateRef.once();
   }
 }

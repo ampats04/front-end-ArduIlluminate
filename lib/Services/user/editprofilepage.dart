@@ -15,10 +15,10 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final TextEditingController _fullnameController = TextEditingController();
+  TextEditingController _fullnameController = TextEditingController();
   DateTime? _selectedDate;
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
   late Future<dynamic> futureUser;
 
   String uid = Auth().currentUser!.uid;
@@ -66,12 +66,21 @@ class _EditProfileState extends State<EditProfile> {
     final String? selectedDateFormatted =
         _selectedDate == null ? null : dateFormat.format(_selectedDate!);
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        preferredSize: Size.fromHeight(screenHeight * 0.08),
         child: AppBar(
-          title: const Text('Edit Profile'),
+          backgroundColor: const Color(0xFFD9D9D9),
+          title: Text(
+            'Edit Profile',
+            style: TextStyle(
+              fontSize: screenWidth * 0.06,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -90,15 +99,17 @@ class _EditProfileState extends State<EditProfile> {
                 String birthdateHint = snapshot.data['birthdate'];
 
                 return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      '',
+                    const Text(
+                      'Profile Details',
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.01,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                      ),
+                          fontSize: 24,
+                          fontFamily: 'Poppins',
+                          color: Color.fromARGB(255, 0, 71, 255)),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.04,
                     ),
                     TextField(
                       enabled: true,
@@ -110,7 +121,7 @@ class _EditProfileState extends State<EditProfile> {
                         labelStyle: const TextStyle(
                           fontFamily: 'Poppins',
                         ),
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       ),
                     ),
                     SizedBox(
@@ -220,8 +231,7 @@ class _EditProfileState extends State<EditProfile> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          margin:
-                              EdgeInsets.only(top: 30.0),
+                          margin: EdgeInsets.only(top: 30.0),
                           child: ElevatedButton(
                             onPressed: () {
                               showDialog(

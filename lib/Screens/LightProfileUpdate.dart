@@ -75,8 +75,7 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
                 _update();
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                      builder: ((context) => const HomePage())),
+                  MaterialPageRoute(builder: ((context) => const HomePage())),
                 );
               },
             ),
@@ -101,9 +100,22 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Light Details'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(screenHeight * 0.08),
+        child: AppBar(
+          backgroundColor: const Color(0xFFD9D9D9),
+          title: Text(
+            'Light Details',
+            style: TextStyle(
+              fontSize: screenWidth * 0.06,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(30),
@@ -168,27 +180,25 @@ class _UpdatedLightDetailsState extends State<UpdatedLightDetails> {
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Watts',
-                prefixIcon: Icon(Icons.electrical_services),
+                prefixIcon: Icon(Icons.electric_bolt_outlined),
               ),
             ),
             const SizedBox(height: 30),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: ElevatedButton(
-                onPressed: updateDetails,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  backgroundColor: const Color(0xFF0047FF),
+            ElevatedButton(
+              onPressed: updateDetails,
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
                 ),
-                child: const Text(
-                  'UPDATE DETAILS',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: Colors.white,
-                  ),
+                backgroundColor: const Color(0xFF0047FF),
+              ),
+              child: const Text(
+                'UPDATE DETAILS',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins',
+                  color: Colors.white,
                 ),
               ),
             ),

@@ -35,7 +35,8 @@ class _MainPageScreenState extends State<MainPage>
   bool ledstatus = false;
   late Websocket ws = Websocket();
   String action = "";
-  String format = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+  String formatDate = DateFormat('yyyy-MM-dd').format(now);
+  String formatTime = DateFormat('HH:mm a').format(now);
 
   //Authentication
   String? uid = Auth().currentUser!.uid;
@@ -85,14 +86,14 @@ class _MainPageScreenState extends State<MainPage>
       ledstatus = false;
 
       ctrRef.child("ctr").set(++ctr);
-      Auth().uidPostData(ctr, action, format, uid!);
+      Auth().uidPostData(ctr, action, formatDate, formatTime, uid!);
     } else {
       ws.sendcmd("poweron");
       action = "Power On";
 
       ledstatus = true;
       ctrRef.child("ctr").set(++ctr);
-      Auth().uidPostData(ctr, action, format, uid!);
+      Auth().uidPostData(ctr, action, formatDate, formatTime, uid!);
     }
     Get.find<MainController>().isBathroomPowerOn.value = value;
     setState(() {
@@ -107,7 +108,6 @@ class _MainPageScreenState extends State<MainPage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    String format = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
     final mainController = Get.find<MainController>();
     return Scaffold(
       backgroundColor: const Color(0xFFD9D9D9),
@@ -247,7 +247,8 @@ class _MainPageScreenState extends State<MainPage>
                                   var brightness = value.round().toString();
                                   action = "Adjusted Brightness: $brightness%";
                                   ws.sendcmd('brightness$brightness');
-                                  Auth().uidPostData(ctr, action, format, uid!);
+                                  Auth().uidPostData(ctr, action, formatDate,
+                                      formatTime, uid!);
                                   setState(() {
                                     mainController.bathroomSliderValue.value =
                                         value;
@@ -262,19 +263,10 @@ class _MainPageScreenState extends State<MainPage>
                 ],
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const EnlighteningDetails()),
-                  );
-                },
-                child: Image.asset(
-                  'assets/lightbulb.png',
-                  width: MediaQuery.of(context).size.width * 0.2,
-                  height: MediaQuery.of(context).size.width * 0.2,
-                ),
+              Image.asset(
+                'assets/lightbulb.png',
+                width: MediaQuery.of(context).size.width * 0.2,
+                height: MediaQuery.of(context).size.width * 0.2,
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.04),
               Text(

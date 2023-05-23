@@ -10,6 +10,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class CreateAccountPage extends StatefulWidget {
@@ -22,6 +23,7 @@ class CreateAccountPage extends StatefulWidget {
 class _CreateAccountPageState extends State<CreateAccountPage> {
   int _activeCurrentStep = 0;
   final bool _isEditable = true;
+  bool passwordVisible = false;
   //User Registration
   final formGlobalKey = GlobalKey<FormState>();
   final TextEditingController fullNameController = TextEditingController();
@@ -336,20 +338,30 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                   TextFormField(
                     controller: passwordController,
-                    obscureText: true,
+                    obscureText: !passwordVisible,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
                       hintText: 'Enter your password',
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock),
                       labelText: 'Password',
-                      labelStyle: TextStyle(
+                      labelStyle: const TextStyle(
                         fontFamily: 'Poppins',
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () {
+                          setState(() {
+                            passwordVisible = !passwordVisible;
+                          });
+                        },
                       ),
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) => value != null && value.length < 6
-                        ? 'Enter a min. of 6 characters'
+                        ? 'Enter a minimum of 6 characters'
                         : null,
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
@@ -429,11 +441,15 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty || value.contains(RegExp(r'[a-zA-Z]'))) {
-                      return "Enter Watt Output";
+                      return 'Enter Watt Output';
                     }
                     return null;
                   },
                   controller: wattController,
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
+                  ],
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Wattage',
