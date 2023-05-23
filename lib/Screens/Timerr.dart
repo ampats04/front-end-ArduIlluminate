@@ -284,7 +284,7 @@ class _TimerPageState extends State<TimerPage>
                         ),
                         child: const Center(
                           child:
-                              Icon(Icons.stop_circle, size: 50, color: Colors.white),
+                              Icon(Icons.stop_rounded, size: 50, color: Colors.white),
                         ),
                       ),
                     ),

@@ -68,7 +68,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     });
 
     await databaseReference.child(ssidPath).set(ssid);
-    await databaseReference.child(ssidPath).set(password);
+    await databaseReference.child(passwordPath).set(password);
   }
 
   String? get selectedDateFormatted {
