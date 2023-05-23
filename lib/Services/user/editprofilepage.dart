@@ -1,6 +1,7 @@
 //import 'package:ardu_illuminate/editPassword.dart';
 
 import 'package:ardu_illuminate/Models/user_model.dart';
+import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:ardu_illuminate/Screens/userProfile.dart';
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:flutter/material.dart';
@@ -250,7 +251,13 @@ class _EditProfileState extends State<EditProfile> {
                                     ),
                                     content: const Text(
                                         'You are about to change details'),
-                                    actions: [
+                                    actions: <Widget> [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
                                       TextButton(
                                         onPressed: () {
                                           _update();
@@ -258,17 +265,11 @@ class _EditProfileState extends State<EditProfile> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  const FirstScreen(),
+                                                  const HomePage(),
                                             ),
                                           );
                                         },
                                         child: const Text('Proceed'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('Cancel'),
                                       ),
                                     ],
                                   );
