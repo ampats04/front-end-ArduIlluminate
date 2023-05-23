@@ -1,6 +1,7 @@
 import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:ardu_illuminate/Services/user/editprofilepage.dart';
 import 'package:ardu_illuminate/Services/user/legalBasis.dart';
+import 'package:ardu_illuminate/Services/user/legalBasis_drawer.dart';
 import 'package:ardu_illuminate/Services/user/passReset.dart';
 import 'package:ardu_illuminate/Services/user/wifiSetup.dart';
 import 'package:flutter/cupertino.dart';
@@ -210,8 +211,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                           ViewLogsPage(),
+                                      builder: (context) => ViewLogsPage(),
                                     ),
                                   );
                                 },
@@ -240,7 +240,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const LegalBasis())); //this should be the legal basis section
+                                              const LegalBasisDrawer())); //this should be the legal basis section
                                 },
                               ),
                             ),

@@ -59,7 +59,6 @@ class ResetPasswordState extends State<ResetPassword> {
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     labelText: 'Email',
-                    
                     labelStyle: TextStyle(
                       fontFamily: 'Poppins',
                     ),
