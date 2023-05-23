@@ -106,8 +106,9 @@ class _LoginPageState extends State<LoginPage> {
                       return '* Password is required';
                     } else if (errorMessage == 'Invalid password') {
                       return 'Invalid password';
+                    } else {
+                      return null;
                     }
-                    return null;
                   },
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -140,6 +141,10 @@ class _LoginPageState extends State<LoginPage> {
                           MediaQuery.of(context).size.width * 0.09),
                       child: ElevatedButton(
                         onPressed: () {
+                          setState(() {
+                            errorMessage = '';
+                          });
+
                           if (formGlobalKey.currentState!.validate()) {
                             signIn();
                           }
