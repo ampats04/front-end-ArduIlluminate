@@ -1,4 +1,3 @@
-// main.dart
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -14,6 +13,11 @@ class ViewLogsPage extends StatefulWidget {
 
 class _ViewLogsPageState extends State<ViewLogsPage> {
   late Future<List<Map<String, dynamic>>> futureData;
+  final _dataColumns = const [
+    DataColumn(label: Text('Date')),
+    DataColumn(label: Text('Action')),
+    DataColumn(label: Text('Time'))
+  ];
 
   @override
   void initState() {
@@ -40,13 +44,11 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
     String timeValue = timeRef.snapshot.value.toString();
     String dateValue = dateRef.snapshot.value.toString();
 
-    for (int index = 0; index < 2000; index++) {
-      data.add({
-        "date": dateValue,
-        "action": actionValue,
-        "time": timeValue,
-      });
-    }
+    data.add({
+      "date": dateValue,
+      "action": actionValue,
+      "time": timeValue,
+    });
 
     return data;
   }
@@ -57,30 +59,54 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
       appBar: AppBar(
         title: const Text('View Logs'),
       ),
-      body: SingleChildScrollView(
-        child: FutureBuilder<List<Map<String, dynamic>>>(
-          future: futureData,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              final data = snapshot.data!;
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: futureData,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    final data = snapshot.data!;
 
-              return PaginatedDataTable(
-                columns: const [
-                  DataColumn(label: Text('Date')),
-                  DataColumn(label: Text('Action')),
-                  DataColumn(label: Text('Time'))
-                ],
-                source: MyData(data),
-                columnSpacing: 40,
-                rowsPerPage: 10,
-              );
-            }
-          },
-        ),
+                    return Container(
+                      padding: const EdgeInsets.all(16.0),
+                      child: PaginatedDataTable(
+                        columns: _dataColumns,
+                        source: MyData(data),
+                        columnSpacing: 40,
+                        rowsPerPage: 10,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+          ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  // Add your logic for manipulating logs
+                },
+                child: const Text('Clear Logs'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Add your logic for exporting logs
+                },
+                child: const Text('Export Logs'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -99,27 +125,30 @@ void _test() {
 int ctr = 0;
 final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
 
-// The "soruce" of the table
 class MyData extends DataTableSource {
   final List<Map<String, dynamic>> _data;
 
   MyData(this._data);
 
   @override
-  bool get isRowCountApproximate => false;
+  DataRow? getRow(int index) {
+    if (index >= _data.length) {
+      return null;
+    }
 
-  @override
-  int get rowCount => _data.length;
-
-  @override
-  int get selectedRowCount => 0;
-
-  @override
-  DataRow getRow(int index) {
     return DataRow(cells: [
       DataCell(Text(_data[index]["date"].toString())),
       DataCell(Text(_data[index]["action"].toString())),
       DataCell(Text(_data[index]["time"].toString())),
     ]);
   }
+
+  @override
+  int get rowCount => _data.length;
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get selectedRowCount => 0;
 }

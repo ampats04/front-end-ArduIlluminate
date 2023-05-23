@@ -80,7 +80,7 @@ class _PowerConsumption extends State<PowerConsumption>
               children: <Widget>[
                 SizedBox(height: (MediaQuery.of(context).size.height * 0.03)),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
+                  width: MediaQuery.of(context).size.width * 0.1,
                   child: FutureBuilder<dynamic>(
                     future: futureLight,
                     builder: (context, snapshot) {
@@ -90,17 +90,17 @@ class _PowerConsumption extends State<PowerConsumption>
                         double watt = snapshot.data['watt'];
 
                         return SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
-                          width: MediaQuery.of(context).size.width * 0.4,
+                          //height: MediaQuery.of(context).size.height * 0.1,
+                          //width: MediaQuery.of(context).size.height * 0.1,
                           child: TextFormField(
                             initialValue: watt.toString(),
                             readOnly: true,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize:
-                                    MediaQuery.of(context).size.width * 0.06,
+                                    30,
                                 fontFamily: 'Poppins',
-                                color: const Color(0XFFD30000),
-                                fontWeight: FontWeight.bold),
+                                color: Color(0XFFD30000),
+                                fontWeight: FontWeight.w900),
                             decoration: const InputDecoration(
                               border: InputBorder.none, // Remove the underline
                             ),

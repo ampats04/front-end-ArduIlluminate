@@ -446,7 +446,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     return null;
                   },
                   controller: wattController,
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*$')),
                   ],
@@ -539,13 +540,24 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   }
                   return null;
                 },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your Password',
-                  prefixIcon: Icon(Icons.password_outlined),
+                obscureText: !passwordVisible, // Add this line
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: 'Enter your password',
+                  prefixIcon: const Icon(Icons.lock),
                   labelText: 'Password',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     fontFamily: 'Poppins',
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(passwordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        passwordVisible = !passwordVisible;
+                      });
+                    },
                   ),
                 ),
               ),
