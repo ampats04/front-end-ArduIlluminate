@@ -1,3 +1,4 @@
+import 'package:ardu_illuminate/BedroomScreen/bedroom_homePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class _WidgetTreeState extends State<WidgetTree> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const HomePage();
+            return const BedroomHomePage();
           } else {
             return const LoginPage();
           }

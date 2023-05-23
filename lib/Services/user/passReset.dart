@@ -22,7 +22,7 @@ class ResetPasswordState extends State<ResetPassword> {
 
   @override
   Widget build(BuildContext context) {
-   final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: PreferredSize(
@@ -35,7 +35,6 @@ class ResetPasswordState extends State<ResetPassword> {
               fontSize: screenWidth * 0.06,
               fontFamily: 'Poppins',
               fontWeight: FontWeight.bold,
-              
             ),
           ),
         ),
@@ -88,7 +87,7 @@ class ResetPasswordState extends State<ResetPassword> {
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(
                           horizontal: MediaQuery.of(context).size.width * 0.03,
-                          vertical: MediaQuery.of(context).size.height * 0.03),
+                          vertical: MediaQuery.of(context).size.height * 0.02),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
@@ -97,9 +96,8 @@ class ResetPasswordState extends State<ResetPassword> {
                     child: Text(
                       'Reset Password',
                       style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.02,
+                        fontSize: MediaQuery.of(context).size.height * 0.025,
                         fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),

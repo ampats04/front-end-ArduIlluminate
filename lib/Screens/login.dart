@@ -1,3 +1,4 @@
+import 'package:ardu_illuminate/BedroomScreen/bedroom_homePage.dart';
 import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:ardu_illuminate/Services/user/passReset.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       );
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const BedroomHomePage()),
       );
     } on FirebaseAuthException catch (e) {
       setState(() {

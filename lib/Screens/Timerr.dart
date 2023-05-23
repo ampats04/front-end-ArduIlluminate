@@ -24,7 +24,6 @@ DateTime now = DateTime.now();
 class _TimerPageState extends State<TimerPage>
     with AutomaticKeepAliveClientMixin<TimerPage> {
   final mainController = Get.find<MainController>();
-
   String formatDate = DateFormat('yyyy-MM-dd').format(now);
   String formatTimee = DateFormat('HH:mm a').format(now);
   Websocket ws = Websocket();
@@ -261,7 +260,9 @@ class _TimerPageState extends State<TimerPage>
                                   : const Text(
                                       'GO',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold, fontSize: 30, color: Colors.white),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30,
+                                          color: Colors.white),
                                     ),
                         ),
                       ),
@@ -283,8 +284,8 @@ class _TimerPageState extends State<TimerPage>
                           minimumSize: const Size(100, 100),
                         ),
                         child: const Center(
-                          child:
-                              Icon(Icons.stop_rounded, size: 50, color: Colors.white),
+                          child: Icon(Icons.stop_rounded,
+                              size: 50, color: Colors.white),
                         ),
                       ),
                     ),

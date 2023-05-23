@@ -14,7 +14,7 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
   final TextEditingController _ssidController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isConnecting = false;
-
+  final formGlobalKey = GlobalKey<FormState>();
   final DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
   final String ssidPath = '/network/ssid';
   final String passwordPath = '/network/password';
@@ -42,85 +42,148 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
           ),
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.wifi,
-                size: 80,
-                color: Colors.blue,
-              ),
-              const SizedBox(height: 16.0),
-              const Text(
-                "Enter the SSID of your network:",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              TextField(
-                controller: _ssidController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "SSID",
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Password",
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () async {
-                  setState(() {
-                    _isConnecting = true;
-                  });
+      body: SingleChildScrollView(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: formGlobalKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Icon(
+                    Icons.wifi,
+                    size: 80,
+                    color: Color(0xFF0047FF),
+                  ),
+                  const SizedBox(height: 35.0),
+                  const Text(
+                    "Enter the SSID of your network:",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins'),
+                  ),
+                  const SizedBox(height: 20.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50.0, vertical: 10.0),
+                    child: TextFormField(
+                      controller: _ssidController,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '* SSID is required';
+                        } else {
+                          return null;
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "SSID",
+                        labelStyle:
+                            TextStyle(fontFamily: 'Poppins', fontSize: 15),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50.0, vertical: 5.0),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '* Password is required';
+                        } else {
+                          return null;
+                        }
+                      },
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: "Password",
+                        labelStyle:
+                            TextStyle(fontFamily: 'Poppins', fontSize: 15),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 35.0),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (formGlobalKey.currentState!.validate()) {
+                        setState(() {
+                          _isConnecting = true;
+                        });
 
-                  await databaseReference.child(ssidPath).set(ssid);
-                  await databaseReference.child(passwordPath).set(password);
+                        String ssid = _ssidController.text;
+                        String password = _passwordController.text;
 
-                  setState(() {
-                    _isConnecting = false;
-                  });
+                        // Perform the necessary operations with the data
+                        // await databaseReference.child(ssidPath).set(ssid);
+                        // await databaseReference.child(passwordPath).set(password);
 
-                  // ignore: use_build_context_synchronously
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Data Sent"),
-                        content: const Text("Settings saved successfully!"),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text("OK"),
-                          ),
-                        ],
-                      );
+                        setState(() {
+                          _isConnecting = false;
+                        });
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text(
+                                "Data Sent",
+                                style: TextStyle(fontFamily: 'Poppins'),
+                              ),
+                              content: const Text(
+                                "Settings saved successfully!",
+                                style: TextStyle(fontFamily: 'Poppins'),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text(
+                                    "OK",
+                                    style: TextStyle(fontFamily: 'Poppins'),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16.0),
-                  textStyle: const TextStyle(fontSize: 20),
-                ),
-                child: _isConnecting
-                    ? const CircularProgressIndicator()
-                    : const Text("Save Settings"),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.03,
+                          vertical: MediaQuery.of(context).size.height * 0.02),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      backgroundColor: const Color(0xFF0047FF),
+                    ),
+                    child: _isConnecting
+                        ? const CircularProgressIndicator()
+                        : Text(
+                            "Save Settings",
+                            style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.025,
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                            ),
+                          ),
+                  ),
+                  response != null ? Text(response!) : Container(),
+                ],
               ),
-              response != null ? Text(response!) : Container(),
-            ],
+            ),
           ),
         ),
       ),

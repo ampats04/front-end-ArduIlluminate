@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
+import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:ardu_illuminate/controllers/maincontroller.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:duration_picker/duration_picker.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 
 Websocket ws = Websocket();
 
@@ -17,16 +19,34 @@ class BedroomTimerPage extends StatefulWidget {
   _BedroomTimerPageState createState() => _BedroomTimerPageState();
 }
 
+DateTime now = DateTime.now();
+
 class _BedroomTimerPageState extends State<BedroomTimerPage>
     with AutomaticKeepAliveClientMixin<BedroomTimerPage> {
   final mainController = Get.find<MainController>();
-
+  String formatDate = DateFormat('yyyy-MM-dd').format(now);
+  String formatTimee = DateFormat('HH:mm a').format(now);
+  Websocket ws = Websocket();
+  String action = "";
+  late int ctr;
+  String uid = Auth().currentUser!.uid;
+  final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
       ws.channelconnect();
     });
     super.initState();
+  }
+
+  void _test() {
+    Stream<DatabaseEvent> stream = ctrRef.child('ctr').onValue;
+
+    stream.listen((DatabaseEvent event) {
+      ctr = event.snapshot.value as int;
+
+      print("value of ctr right in Timer $ctr");
+    });
   }
 
   void startTimer() {
@@ -37,16 +57,16 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
     if (!mainController.bedroomStarted.value) {
       mainController.bedroomnSecondsRemaining.value--;
       if (mainController.bedroomnSecondsRemaining.value <= 0) {
+        mainController.bedroomTimeSet.value = false;
+
         stopTimer();
         ws.sendcmd("poweroff");
       }
-
       mainController.bedroomCountDownTimer =
           Timer.periodic(const Duration(seconds: 1), (_) {
         if (!mainController.bedroomPaused.value) {
           mainController.bedroomnSecondsRemaining.value--;
         }
-
         if (mainController.bedroomnSecondsRemaining.value <= 0) {
           stopTimer();
         }
@@ -58,6 +78,7 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
         mainController.bedroomPaused.value = false;
       });
       mainController.bedroomCountDownTimer?.cancel();
+
       mainController.bedroomCountDownTimer =
           Timer.periodic(const Duration(seconds: 1), (_) {
         mainController.bedroomnSecondsRemaining.value--;
@@ -76,9 +97,14 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
 
   void stopTimer() {
     mainController.bedroomCountDownTimer?.cancel();
+
     mainController.bedroomStarted.value = false;
     mainController.bedroomPaused.value = false;
+
     mainController.bedroomnSecondsRemaining.value = 0;
+    action = "Timer Stopped";
+    ctrRef.child("ctr").set(++ctr);
+    Auth().uidPostData(ctr, action, formatDate, formatTimee, uid);
   }
 
   void resetTimer() {
@@ -90,12 +116,22 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
   }
 
   void setTimer(BuildContext context) async {
+    _test();
     final selectedTime = await showDurationPicker(
       context: context,
       initialTime: const Duration(hours: 0, minutes: 15),
     );
     if (selectedTime != null) {
       mainController.bedroomnSecondsRemaining.value = selectedTime.inSeconds;
+
+      if (selectedTime.inMinutes == 1) {
+        action = "Timer Set : ${selectedTime.inMinutes} minute";
+      } else {
+        action = "Timer Set : ${selectedTime.inMinutes} minutes";
+      }
+
+      ctrRef.child("ctr").set(++ctr);
+      Auth().uidPostData(ctr, action, formatDate, formatTimee, uid);
       setState(() {
         mainController.bedroomTimeSet.value = true;
       });
@@ -173,77 +209,84 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
                         fontFamily: 'Poppins'),
                   )),
               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              Obx(
-                () => ElevatedButton.icon(
-                  onPressed: mainController.bedroomTimeSet.value &&
-                          mainController.bedroomnSecondsRemaining.value > 0
-                      ? () {
-                          if (mainController.bedroomnSecondsRemaining.value <=
-                              0) {
-                            return;
-                          }
-                          startTimer();
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: mainController.bedroomStarted.value &&
-                            !mainController.bedroomPaused.value
-                        ? Colors.orange
-                        : (mainController.bedroomStarted.value
-                            ? Colors.blue
-                            : Colors.green),
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height * 0.028,
-                        horizontal: MediaQuery.of(context).size.width * 0.035),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: Obx(
+                      () => ElevatedButton(
+                        onPressed: mainController.bedroomTimeSet.value &&
+                                mainController.bedroomnSecondsRemaining.value >
+                                    0
+                            ? () {
+                                if (mainController.bedroomnSecondsRemaining <=
+                                    0) {
+                                  return;
+                                }
+                                startTimer();
+                                action = "Timer Started";
+                                ctrRef.child("ctr").set(++ctr);
+                                Auth().uidPostData(
+                                    ctr, action, formatDate, formatTimee, uid);
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(0),
+                          backgroundColor:
+                              mainController.bedroomStarted.value &&
+                                      !mainController.bedroomPaused.value
+                                  ? Colors.orange
+                                  : (mainController.bedroomStarted.value
+                                      ? Colors.blue
+                                      : Colors.green),
+                          shape: const CircleBorder(),
+                          elevation: 2,
+                          minimumSize: const Size(100, 100),
+                        ),
+                        child: Center(
+                          child: mainController.bedroomStarted.value &&
+                                  !mainController.bedroomPaused.value
+                              ? const Icon(Icons.pause,
+                                  size: 50, color: Colors.white)
+                              : mainController.bedroomPaused.value
+                                  ? const Icon(Icons.play_arrow,
+                                      size: 50, color: Colors.white)
+                                  : const Text(
+                                      'GO',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 30,
+                                          color: Colors.white),
+                                    ),
+                        ),
+                      ),
                     ),
-                    elevation: 2,
                   ),
-                  icon: mainController.bedroomStarted.value &&
-                          !mainController.bedroomPaused.value
-                      ? Icon(Icons.pause,
-                          size: MediaQuery.of(context).size.width * 0.1)
-                      : mainController.bedroomPaused.value
-                          ? Icon(Icons.play_arrow,
-                              size: MediaQuery.of(context).size.width * 0.1)
-                          : Icon(Icons.play_arrow,
-                              size: MediaQuery.of(context).size.width * 0.1),
-                  label: Text(
-                    !mainController.bedroomStarted.value
-                        ? 'Start'
-                        : mainController.bedroomPaused.value
-                            ? 'Resume'
-                            : 'Pause',
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.06),
-                  ),
-                ),
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              Obx(
-                () => ElevatedButton.icon(
-                  onPressed:
-                      mainController.bedroomTimeSet.value ? resetTimer : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.height * 0.028,
-                        horizontal: MediaQuery.of(context).size.width * 0.035),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                  SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: Obx(
+                      () => ElevatedButton(
+                        onPressed: mainController.bedroomTimeSet.value
+                            ? resetTimer
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(0),
+                          backgroundColor: Colors.red,
+                          shape: const CircleBorder(),
+                          elevation: 2,
+                          minimumSize: const Size(100, 100),
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.stop_rounded,
+                              size: 50, color: Colors.white),
+                        ),
+                      ),
                     ),
-                    elevation: 2,
                   ),
-                  icon: const Icon(Icons.refresh, size: 32),
-                  label: Text(
-                    'Reset',
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.06),
-                  ),
-                ),
+                ],
               ),
             ],
           ),
