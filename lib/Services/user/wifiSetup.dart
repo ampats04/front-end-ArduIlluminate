@@ -15,8 +15,7 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isConnecting = false;
 
-  final DatabaseReference databaseReference =
-      FirebaseDatabase.instance.ref();
+  final DatabaseReference databaseReference = FirebaseDatabase.instance.ref();
   final String ssidPath = '/network/ssid';
   final String passwordPath = '/network/password';
   String? response;
@@ -26,9 +25,22 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
     final ssid = _ssidController.text;
     final password = _passwordController.text;
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Network Settings"),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(screenHeight * 0.08),
+        child: AppBar(
+          backgroundColor: const Color(0xFFD9D9D9),
+          title: Text(
+            'Network Settings',
+            style: TextStyle(
+              fontSize: screenWidth * 0.06,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
       body: Center(
         child: Padding(
@@ -53,7 +65,7 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
               TextField(
                 controller: _ssidController,
                 decoration: const InputDecoration(
-                   border: OutlineInputBorder(),
+                  border: OutlineInputBorder(),
                   labelText: "SSID",
                 ),
               ),
@@ -62,7 +74,7 @@ class _NetworkSettingsPageState extends State<NetworkSettingsPage> {
                 controller: _passwordController,
                 obscureText: true,
                 decoration: const InputDecoration(
-                   border: OutlineInputBorder(),
+                  border: OutlineInputBorder(),
                   labelText: "Password",
                 ),
               ),

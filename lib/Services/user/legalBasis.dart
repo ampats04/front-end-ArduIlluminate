@@ -10,21 +10,23 @@ class LegalBasis extends StatefulWidget {
 class _LegalBasisState extends State<LegalBasis> {
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize:
-              Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
-          child: AppBar(
-            title: Text(
-              'Terms of Service',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: MediaQuery.of(context).size.width * 0.05,
-                fontWeight: FontWeight.bold,
-              ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(screenHeight * 0.08),
+        child: AppBar(
+          backgroundColor: const Color(0xFFD9D9D9),
+          title: Text(
+            'Terms of Service',
+            style: TextStyle(
+              fontSize: screenWidth * 0.06,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
+      ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.06),
           child: Column(

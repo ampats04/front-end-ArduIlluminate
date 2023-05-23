@@ -258,8 +258,11 @@ class _TimerPageState extends State<TimerPage>
                               : mainController.bathroomPaused.value
                                   ? const Icon(Icons.play_arrow,
                                       size: 50, color: Colors.white)
-                                  : const Icon(Icons.play_arrow,
-                                      size: 50, color: Colors.white),
+                                  : const Text(
+                                      'GO',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold, fontSize: 30, color: Colors.white),
+                                    ),
                         ),
                       ),
                     ),
@@ -281,7 +284,7 @@ class _TimerPageState extends State<TimerPage>
                         ),
                         child: const Center(
                           child:
-                              Icon(Icons.pause, size: 50, color: Colors.white),
+                              Icon(Icons.stop_circle, size: 50, color: Colors.white),
                         ),
                       ),
                     ),

@@ -50,6 +50,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                   child: Text(
                     'Settings',
                     style: TextStyle(
+                      fontWeight: FontWeight.bold,
                         fontFamily: 'Poppins',
                         fontSize: MediaQuery.of(context).size.width * 0.06,
                         color: Colors.black),

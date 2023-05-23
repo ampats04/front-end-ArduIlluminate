@@ -61,12 +61,21 @@ class _EnlighteningDetailsState extends State<EnlighteningDetails> {
     final DateFormat dateFormat = DateFormat.yMMMMd('en_US');
     final String? selectedDateFormatted =
         _selectedDate == null ? null : dateFormat.format(_selectedDate!);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        preferredSize: Size.fromHeight(screenHeight * 0.08),
         child: AppBar(
-          title: const Text('Enlightening Details'),
+          backgroundColor: const Color(0xFFD9D9D9),
+          title: Text(
+            'Enlightening Details',
+            style: TextStyle(
+              fontSize: screenWidth * 0.06,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
       body: SingleChildScrollView(

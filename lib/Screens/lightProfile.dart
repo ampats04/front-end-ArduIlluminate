@@ -28,9 +28,22 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Light Details'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(screenHeight * 0.08),
+        child: AppBar(
+          backgroundColor: const Color(0xFFD9D9D9),
+          title: Text(
+            'Light Details',
+            style: TextStyle(
+              fontSize: screenWidth * 0.06,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(30),
@@ -110,7 +123,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Watts',
-                        prefixIcon: Icon(Icons.electrical_services),
+                        prefixIcon: Icon(Icons.electric_bolt_outlined),
                       ),
                       readOnly: true,
                     ),
@@ -119,14 +132,49 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UpdatedLightDetails(
-                              data: snapshot.data,
-                              lightId: lightId,
-                            ),
-                          ),
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text(
+                                'Update Details?',
+                                style: TextStyle(
+                                  color: const Color(0xFF0047FF),
+                                  fontFamily: 'Poppins',
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.05,
+                                ),
+                              ),
+                              content: const Text(
+                                  'Do you want to update bulb details?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(
+                                        context); // Close the dialog box
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    Navigator.pop(
+                                        context); // Close the dialog box
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            UpdatedLightDetails(
+                                          data: snapshot.data,
+                                          lightId: lightId,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('Yes'),
+                                ),
+                              ],
+                            );
+                          },
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -139,6 +187,7 @@ class _EnlighteningDetailsViewState extends State<EnlighteningDetailsView> {
                       child: const Text(
                         'UPDATE DETAILS',
                         style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           fontFamily: 'Poppins',
                           color: Colors.white,
                         ),

@@ -42,20 +42,21 @@ class _PowerConsumption extends State<PowerConsumption>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        preferredSize: Size.fromHeight(screenHeight * 0.08),
         child: AppBar(
+          backgroundColor: const Color(0xFFD9D9D9),
           title: Text(
-            'Bathroom Power',
+            'Bathroom Power Consumption',
             style: TextStyle(
-              fontSize: MediaQuery.of(context).size.width * 0.06,
+              fontSize: screenWidth * 0.06,
               fontFamily: 'Poppins',
               fontWeight: FontWeight.bold,
             ),
           ),
-          backgroundColor: const Color(0xFFD9D9D9),
         ),
       ),
       drawer: const DrawHeader(),
