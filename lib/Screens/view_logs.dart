@@ -12,6 +12,7 @@ class ViewLogsPage extends StatefulWidget {
 }
 
 class _ViewLogsPageState extends State<ViewLogsPage> {
+  int ctr = 0;
   late Future<List<Map<String, dynamic>>> futureData;
   final _dataColumns = const [
     DataColumn(label: Text('Date')),
@@ -29,9 +30,9 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
     List<Map<String, dynamic>> data = [];
 
     Stream<DatabaseEvent> stream = ctrRef.child('ctr').onValue;
-    DatabaseReference ref =
-        FirebaseDatabase.instance.ref("post/uid/${Auth().currentUser!.uid}/2");
 
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("post/uid/${Auth().currentUser!.uid}/9");
     DatabaseReference date = ref.child('date');
     DatabaseReference action = ref.child('action');
     DatabaseReference time = ref.child('time');
@@ -80,7 +81,7 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
                       child: PaginatedDataTable(
                         columns: _dataColumns,
                         source: MyData(data),
-                        columnSpacing: 40,
+                        columnSpacing: 60,
                         rowsPerPage: 10,
                       ),
                     );

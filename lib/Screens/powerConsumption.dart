@@ -1,62 +1,69 @@
-// ignore_for_file: library_private_types_in_public_api
+import 'dart:async';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
 
-import 'draw_header.dart';
+import 'package:ardu_illuminate/Screens/draw_header.dart';
 
 class PowerConsumption extends StatefulWidget {
-  const PowerConsumption({super.key});
+  const PowerConsumption({Key? key}) : super(key: key);
 
   @override
-  _PowerConsumption createState() => _PowerConsumption();
+  // ignore: library_private_types_in_public_api
+  _PowerConsumptionState createState() => _PowerConsumptionState();
 }
 
-class _PowerConsumption extends State<PowerConsumption>
+class _PowerConsumptionState extends State<PowerConsumption>
     with AutomaticKeepAliveClientMixin<PowerConsumption> {
-  double wattage = 0.0;
-  double kilowattHours = 0.0;
-  double pesoCost = 0.0;
+  late DatabaseReference _powerRef;
+  StreamSubscription<DatabaseEvent>? _powerSubscription;
+  double _powerValue = 0.0;
+  double _kWhValue = 0.0;
+  double _pesoCost = 0.0;
 
   String? uid = Auth().currentUser!.uid;
-  late Future<dynamic> futureLight;
-
   @override
   void initState() {
     super.initState();
-    futureLight = apiService().get("/light/one/$uid");
+    _powerRef = FirebaseDatabase.instance.ref().child('energy/power');
+    _powerSubscription = _powerRef.onValue.listen((event) {
+      setState(() {
+        _powerValue = (event.snapshot.value as double?) ?? 0.0;
+        _kWhValue += _powerValue / 1000.0; // Assuming power is in watts
+        _pesoCost = _kWhValue * 10.0; // Assuming cost per kWh is 10 pesos
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _powerSubscription?.cancel();
+    super.dispose();
   }
 
   @override
   bool get wantKeepAlive => true;
 
-  void updateValues(double watt) {
-    setState(() {
-      wattage = watt;
-      kilowattHours = wattage / 1000 * 24;
-      pesoCost = kilowattHours * 10;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.08),
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
         child: AppBar(
-          backgroundColor: const Color(0xFFD9D9D9),
           title: Text(
-            'Bathroom Power Consumption',
+            'Bedroom Power',
             style: TextStyle(
-              fontSize: screenWidth * 0.06,
+              fontSize: MediaQuery.of(context).size.width * 0.06,
               fontFamily: 'Poppins',
               fontWeight: FontWeight.bold,
             ),
           ),
+          backgroundColor: const Color(0xFFD9D9D9),
         ),
       ),
       drawer: const DrawHeader(),
@@ -80,41 +87,11 @@ class _PowerConsumption extends State<PowerConsumption>
               children: <Widget>[
                 SizedBox(height: (MediaQuery.of(context).size.height * 0.03)),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.1,
-                  child: FutureBuilder<dynamic>(
-                    future: futureLight,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasData) {
-                        double watt = snapshot.data['watt'];
-
-                        return SizedBox(
-                          //height: MediaQuery.of(context).size.height * 0.1,
-                          //width: MediaQuery.of(context).size.height * 0.1,
-                          child: TextFormField(
-                            initialValue: watt.toString(),
-                            readOnly: true,
-                            style: const TextStyle(
-                                fontSize:
-                                    30,
-                                fontFamily: 'Poppins',
-                                color: Color(0XFFD30000),
-                                fontWeight: FontWeight.w900),
-                            decoration: const InputDecoration(
-                              border: InputBorder.none, // Remove the underline
-                            ),
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      }
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.04,
-                        width: MediaQuery.of(context).size.width * 0.4,
-                      );
-                    },
-                  ),
+                  width: MediaQuery.of(context).size.width * 0.3,
+                ),
+                Text(
+                  _powerValue.toStringAsFixed(5),
+                  style: const TextStyle(fontSize: 60.0, color: Colors.red),
                 ),
                 SizedBox(height: (MediaQuery.of(context).size.height * 0.03)),
                 Text(
@@ -125,7 +102,7 @@ class _PowerConsumption extends State<PowerConsumption>
                 ),
                 SizedBox(height: (MediaQuery.of(context).size.height * 0.08)),
                 Text(
-                  '${kilowattHours.toStringAsFixed(2)} kWh',
+                  '${_kWhValue.toStringAsFixed(4)} kWh',
                   style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width * 0.08,
                       fontFamily: 'Poppins',
@@ -142,7 +119,7 @@ class _PowerConsumption extends State<PowerConsumption>
                 ),
                 SizedBox(height: (MediaQuery.of(context).size.height * 0.08)),
                 Text(
-                  'P ${pesoCost.toStringAsFixed(2)}',
+                  'P ${_pesoCost.toStringAsFixed(2)}',
                   style: TextStyle(
                       fontSize: MediaQuery.of(context).size.width * 0.08,
                       fontFamily: 'Poppins',
