@@ -50,7 +50,7 @@ class _BedroomPowerConsumptionState extends State<BedroomPowerConsumption>
   }
 
   Future<void> _initFirebase() async {
-    _powerRef = FirebaseDatabase.instance.ref('users/$uid/energy/power');
+    _powerRef = FirebaseDatabase.instance.ref('energy/power');
 
     _powerSubscription = _powerRef.onValue.listen((event) {
       setState(() {
@@ -166,6 +166,10 @@ class _BedroomPowerConsumptionState extends State<BedroomPowerConsumption>
           .toList(),
       animate: true,
       dateTimeFactory: const charts.LocalDateTimeFactory(),
+      primaryMeasureAxis: const charts.NumericAxisSpec(
+          tickProviderSpec: charts.BasicNumericTickProviderSpec(
+        desiredTickCount: 6,
+      )),
     );
 
     return Scaffold(

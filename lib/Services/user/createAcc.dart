@@ -129,11 +129,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
       await apiService().post("/users/add", userData);
 
-      // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
-
-      // ignore: use_build_context_synchronously
+      // Show credentials dialog
+      _showCredentialsDialog();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         //logic para sa weak pass
@@ -144,6 +141,64 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       print("Failed to create account: $e");
     }
   }
+
+  void _showCredentialsDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Entered Credentials'),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTextRow('Full Name', fullNameController.text),
+              _buildTextRow('Birthdate', selectedDateFormatted!),
+              _buildTextRow('Email', emailController.text),
+              _buildTextRow('Username', usernameController.text),
+              _buildTextRow('Password', passwordController.text),
+              _buildTextRow('Bulb Model', bulbController.text),
+              _buildTextRow('Manufacturer', manufacturerController.text),
+              _buildTextRow('Wattage', wattController.text),
+              _buildTextRow('Installation Date', selectedDateFormattedLight!),
+            ],
+          ),
+        ),
+        actions: [
+          _buildRegisterButton(),
+          _buildCancelButton(),
+        ],
+      );
+    },
+  );
+}
+
+Widget _buildTextRow(String label, String value) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: Text('$label: $value'),
+  );
+}
+
+Widget _buildRegisterButton() {
+  return TextButton(
+    onPressed: () {
+      Navigator.of(context).pop();
+      _registerLight(); // Proceed with light registration
+    },
+    child: const Text('Register'),
+  );
+}
+
+Widget _buildCancelButton() {
+  return TextButton(
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+    child: const Text('Cancel'),
+  );
+}
+
 
   void _registerLight() async {
     try {
@@ -599,24 +654,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         currentStep: _activeCurrentStep,
         steps: stepList(),
         onStepContinue: () {
-          if (_activeCurrentStep < (stepList().length - 1)) {
-            if (_activeCurrentStep == 0) {
-              _registerUser();
-            } else if (_activeCurrentStep == 1) {
-              _registerLight();
-            } else if (_activeCurrentStep == 2) {
-              _wifiUpdate();
+          setState(() {
+            if (_activeCurrentStep < stepList().length - 1) {
+              _activeCurrentStep += 1;
+            } else {
+              // Last step, submit the form
+              if (formGlobalKey.currentState!.validate()) {
+                _showCredentialsDialog(); // Show credentials dialog
+              }
             }
-
-            if (_validateFields() || _validatorfield() || _wifivalidator()) {
-              setState(() {
-                _activeCurrentStep += 1;
-              });
-            }
-          } else {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePage()));
-          }
+          });
         },
         onStepCancel: () {
           if (_activeCurrentStep == 0) {

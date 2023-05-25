@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Screens/widget_tree.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,15 +37,17 @@ class MyApp extends StatelessWidget {
       home: Builder(
         builder: (BuildContext context) {
           return AnimatedSplashScreen(
-            splash: Center(
-              child: Transform.scale(
-                scale: MediaQuery.of(context).size.width * 0.007,
-                child: Image.asset(
-                  'assets/ardu-ulliminate.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
+            splash: Lottie.asset('assets/26390-light-bulb.json'),
+            // Center(
+            //   child: Transform.scale(
+            //     scale: MediaQuery.of(context).size.width * 0.007,
+            //     child: Image.asset(
+            //       'assets/ardu-ulliminate.png',
+            //       fit: BoxFit.contain,
+            //     ),
+            //   ),
+            // ),
+
             duration: 1000,
             splashTransition: SplashTransition.sizeTransition,
             nextScreen: const WidgetTree(),
