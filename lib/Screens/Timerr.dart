@@ -28,6 +28,7 @@ class _TimerPageState extends State<TimerPage>
   String formatTimee = DateFormat('HH:mm a').format(now);
   Websocket ws = Websocket();
   String action = "";
+  String location = "Bathroom";
   late int ctr;
   String uid = Auth().currentUser!.uid;
   final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
@@ -105,7 +106,7 @@ class _TimerPageState extends State<TimerPage>
     mainController.bathroomSecondsRemaining.value = 0;
     action = "Timer Stopped";
     ctrRef.child("ctr").set(++ctr);
-    Auth().uidPostData(ctr, action, formatDate, formatTimee, uid);
+    Auth().uidPostData(ctr, action, formatDate, formatTimee, uid, location);
   }
 
   void resetTimer() {
@@ -133,7 +134,7 @@ class _TimerPageState extends State<TimerPage>
       }
 
       ctrRef.child("ctr").set(++ctr);
-      Auth().uidPostData(ctr, action, formatDate, formatTimee, uid);
+      Auth().uidPostData(ctr, action, formatDate, formatTimee, uid, location);
       setState(() {
         mainController.bathroomTimeSet.value = true;
       });
@@ -232,8 +233,8 @@ class _TimerPageState extends State<TimerPage>
                                 startTimer();
                                 action = "Timer Started";
                                 ctrRef.child("ctr").set(++ctr);
-                                Auth().uidPostData(
-                                    ctr, action, formatDate, formatTimee, uid);
+                                Auth().uidPostData(ctr, action, formatDate,
+                                    formatTimee, uid, location);
                               }
                             : null,
                         style: ElevatedButton.styleFrom(

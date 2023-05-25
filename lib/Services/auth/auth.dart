@@ -45,8 +45,9 @@ class Auth {
   }
 
   Future<void> uidPostData(int ctr, String action, String formatDate,
-      String formatTime, String uid) async {
+      String formatTime, String uid, String location) async {
     await uidRef.child("$uid/$ctr").set({
+      'location': location,
       'action': action,
       'date': formatDate,
       'time': formatTime,

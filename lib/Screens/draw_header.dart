@@ -4,6 +4,7 @@ import 'package:ardu_illuminate/Services/user/legalBasis.dart';
 import 'package:ardu_illuminate/Services/user/legalBasis_drawer.dart';
 import 'package:ardu_illuminate/Services/user/passReset.dart';
 import 'package:ardu_illuminate/Services/user/wifiSetup.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/user/legalBasis.dart';
@@ -21,12 +22,14 @@ class DrawHeader extends StatefulWidget {
   State<DrawHeader> createState() => _DrawHeaderState();
 }
 
+final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
+
 class _DrawHeaderState extends State<DrawHeader> {
   User? user = Auth().currentUser;
 
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
-
+    ctrRef.child("ctr").set(0);
     // ignore: use_build_context_synchronously
     Navigator.pushAndRemoveUntil(
       context,
@@ -51,7 +54,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                   child: Text(
                     'Settings',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.bold,
                         fontFamily: 'Poppins',
                         fontSize: MediaQuery.of(context).size.width * 0.06,
                         color: Colors.black),

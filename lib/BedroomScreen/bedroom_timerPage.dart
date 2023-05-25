@@ -28,9 +28,11 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
   String formatTimee = DateFormat('HH:mm a').format(now);
   Websocket ws = Websocket();
   String action = "";
+  String location = "Bedroom";
   late int ctr;
   String uid = Auth().currentUser!.uid;
   final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
@@ -50,24 +52,25 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
   }
 
   void startTimer() {
-    if (mainController.bedroomnSecondsRemaining.value <= 0) {
+    if (mainController.bedroomSecondsRemaining.value <= 0) {
       resetTimer();
     }
 
     if (!mainController.bedroomStarted.value) {
-      mainController.bedroomnSecondsRemaining.value--;
-      if (mainController.bedroomnSecondsRemaining.value <= 0) {
-        mainController.bedroomTimeSet.value = false;
+      // mainController.bedroomSecondsRemaining.value--;
+      // if (mainController.bedroomSecondsRemaining.value <= 0) {
+      //   mainController.bedroomTimeSet.value = false;
 
-        stopTimer();
-        ws.sendcmd("poweroff");
-      }
+      //   stopTimer();
+      //   ws.sendcmd("poweroff");
+      // }
       mainController.bedroomCountDownTimer =
           Timer.periodic(const Duration(seconds: 1), (_) {
         if (!mainController.bedroomPaused.value) {
-          mainController.bedroomnSecondsRemaining.value--;
+          mainController.bedroomSecondsRemaining.value--;
         }
-        if (mainController.bedroomnSecondsRemaining.value <= 0) {
+        if (mainController.bedroomSecondsRemaining.value <= 0) {
+          ws.sendcmd("bed_poweroff");
           stopTimer();
         }
       });
@@ -81,9 +84,9 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
 
       mainController.bedroomCountDownTimer =
           Timer.periodic(const Duration(seconds: 1), (_) {
-        mainController.bedroomnSecondsRemaining.value--;
+        mainController.bedroomSecondsRemaining.value--;
 
-        if (mainController.bedroomnSecondsRemaining.value <= 0) {
+        if (mainController.bedroomSecondsRemaining.value <= 0) {
           stopTimer();
         }
       });
@@ -101,15 +104,16 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
     mainController.bedroomStarted.value = false;
     mainController.bedroomPaused.value = false;
 
-    mainController.bedroomnSecondsRemaining.value = 0;
+    mainController.bedroomSecondsRemaining.value = 0;
     action = "Timer Stopped";
     ctrRef.child("ctr").set(++ctr);
-    Auth().uidPostData(ctr, action, formatDate, formatTimee, uid);
+    Auth().uidPostData(ctr, action, formatDate, formatTimee, uid, location);
   }
 
   void resetTimer() {
     stopTimer();
-    mainController.bedroomnSecondsRemaining.value = 0;
+    mainController.bedroomSecondsRemaining.value = 0;
+
     setState(() {
       mainController.bedroomTimeSet.value = false;
     });
@@ -122,7 +126,7 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
       initialTime: const Duration(hours: 0, minutes: 15),
     );
     if (selectedTime != null) {
-      mainController.bedroomnSecondsRemaining.value = selectedTime.inSeconds;
+      mainController.bedroomSecondsRemaining.value = selectedTime.inSeconds;
 
       if (selectedTime.inMinutes == 1) {
         action = "Timer Set : ${selectedTime.inMinutes} minute";
@@ -131,7 +135,7 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
       }
 
       ctrRef.child("ctr").set(++ctr);
-      Auth().uidPostData(ctr, action, formatDate, formatTimee, uid);
+      Auth().uidPostData(ctr, action, formatDate, formatTimee, uid, location);
       setState(() {
         mainController.bedroomTimeSet.value = true;
       });
@@ -202,12 +206,14 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-              Obx(() => Text(
-                    formatTime(mainController.bedroomnSecondsRemaining.value),
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.1,
-                        fontFamily: 'Poppins'),
-                  )),
+              Obx(
+                () => Text(
+                  formatTime(mainController.bedroomSecondsRemaining.value),
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.1,
+                      fontFamily: 'Poppins'),
+                ),
+              ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -218,18 +224,17 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
                     child: Obx(
                       () => ElevatedButton(
                         onPressed: mainController.bedroomTimeSet.value &&
-                                mainController.bedroomnSecondsRemaining.value >
-                                    0
+                                mainController.bedroomSecondsRemaining.value > 0
                             ? () {
-                                if (mainController.bedroomnSecondsRemaining <=
+                                if (mainController.bedroomSecondsRemaining <=
                                     0) {
                                   return;
                                 }
                                 startTimer();
                                 action = "Timer Started";
                                 ctrRef.child("ctr").set(++ctr);
-                                Auth().uidPostData(
-                                    ctr, action, formatDate, formatTimee, uid);
+                                Auth().uidPostData(ctr, action, formatDate,
+                                    formatTimee, uid, location);
                               }
                             : null,
                         style: ElevatedButton.styleFrom(

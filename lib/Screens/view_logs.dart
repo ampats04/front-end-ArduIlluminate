@@ -2,7 +2,7 @@ import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'dart:async';
 
 class ViewLogsPage extends StatefulWidget {
   const ViewLogsPage({Key? key}) : super(key: key);
@@ -12,27 +12,49 @@ class ViewLogsPage extends StatefulWidget {
 }
 
 class _ViewLogsPageState extends State<ViewLogsPage> {
-  int ctr = 0;
-  late Future<List<Map<String, dynamic>>> futureData;
+  int ctr = 1;
+  List<Map<String, dynamic>> logsData = [];
+  late Stream<List<Map<String, dynamic>>> logsStream;
   final _dataColumns = const [
     DataColumn(label: Text('Date')),
     DataColumn(label: Text('Action')),
     DataColumn(label: Text('Time'))
   ];
+  late Timer timer;
 
   @override
   void initState() {
     super.initState();
-    futureData = fetchData();
+    logsStream = logsStreamController.stream;
+    startDataFetching();
   }
 
-  Future<List<Map<String, dynamic>>> fetchData() async {
+  StreamController<List<Map<String, dynamic>>> logsStreamController =
+      StreamController<List<Map<String, dynamic>>>();
+
+  void startDataFetching() {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      fetchData(ctr).then((data) {
+        if (data.isEmpty) {
+          timer.cancel();
+          print('Empty Data');
+        }
+        logsData.addAll(data);
+        logsData.removeWhere((element) => element.containsValue(null));
+        logsStreamController.sink.add(logsData);
+        ctr++;
+      });
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> fetchData(int ctr) async {
     List<Map<String, dynamic>> data = [];
 
-    Stream<DatabaseEvent> stream = ctrRef.child('ctr').onValue;
+    DatabaseReference ref = FirebaseDatabase.instance
+        .ref("post/uid/${Auth().currentUser!.uid}/$ctr");
 
-    DatabaseReference ref =
-        FirebaseDatabase.instance.ref("post/uid/${Auth().currentUser!.uid}/9");
+    print(ctr);
+
     DatabaseReference date = ref.child('date');
     DatabaseReference action = ref.child('action');
     DatabaseReference time = ref.child('time');
@@ -45,13 +67,22 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
     String timeValue = timeRef.snapshot.value.toString();
     String dateValue = dateRef.snapshot.value.toString();
 
-    data.add({
-      "date": dateValue,
-      "action": actionValue,
-      "time": timeValue,
-    });
+    if (actionValue != "null" && timeValue != "null" && dateValue != "null") {
+      data.add({
+        "date": dateValue,
+        "action": actionValue,
+        "time": timeValue,
+      });
+    }
 
     return data;
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    logsStreamController.close();
+    super.dispose();
   }
 
   @override
@@ -64,8 +95,8 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: futureData,
+              child: StreamBuilder<List<Map<String, dynamic>>>(
+                stream: logsStream,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -74,14 +105,15 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    final data = snapshot.data!;
+                    final data = snapshot.data;
 
                     return Container(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(
+                          MediaQuery.of(context).size.height * 0.04),
                       child: PaginatedDataTable(
                         columns: _dataColumns,
-                        source: MyData(data),
-                        columnSpacing: 60,
+                        source: MyData(data!),
+                        columnSpacing: 55,
                         rowsPerPage: 10,
                       ),
                     );
@@ -90,41 +122,11 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
               ),
             ),
           ),
-          ButtonBar(
-            alignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  // Add your logic for manipulating logs
-                },
-                child: const Text('Clear Logs'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Add your logic for exporting logs
-                },
-                child: const Text('Export Logs'),
-              ),
-            ],
-          ),
         ],
       ),
     );
   }
 }
-
-void _test() {
-  Stream<DatabaseEvent> stream = ctrRef.child('ctr').onValue;
-
-  stream.listen((DatabaseEvent event) {
-    ctr = event.snapshot.value as int;
-
-    print("value of ctr right in Timer $ctr");
-  });
-}
-
-int ctr = 0;
-final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
 
 class MyData extends DataTableSource {
   final List<Map<String, dynamic>> _data;

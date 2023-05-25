@@ -7,7 +7,7 @@ class MainController extends GetxController {
   //final isPowerOn = false.obs;
   final isBedroomPowerOn = false.obs;
   final isBathroomPowerOn = false.obs;
-  final bedroomnSecondsRemaining = 0.obs;
+  final bedroomSecondsRemaining = 0.obs;
   final bathroomSecondsRemaining = 0.obs;
   final bedroomSliderValue = 20.0.obs;
   final bathroomSliderValue = 20.0.obs;

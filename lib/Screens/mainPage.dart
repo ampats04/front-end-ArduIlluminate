@@ -9,6 +9,7 @@ import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ardu_illuminate/Screens/addLight.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/maincontroller.dart';
@@ -35,6 +36,7 @@ class _MainPageScreenState extends State<MainPage>
   bool ledstatus = false;
   late Websocket ws = Websocket();
   String action = "";
+  String location = "Bathroom";
   String formatDate = DateFormat('yyyy-MM-dd').format(now);
   String formatTime = DateFormat('HH:mm a').format(now);
 
@@ -50,9 +52,9 @@ class _MainPageScreenState extends State<MainPage>
 
   @override
   void initState() {
-    // Future.delayed(Duration.zero, () async {
-    //   ws.channelconnect();
-    // });
+    Future.delayed(Duration.zero, () async {
+      ws.channelconnect();
+    });
     super.initState();
     futureLight = apiService().get("/light/one/$uid");
   }
@@ -86,14 +88,14 @@ class _MainPageScreenState extends State<MainPage>
       ledstatus = false;
 
       ctrRef.child("ctr").set(++ctr);
-      Auth().uidPostData(ctr, action, formatDate, formatTime, uid!);
+      Auth().uidPostData(ctr, action, formatDate, formatTime, uid!, location);
     } else {
       ws.sendcmd("poweron");
       action = "Power On";
 
       ledstatus = true;
       ctrRef.child("ctr").set(++ctr);
-      Auth().uidPostData(ctr, action, formatDate, formatTime, uid!);
+      Auth().uidPostData(ctr, action, formatDate, formatTime, uid!, location);
     }
     Get.find<MainController>().isBathroomPowerOn.value = value;
     setState(() {
@@ -248,7 +250,7 @@ class _MainPageScreenState extends State<MainPage>
                                   action = "Adjusted Brightness: $brightness%";
                                   ws.sendcmd('brightness$brightness');
                                   Auth().uidPostData(ctr, action, formatDate,
-                                      formatTime, uid!);
+                                      formatTime, uid!, location);
                                   setState(() {
                                     mainController.bathroomSliderValue.value =
                                         value;
