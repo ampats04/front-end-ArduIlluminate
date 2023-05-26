@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:ardu_illuminate/Screens/draw_header.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:ardu_illuminate/Screens/addLight.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/maincontroller.dart';
@@ -52,9 +50,6 @@ class _MainPageScreenState extends State<MainPage>
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () async {
-      ws.channelconnect();
-    });
     super.initState();
     futureLight = apiService().get("/light/one/$uid");
   }
@@ -64,8 +59,6 @@ class _MainPageScreenState extends State<MainPage>
 
     stream.listen((DatabaseEvent event) {
       ctr = event.snapshot.value as int;
-
-      print("value of ctr rightnow $ctr");
     });
   }
 
@@ -85,6 +78,7 @@ class _MainPageScreenState extends State<MainPage>
     if (ledstatus) {
       ws.sendcmd("poweroff");
       action = "Power Off";
+      print("mao ni bathroom");
       ledstatus = false;
 
       ctrRef.child("ctr").set(++ctr);

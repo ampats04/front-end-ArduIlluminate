@@ -35,9 +35,9 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () async {
-      ws.channelconnect();
-    });
+    // Future.delayed(Duration.zero, () async {
+    //   ws.channelConnect();
+    // });
     super.initState();
   }
 
@@ -70,7 +70,7 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
           mainController.bedroomSecondsRemaining.value--;
         }
         if (mainController.bedroomSecondsRemaining.value <= 0) {
-          ws.sendcmd("bed_poweroff");
+          ws.sendcmd("poweroff");
           stopTimer();
         }
       });

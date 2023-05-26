@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:ardu_illuminate/BedroomScreen/bedroom_homePage.dart';
+import 'package:ardu_illuminate/BedroomScreen/bedroom_mainPage.dart';
 import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:ardu_illuminate/Screens/login.dart';
 import 'package:ardu_illuminate/Screens/mainPage.dart';
@@ -143,62 +145,65 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   }
 
   void _showCredentialsDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Entered Credentials'),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTextRow('Full Name', fullNameController.text),
-              _buildTextRow('Birthdate', selectedDateFormatted!),
-              _buildTextRow('Email', emailController.text),
-              _buildTextRow('Username', usernameController.text),
-              _buildTextRow('Password', passwordController.text),
-              _buildTextRow('Bulb Model', bulbController.text),
-              _buildTextRow('Manufacturer', manufacturerController.text),
-              _buildTextRow('Wattage', wattController.text),
-              _buildTextRow('Installation Date', selectedDateFormattedLight!),
-            ],
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Entered Credentials'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildTextRow('Full Name', fullNameController.text),
+                _buildTextRow('Birthdate', selectedDateFormatted!),
+                _buildTextRow('Email', emailController.text),
+                _buildTextRow('Username', usernameController.text),
+                _buildTextRow('Password', passwordController.text),
+                _buildTextRow('Bulb Model', bulbController.text),
+                _buildTextRow('Manufacturer', manufacturerController.text),
+                _buildTextRow('Wattage', wattController.text),
+                _buildTextRow('Installation Date', selectedDateFormattedLight!),
+              ],
+            ),
           ),
-        ),
-        actions: [
-          _buildRegisterButton(),
-          _buildCancelButton(),
-        ],
-      );
-    },
-  );
-}
+          actions: [
+            _buildRegisterButton(),
+            _buildCancelButton(),
+          ],
+        );
+      },
+    );
+  }
 
-Widget _buildTextRow(String label, String value) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8.0),
-    child: Text('$label: $value'),
-  );
-}
+  Widget _buildTextRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Text('$label: $value'),
+    );
+  }
 
-Widget _buildRegisterButton() {
-  return TextButton(
-    onPressed: () {
-      Navigator.of(context).pop();
-      _registerLight(); // Proceed with light registration
-    },
-    child: const Text('Register'),
-  );
-}
+  Widget _buildRegisterButton() {
+    return TextButton(
+      onPressed: () {
+        _registerLight();
 
-Widget _buildCancelButton() {
-  return TextButton(
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-    child: const Text('Cancel'),
-  );
-}
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const BedroomHomePage()),
+        ); // Proced with light registration
+      },
+      child: const Text('Register'),
+    );
+  }
 
+  Widget _buildCancelButton() {
+    return TextButton(
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      child: const Text('Cancel'),
+    );
+  }
 
   void _registerLight() async {
     try {
@@ -656,6 +661,9 @@ Widget _buildCancelButton() {
         onStepContinue: () {
           setState(() {
             if (_activeCurrentStep < stepList().length - 1) {
+              if (_activeCurrentStep == 0) {
+                _registerUser();
+              }
               _activeCurrentStep += 1;
             } else {
               // Last step, submit the form

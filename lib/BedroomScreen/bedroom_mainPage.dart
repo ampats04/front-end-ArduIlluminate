@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:flutter/material.dart';
@@ -51,9 +52,9 @@ class _BedroomMainPageScreenState extends State<BedroomMainPage>
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () async {
-      ws.channelconnect();
-    });
+    // Future.delayed(Duration.zero, () async {
+    //   ws.channelconnect();
+    // });
     super.initState();
     futureLight = apiService().get("/light/one/$uid");
   }
@@ -82,15 +83,15 @@ class _BedroomMainPageScreenState extends State<BedroomMainPage>
   void _onPressed(bool value) {
     _test();
     if (ledstatus) {
-      ws.sendcmd("poweroff");
+      ws.sendcmd("poweron");
+      print("mao ni bedroom");
       action = "Power Off";
-      print(ws.sendcmd("poweron"));
       ledstatus = false;
 
       ctrRef.child("ctr").set(++ctr);
       Auth().uidPostData(ctr, action, formatDate, formatTime, uid!, location);
     } else {
-      ws.sendcmd("poweron");
+      ws.sendcmd("poweroff");
       action = "Power On";
 
       ledstatus = true;
@@ -136,7 +137,7 @@ class _BedroomMainPageScreenState extends State<BedroomMainPage>
                   items: [
                     const PopupMenuItem<String>(
                       value: 'bedroom',
-                      child: Text('Bedroom'),
+                      child: Text('Bathroom'),
                     ),
                   ],
                   elevation: 8.0,
@@ -144,11 +145,11 @@ class _BedroomMainPageScreenState extends State<BedroomMainPage>
                   if (itemSelected == null) return;
 
                   switch (itemSelected) {
-                    case 'bedroom':
+                    case 'bathroom':
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const BedroomHomePage(),
+                          builder: (context) => const MainPage(),
                         ),
                       );
                       break;

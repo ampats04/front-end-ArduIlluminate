@@ -1,4 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:ardu_illuminate/Services/api/webSocket.dart';
 import 'package:ardu_illuminate/controllers/maincontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:ardu_illuminate/Screens/widget_tree.dart';
@@ -17,6 +18,12 @@ void main() async {
           projectId: 'ardu-illuminate',
           databaseURL:
               'https://ardu-illuminate-default-rtdb.asia-southeast1.firebasedatabase.app'));
+
+  Websocket ws = Websocket();
+  // ws.channelconnect;
+  Future.delayed(Duration.zero, () async {
+    ws.channelconnect();
+  });
   runApp(const MyApp());
 }
 
