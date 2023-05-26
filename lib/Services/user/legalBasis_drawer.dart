@@ -1,3 +1,4 @@
+import 'package:ardu_illuminate/BedroomScreen/bedroom_homePage.dart';
 import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:flutter/material.dart';
 
@@ -160,7 +161,7 @@ class _LegalBasisDrawerState extends State<LegalBasisDrawer> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const HomePage(),
+                      builder: (context) => const BedroomHomePage(),
                     ),
                   );
                 },

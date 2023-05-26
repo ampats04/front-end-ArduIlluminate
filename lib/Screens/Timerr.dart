@@ -54,12 +54,15 @@ class _TimerPageState extends State<TimerPage>
   void startTimer() {
     if (mainController.bathroomSecondsRemaining.value <= 0) {
       resetTimer();
+      mainController.isBathroomPowerOn.value = false;
+      mainController.bathroomTimeSet.value = false;
     }
 
     if (!mainController.bathroomStarted.value) {
       mainController.bathroomSecondsRemaining.value--;
       if (mainController.bathroomSecondsRemaining.value <= 0) {
         mainController.bathroomTimeSet.value = false;
+        mainController.isBathroomPowerOn.value = false;
 
         stopTimer();
         ws.sendcmd("poweroff");
@@ -71,6 +74,8 @@ class _TimerPageState extends State<TimerPage>
         }
         if (mainController.bathroomSecondsRemaining.value <= 0) {
           stopTimer();
+          mainController.bathroomTimeSet.value = false;
+          mainController.isBathroomPowerOn.value = false;
         }
       });
       mainController.bathroomStarted.value = true;
@@ -228,6 +233,9 @@ class _TimerPageState extends State<TimerPage>
                             ? () {
                                 if (mainController.bathroomSecondsRemaining <=
                                     0) {
+                                  mainController.isBathroomPowerOn.value =
+                                      false;
+                                  mainController.bathroomTimeSet.value = false;
                                   return;
                                 }
                                 startTimer();
@@ -279,7 +287,7 @@ class _TimerPageState extends State<TimerPage>
                             : null,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.all(0),
-                          backgroundColor: Colors.red,
+                          backgroundColor: Color(0XFFD30000),
                           shape: const CircleBorder(),
                           elevation: 2,
                           minimumSize: const Size(100, 100),

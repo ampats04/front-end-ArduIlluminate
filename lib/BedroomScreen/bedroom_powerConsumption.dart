@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:ardu_illuminate/Screens/draw_header.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -52,24 +53,28 @@ class _BedroomPowerConsumptionState extends State<BedroomPowerConsumption>
   Future<void> _initFirebase() async {
     _powerRef = FirebaseDatabase.instance.ref('energy/power');
 
-    _powerSubscription = _powerRef.onValue.listen((event) {
-      setState(() {
-        _powerValue = (event.snapshot.value as double?) ?? 0.0;
-        _kWhValue += _powerValue / 1000.0; // Assuming power is in watts
-        _pesoCost = _kWhValue * 10.0; // Assuming cost per kWh is 10 pesos
+    _powerSubscription = _powerRef.onValue.listen(
+      (event) {
+        setState(
+          () {
+            _powerValue = (event.snapshot.value as double?) ?? 0.0;
+            _kWhValue += _powerValue / 1000.0; // Assuming power is in watts
+            _pesoCost = _kWhValue * 10.0; // Assuming cost per kWh is 10 pesos
 
-        final currentTime = DateTime.now();
-        final powerData = PowerData(currentTime, _powerValue);
-        final kWhData = kwhData(currentTime, _kWhValue);
-        final pesoData = PesoData(currentTime, _pesoCost);
+            final currentTime = DateTime.now();
+            final powerData = PowerData(currentTime, _powerValue);
+            final kWhData = kwhData(currentTime, _kWhValue);
+            final pesoData = PesoData(currentTime, _pesoCost);
 
-        _powerDataList.add(powerData);
-        _kWhDataList.add(kWhData);
-        _pesoDataList.add(pesoData);
+            _powerDataList.add(powerData);
+            _kWhDataList.add(kWhData);
+            _pesoDataList.add(pesoData);
 
-        _saveGraphData();
-      });
-    });
+            _saveGraphData();
+          },
+        );
+      },
+    );
   }
 
   Future<void> _saveGraphData() async {
@@ -132,30 +137,33 @@ class _BedroomPowerConsumptionState extends State<BedroomPowerConsumption>
     final powerSeries = [
       charts.Series<PowerData, DateTime>(
         id: 'Power',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(
+            Color(0XFFD30000)), // Change line color to red
         domainFn: (PowerData data, _) => data.date,
         measureFn: (PowerData data, _) => data.power,
         data: _powerDataList,
+        strokeWidthPxFn: (_, __) => 3,
       ),
     ];
-
     final kWhSeries = [
       charts.Series<kwhData, DateTime>(
         id: 'kWh',
-        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Color(0XFFD30000)),
         domainFn: (kwhData data, _) => data.date,
         measureFn: (kwhData data, _) => data.kWh,
         data: _kWhDataList,
+        strokeWidthPxFn: (_, __) => 3,
       ),
     ];
 
     final pesoSeries = [
       charts.Series<PesoData, DateTime>(
         id: 'Peso',
-        colorFn: (_, __) => charts.MaterialPalette.deepOrange.shadeDefault,
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Color(0XFFD30000)),
         domainFn: (PesoData data, _) => data.date,
         measureFn: (PesoData data, _) => data.peso,
         data: _pesoDataList,
+        strokeWidthPxFn: (_, __) => 3,
       ),
     ];
 
@@ -173,113 +181,213 @@ class _BedroomPowerConsumptionState extends State<BedroomPowerConsumption>
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Energy Meter'),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const Expanded(
-              child: Center(
-                child: Text(
-                  'Power Consumption',
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                ),
-              ),
+      backgroundColor: const Color(0xFFD9D9D9),
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
+        child: AppBar(
+          title: Text(
+            'Bedroom Meter',
+            style: TextStyle(
+              fontSize: MediaQuery.of(context).size.width * 0.06,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
             ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        _powerValue.toStringAsFixed(2),
-                        style: const TextStyle(fontSize: 60.0),
-                      ),
-                      const SizedBox(height: 8.0),
-                      const Text(
-                        'W',
-                        style: TextStyle(fontSize: 24.0),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        _kWhValue.toStringAsFixed(2),
-                        style: const TextStyle(fontSize: 60.0),
-                      ),
-                      const SizedBox(height: 8.0),
-                      const Text(
-                        'kWh',
-                        style: TextStyle(fontSize: 24.0),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        _pesoCost.toStringAsFixed(2),
-                        style: const TextStyle(fontSize: 60.0),
-                      ),
-                      const SizedBox(height: 8.0),
-                      const Text(
-                        'Peso Cost',
-                        style: TextStyle(fontSize: 24.0),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 4,
-              child: Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: lineChart,
-              ),
-            ),
-            const Expanded(
-              child: Text(
-                'Real-time Power Consumption',
-                style: TextStyle(fontSize: 18.0),
-              ),
-            ),
-          ],
+          ),
+          backgroundColor: const Color(0xFFD9D9D9),
         ),
       ),
+      drawer: const DrawHeader(),
+      body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/bg.png'),
+              fit: BoxFit.fitHeight,
+              alignment: Alignment(1.5, 1.0),
+            ),
+          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: <
+                  Widget>[
+            Container(
+              width: 310,
+              height: 270,
+              decoration: BoxDecoration(
+                color: Color(0xFFe7e5e4),
+                borderRadius: BorderRadius.circular(8.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(1.0),
+                    offset: Offset(5, 5),
+                    blurRadius: 4,
+                    spreadRadius: 1,
+                    // blurRadius: 10,
+                  ),
+                ],
+              ),
+              child: lineChart,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 45.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        Container(
+                          width: 250,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFe7e5e4),
+                            borderRadius: BorderRadius.circular(8.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(1.0),
+                                offset: Offset(5, 5),
+                                blurRadius: 4,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              _kWhValue.toStringAsFixed(6),
+                              style: TextStyle(
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.08,
+                                  fontFamily: 'Stencil',
+                                  color: Color(0XFFD30000),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Stack(
+                  children: <Widget>[
+                    Container(
+                      width: 100,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(1.0),
+                            offset: Offset(5, 5),
+                            blurRadius: 4,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xFFe7e5e4),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 8.0,
+                            left: 8.0,
+                            child: Text(
+                              'KwH',
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.05,
+                                fontFamily: 'Poppins',
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 8.0,
+                            right: 8.0,
+                            child: Text(
+                              _kWhValue.toStringAsFixed(2),
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.08,
+                                fontFamily: 'Stencil',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(width: MediaQuery.of(context).size.width * 0.06),
+                Stack(
+                  children: <Widget>[
+                    Container(
+                      width: 100,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(1.0),
+                            offset: Offset(5, 5),
+                            blurRadius: 4,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xFFe7e5e4),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 8.0,
+                            left: 8.0,
+                            child: Text(
+                              'Php',
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.05,
+                                fontFamily: 'Poppins',
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 8.0,
+                            right: 8.0,
+                            child: Text(
+                              _kWhValue.toStringAsFixed(2),
+                              style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.08,
+                                fontFamily: 'Stencil',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ])),
     );
   }
 }

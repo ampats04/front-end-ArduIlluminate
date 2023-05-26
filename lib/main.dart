@@ -43,20 +43,24 @@ class MyApp extends StatelessWidget {
       ),
       home: Builder(
         builder: (BuildContext context) {
+          double screenWidth = MediaQuery.of(context).size.width;
+          double screenheight = MediaQuery.of(context).size.width;
           return AnimatedSplashScreen(
-            splash: Lottie.asset('assets/26390-light-bulb.json'),
-            // Center(
-            //   child: Transform.scale(
-            //     scale: MediaQuery.of(context).size.width * 0.007,
-            //     child: Image.asset(
-            //       'assets/ardu-ulliminate.png',
-            //       fit: BoxFit.contain,
-            //     ),
-            //   ),
-            // ),
-
-            duration: 1000,
-            splashTransition: SplashTransition.sizeTransition,
+            backgroundColor: Color(0XFF2f3334),
+            splash: Align(
+              alignment: Alignment.topCenter,
+              child: FractionallySizedBox(
+                heightFactor: 5.0, // Adjust the height factor as needed
+                child: Transform.scale(
+                  scale: screenheight *
+                      0.0025, // Adjust the scale factor as needed
+                  child: Lottie.asset(
+                    'assets/lf20_fboneztl.json',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
             nextScreen: const WidgetTree(),
           );
         },
