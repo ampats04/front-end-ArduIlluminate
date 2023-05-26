@@ -189,7 +189,7 @@ class _PowerConsumptionState extends State<PowerConsumption>
             Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
         child: AppBar(
           title: Text(
-            'Bathroom Meter',
+            'Power Meter',
             style: TextStyle(
               fontSize: MediaQuery.of(context).size.width * 0.06,
               fontFamily: 'Poppins',

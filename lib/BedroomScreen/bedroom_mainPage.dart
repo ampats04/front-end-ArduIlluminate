@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:ardu_illuminate/Screens/homePage.dart';
 import 'package:ardu_illuminate/Screens/mainPage.dart';
 import 'package:ardu_illuminate/Services/api/apiService.dart';
 import 'package:ardu_illuminate/Services/auth/auth.dart';
@@ -119,7 +120,7 @@ class _BedroomMainPageScreenState extends State<BedroomMainPage>
             Size.fromHeight(MediaQuery.of(context).size.height * 0.08),
         child: AppBar(
           title: Text(
-            'bedroom Light',
+            'Bedroom Light',
             style: TextStyle(
               fontSize: MediaQuery.of(context).size.width * 0.06,
               fontFamily: 'Poppins',
@@ -136,7 +137,7 @@ class _BedroomMainPageScreenState extends State<BedroomMainPage>
                   position: const RelativeRect.fromLTRB(25.0, 50.0, 0.0, 0.0),
                   items: [
                     const PopupMenuItem<String>(
-                      value: 'bedroom',
+                      value: 'bathroom',
                       child: Text('Bathroom'),
                     ),
                   ],
@@ -149,7 +150,7 @@ class _BedroomMainPageScreenState extends State<BedroomMainPage>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const MainPage(),
+                          builder: (context) => const HomePage(),
                         ),
                       );
                       break;

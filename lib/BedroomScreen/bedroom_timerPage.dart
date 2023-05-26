@@ -33,21 +33,11 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
   String uid = Auth().currentUser!.uid;
   final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
 
-  @override
-  void initState() {
-    // Future.delayed(Duration.zero, () async {
-    //   ws.channelConnect();
-    // });
-    super.initState();
-  }
-
   void _test() {
     Stream<DatabaseEvent> stream = ctrRef.child('ctr').onValue;
 
     stream.listen((DatabaseEvent event) {
       ctr = event.snapshot.value as int;
-
-      print("value of ctr right in Timer $ctr");
     });
   }
 
@@ -59,13 +49,6 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
     }
 
     if (!mainController.bedroomStarted.value) {
-      // mainController.bedroomSecondsRemaining.value--;
-      // if (mainController.bedroomSecondsRemaining.value <= 0) {
-      //   mainController.bedroomTimeSet.value = false;
-
-      //   stopTimer();
-      //   ws.sendcmd("poweroff");
-      // }
       mainController.bedroomCountDownTimer =
           Timer.periodic(const Duration(seconds: 1), (_) {
         if (!mainController.bedroomPaused.value) {
@@ -74,7 +57,7 @@ class _BedroomTimerPageState extends State<BedroomTimerPage>
         if (mainController.bedroomSecondsRemaining.value <= 0) {
           ws.sendcmd("poweroff");
           stopTimer();
-          // mainController.isBedroomPowerOn.value = false;
+
           mainController.isBedroomPowerOn.value = false;
           mainController.bedroomTimeSet.value = false;
         }
