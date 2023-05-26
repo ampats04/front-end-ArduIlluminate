@@ -113,12 +113,13 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
                     final data = snapshot.data;
 
                     return Container(
-                      padding: EdgeInsets.all(
-                          MediaQuery.of(context).size.height * 0.04),
+                      padding: EdgeInsets.symmetric(
+                          vertical: MediaQuery.of(context).size.height * 0.04,
+                          horizontal: MediaQuery.of(context).size.width * 0.03),
                       child: PaginatedDataTable(
                         columns: _dataColumns,
                         source: MyData(data!),
-                        columnSpacing: 20,
+                        columnSpacing: 15,
                         rowsPerPage: 10,
                       ),
                     );

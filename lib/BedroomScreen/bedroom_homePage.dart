@@ -56,8 +56,8 @@ class _BedroomHomePageState extends State<BedroomHomePage> {
           children: _pages,
         ),
         bottomNavigationBar: CurvedNavigationBar(
-          backgroundColor: const Color(0xFFDCA3A3),
-          color: const Color(0xFFF5F5DC),
+          backgroundColor: const Color(0xFFe6cfa8),
+          color: const Color(0xFFf1d7c8),
           height: MediaQuery.of(context).size.height * 0.09,
           animationDuration: const Duration(milliseconds: 400),
           items: [
