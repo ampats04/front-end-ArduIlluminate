@@ -32,6 +32,8 @@ class _TimerPageState extends State<TimerPage>
   late int ctr;
   String uid = Auth().currentUser!.uid;
   final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
+  int offz = 1;
+  int onz = 2;
 
   @override
   void initState() {
@@ -59,21 +61,23 @@ class _TimerPageState extends State<TimerPage>
     }
 
     if (!mainController.bathroomStarted.value) {
-      mainController.bathroomSecondsRemaining.value--;
-      if (mainController.bathroomSecondsRemaining.value <= 0) {
-        mainController.bathroomTimeSet.value = false;
-        mainController.isBathroomPowerOn.value = false;
+      // mainController.bathroomSecondsRemaining.value--;
+      // if (mainController.bathroomSecondsRemaining.value <= 0) {
+      //   mainController.bathroomTimeSet.value = false;
+      //   mainController.isBathroomPowerOn.value = false;
 
-        stopTimer();
-        ws.sendcmd("poweroff");
-      }
+      //   stopTimer();
+      //   ws.sendcmd("poweroff");
+      // }
       mainController.bathroomCountDownTimer =
           Timer.periodic(const Duration(seconds: 1), (_) {
         if (!mainController.bathroomPaused.value) {
           mainController.bathroomSecondsRemaining.value--;
         }
         if (mainController.bathroomSecondsRemaining.value <= 0) {
+          var off = offz.toString();
           stopTimer();
+          ws.sendcmd("power$off");
           mainController.bathroomTimeSet.value = false;
           mainController.isBathroomPowerOn.value = false;
         }

@@ -19,7 +19,7 @@ class Websocket {
   channelconnect() {
     try {
       channel = IOWebSocketChannel.connect(
-          "ws://192.168.63.158:3000"); //channel IP : Port
+          "ws://192.168.211.158:3000"); //channel IP : Port
       channel.stream.listen(
         (message) {
           if (message == "connected") {

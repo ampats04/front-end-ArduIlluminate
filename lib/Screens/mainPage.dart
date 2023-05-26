@@ -47,6 +47,8 @@ class _MainPageScreenState extends State<MainPage>
   final DatabaseReference ctrRef = FirebaseDatabase.instance.ref('counter');
 
   late int ctr;
+  int offz = 1;
+  int onz = 2;
 
   @override
   void initState() {
@@ -76,8 +78,10 @@ class _MainPageScreenState extends State<MainPage>
   void _onPressed(bool value) {
     _test();
     if (ledstatus) {
-      var off = 1;
+      var off = offz.toString();
+
       ws.sendcmd("power$off");
+      print(off);
       action = "Power Off";
       print("mao ni bathroom");
       ledstatus = false;
@@ -85,7 +89,7 @@ class _MainPageScreenState extends State<MainPage>
       ctrRef.child("ctr").set(++ctr);
       Auth().uidPostData(ctr, action, formatDate, formatTime, uid!, location);
     } else {
-      var on = 2;
+      var on = onz.toString();
       ws.sendcmd("power$on");
       action = "Power On";
 
