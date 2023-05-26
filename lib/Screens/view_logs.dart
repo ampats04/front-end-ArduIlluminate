@@ -16,9 +16,10 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
   List<Map<String, dynamic>> logsData = [];
   late Stream<List<Map<String, dynamic>>> logsStream;
   final _dataColumns = const [
+    DataColumn(label: Text('Location')),
     DataColumn(label: Text('Date')),
     DataColumn(label: Text('Action')),
-    DataColumn(label: Text('Time'))
+    DataColumn(label: Text('Time')),
   ];
   late Timer timer;
 
@@ -58,17 +59,21 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
     DatabaseReference date = ref.child('date');
     DatabaseReference action = ref.child('action');
     DatabaseReference time = ref.child('time');
+    DatabaseReference location = ref.child('location');
 
     DatabaseEvent actionRef = await action.once();
     DatabaseEvent timeRef = await time.once();
     DatabaseEvent dateRef = await date.once();
+    DatabaseEvent locationRef = await location.once();
 
     String actionValue = actionRef.snapshot.value.toString();
     String timeValue = timeRef.snapshot.value.toString();
     String dateValue = dateRef.snapshot.value.toString();
+    String locationValue = locationRef.snapshot.value.toString();
 
     if (actionValue != "null" && timeValue != "null" && dateValue != "null") {
       data.add({
+        "location": locationValue,
         "date": dateValue,
         "action": actionValue,
         "time": timeValue,
@@ -113,7 +118,7 @@ class _ViewLogsPageState extends State<ViewLogsPage> {
                       child: PaginatedDataTable(
                         columns: _dataColumns,
                         source: MyData(data!),
-                        columnSpacing: 55,
+                        columnSpacing: 20,
                         rowsPerPage: 10,
                       ),
                     );
@@ -140,6 +145,7 @@ class MyData extends DataTableSource {
     }
 
     return DataRow(cells: [
+      DataCell(Text(_data[index]["location"].toString())),
       DataCell(Text(_data[index]["date"].toString())),
       DataCell(Text(_data[index]["action"].toString())),
       DataCell(Text(_data[index]["time"].toString())),

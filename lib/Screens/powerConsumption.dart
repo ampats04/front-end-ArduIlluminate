@@ -140,7 +140,7 @@ class _PowerConsumptionState extends State<PowerConsumption>
       charts.Series<PowerData, DateTime>(
         id: 'Power',
         colorFn: (_, __) => charts.ColorUtil.fromDartColor(
-            Color(0XFFD30000)), // Change line color to red
+            Color.fromARGB(255, 255, 0, 0)), // Change line color to red
         domainFn: (PowerData data, _) => data.date,
         measureFn: (PowerData data, _) => data.power,
         data: _powerDataList,

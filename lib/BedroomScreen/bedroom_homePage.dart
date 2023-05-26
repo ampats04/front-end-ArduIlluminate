@@ -56,8 +56,8 @@ class _BedroomHomePageState extends State<BedroomHomePage> {
           children: _pages,
         ),
         bottomNavigationBar: CurvedNavigationBar(
-          backgroundColor: const Color(0xFF24AFC1),
-          color: const Color(0xFF1795A8),
+          backgroundColor: const Color(0xFFDCA3A3),
+          color: const Color(0xFFF5F5DC),
           height: MediaQuery.of(context).size.height * 0.09,
           animationDuration: const Duration(milliseconds: 400),
           items: [
@@ -81,9 +81,9 @@ class _BedroomHomePageState extends State<BedroomHomePage> {
 
               for (int i = 0; i < _iconColors.length; i++) {
                 if (i == selectedPageIndex) {
-                  _iconColors[i] = const Color(0xFFFCCF47);
+                  _iconColors[i] = const Color(0xFFA63C3C);
                 } else {
-                  _iconColors[i] = const Color.fromARGB(255, 255, 255, 255);
+                  _iconColors[i] = const Color(0xFF292d46);
                 }
               }
 

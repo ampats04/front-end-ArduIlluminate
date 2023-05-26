@@ -100,7 +100,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                   ),
                                   leading: const Icon(
                                     CupertinoIcons.profile_circled,
-                                    color: Color(0xFFfbbf24),
+                                    color: Color(0xFFA63C3C),
                                     size: 27.0,
                                   ),
                                 ),
@@ -121,7 +121,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                 ),
                                 leading: const Icon(
                                   CupertinoIcons.wifi,
-                                  color: Color(0xFFfbbf24),
+                                  color: Color(0xFFA63C3C),
                                   size: 27.0,
                                 ),
                                 onTap: () {
@@ -150,7 +150,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                 ),
                                 leading: const Icon(
                                   CupertinoIcons.lightbulb_fill,
-                                  color: Color(0xFFfbbf24),
+                                  color: Color(0xFFA63C3C),
                                   size: 27.0,
                                 ),
                                 onTap: () {
@@ -179,7 +179,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                 ),
                                 leading: const Icon(
                                   Icons.edit_square,
-                                  color: Color(0xFFfbbf24),
+                                  color: Color(0xFFA63C3C),
                                   size: 27.0,
                                 ),
                                 onTap: () {
@@ -208,7 +208,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                 ),
                                 leading: const Icon(
                                   Icons.data_exploration,
-                                  color: Color(0xFFfbbf24),
+                                  color: Color(0xFFA63C3C),
                                   size: 27.0,
                                 ),
                                 onTap: () {
@@ -236,7 +236,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                                 ),
                                 leading: const Icon(
                                   Icons.privacy_tip_rounded,
-                                  color: Color(0xFFfbbf24),
+                                  color: Color(0xFFA63C3C),
                                   size: 27.0,
                                 ),
                                 onTap: () {
@@ -267,7 +267,7 @@ class _DrawHeaderState extends State<DrawHeader> {
                           ),
                           leading: const Icon(
                             Icons.logout,
-                            color: Color(0xFFfbbf24),
+                            color: Color(0xFFA63C3C),
                             size: 27.0,
                           ),
                           onTap: () {

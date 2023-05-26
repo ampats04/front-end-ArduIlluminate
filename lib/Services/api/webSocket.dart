@@ -11,7 +11,7 @@ class Websocket {
   static final Websocket _instance = Websocket._();
 
   late IOWebSocketChannel channel;
-  bool connected = false; 
+  bool connected = false;
   bool ledstatus = false;
 
   bool get isPowerOn => false;
@@ -19,8 +19,7 @@ class Websocket {
   channelconnect() {
     try {
       channel = IOWebSocketChannel.connect(
-        
-          "ws://192.168.215.158:3000"); //channel IP : Port
+          "ws://192.168.63.158:3000"); //channel IP : Port
       channel.stream.listen(
         (message) {
           if (message == "connected") {

@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
               // kamo lang bahala sa color boss
               for (int i = 0; i < _iconColors.length; i++) {
                 if (i == selectedPageIndex) {
-                  _iconColors[i] = const Color(0xFFFCCF47);
+                  _iconColors[i] = const Color(0xFFA63C3C);
                 } else {
                   _iconColors[i] = const Color.fromARGB(255, 255, 255, 255);
                 }

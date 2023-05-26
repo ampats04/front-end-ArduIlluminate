@@ -82,7 +82,7 @@ class _FirstScreenState extends State<FirstScreen> {
                       height: MediaQuery.of(context).size.height * 0.04,
                     ),
                     TextField(
-                      enabled: isEditProfile,
+                      // enabled: isEditProfile,
                       controller: _fullnameController,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
@@ -96,12 +96,13 @@ class _FirstScreenState extends State<FirstScreen> {
                           fontFamily: 'Poppins',
                         ),
                       ),
+                      readOnly: true,
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.04,
                     ),
                     TextField(
-                      enabled: isEditProfile,
+                      //enabled: isEditProfile,
                       controller: _birthdateController,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
@@ -115,12 +116,13 @@ class _FirstScreenState extends State<FirstScreen> {
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.calendar_month),
                       ),
+                      readOnly: true,
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.04,
                     ),
                     TextField(
-                      enabled: isEditProfile,
+                      //enabled: isEditProfile,
                       controller: _emailController,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
@@ -134,12 +136,13 @@ class _FirstScreenState extends State<FirstScreen> {
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.email),
                       ),
+                      readOnly: true,
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.04,
                     ),
                     TextField(
-                      enabled: isEditProfile,
+                      //enabled: isEditProfile,
                       controller: _usernameController,
                       style: const TextStyle(
                         fontWeight: FontWeight.normal,
@@ -153,6 +156,7 @@ class _FirstScreenState extends State<FirstScreen> {
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.person_2),
                       ),
+                      readOnly: true,
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.04,

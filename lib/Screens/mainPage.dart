@@ -76,7 +76,8 @@ class _MainPageScreenState extends State<MainPage>
   void _onPressed(bool value) {
     _test();
     if (ledstatus) {
-      ws.sendcmd("poweroff");
+      var off = 1;
+      ws.sendcmd("power$off");
       action = "Power Off";
       print("mao ni bathroom");
       ledstatus = false;
@@ -84,7 +85,8 @@ class _MainPageScreenState extends State<MainPage>
       ctrRef.child("ctr").set(++ctr);
       Auth().uidPostData(ctr, action, formatDate, formatTime, uid!, location);
     } else {
-      ws.sendcmd("poweron");
+      var on = 2;
+      ws.sendcmd("power$on");
       action = "Power On";
 
       ledstatus = true;
